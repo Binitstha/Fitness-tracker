@@ -1,9 +1,10 @@
 import NavBar from "@/components/navBar";
+import { roboto_mono } from "./fonts";
 
 const page = () => {
   return (
     <>
-      <section><NavBar/></section>
+      <main className={`${roboto_mono.className}`}><NavBar/></main>
     </>
   );
 };
