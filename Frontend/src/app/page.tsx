@@ -5,8 +5,10 @@ const page = () => {
   return (
     <>
       <main className={`${roboto_mono.className}`}><NavBar/></main>
+      <div></div>
     </>
   );
 };
 
 export default page;
+
