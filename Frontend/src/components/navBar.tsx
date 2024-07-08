@@ -13,12 +13,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { inter, roboto_mono } from "@/app/fonts";
 
 const NavBar = () => {
   const { setTheme } = useTheme();
   const session = false;
   return (
-    <section className="relative">
+    <section className={` ${roboto_mono.className}`}>
       <div className="fixed right-10 top-5">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -43,8 +44,8 @@ const NavBar = () => {
       </div>
       <div className="flex justify-between items-center border-b border-stone-500 h-20 px-[15rem]">
         <div className="text-3xl">
-          <Link href={"./"}>
-            <Image src="./logo.svg" alt="logo" height={100} width={100}></Image>
+          <Link href={"/"}>
+            <Image src="/logo.svg" alt="logo" height={100} width={100}></Image>
           </Link>
         </div>
         <div className="flex gap-5 justify-center items-center">
@@ -53,9 +54,13 @@ const NavBar = () => {
         {session ? (
           <div>user</div>
         ) : (
-          <div className="flex gap-3">
-            <Button>Log In</Button>
-            <Button>Sign up</Button>
+          <div className={`${inter.className} flex gap-3`}>
+            <Link href="/auth/login">
+              <Button>Log In</Button>
+            </Link>
+            <Link href="/auth/signup">
+              <Button>Sign up</Button>
+            </Link>
           </div>
         )}
       </div>

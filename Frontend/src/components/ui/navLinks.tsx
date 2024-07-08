@@ -10,7 +10,7 @@ const NavLinks = () => {
     { href: "/", name: "Dashboard", icon: House },
     { href: "/Workout", name: "Workout", icon: Dumbbell },
     { href: "/Blogs", name: "Blogs", icon: NotebookText },
-    { href: "/Workout", name: "Workout", icon: Dumbbell },
+    { href: "/Workouts", name: "Workouts", icon: Dumbbell },
   ];
 
   const pathname = usePathname();
