@@ -22,10 +22,6 @@ import { useState } from "react";
 
 const FormSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
-  password: z
-    .string()
-    .min(1, { message: "Please enter your password" })
-    .max(50, { message: "Password must not exceed 50 characters" }),
 });
 
 const Signin = () => {
@@ -34,7 +30,6 @@ const Signin = () => {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       email: "",
-      password: "",
     },
   });
 
@@ -55,12 +50,12 @@ const Signin = () => {
       className={`${roboto.className} flex text-sm justify-center items-center w-full`}
     >
       <div className="w-[28rem] flex flex-col justify-center items-center my-10 ">
-        <h1 className=" text-3xl m-6">Log In</h1>
+        <h1 className=" text-3xl m-6">Reset Password</h1>
         <div className="flex gap-1">
-          <p className=" text-stone-400">Don&apos;t have an account?</p>
-          <Link href="/auth/signup" className="underline">
-            Sign Up
-          </Link>
+          <p className=" text-stone-400 text-center">
+            Forgot your password? No problem. Enter in your email address and
+            we&apos;ll send you a link to reset it.
+          </p>
         </div>
         <div className="my-10 mb-20 w-80">
           <Form {...form}>
@@ -78,44 +73,13 @@ const Signin = () => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl className="relative">
-                      <div>
-                        <Input
-                          placeholder="Enter password"
-                          type={showPassword ? "text" : "password"}
-                          {...field}
-                        />
-                        <div className="absolute right-3 top-2">
-                          <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                          >
-                            {showPassword ? (
-                              <Eye className="h-5 w-5 text-gray-400" />
-                            ) : (
-                              <EyeOff className="h-5 w-5 text-gray-400" />
-                            )}
-                          </button>
-                        </div>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="text-center">
-                <Link href={"/auth/forgotPassword"} className="underline">
-                  Forgot Password?
-                </Link>
-              </div>
               <div className="flex justify-center items-center">
-                <Button type="submit">Log In</Button>
+                <Button type="submit">Reset password</Button>
+              </div>
+              <div className="text-center">
+                <Link href={"/auth/login"} className="underline">
+                  Back to Log In
+                </Link>
               </div>
             </form>
           </Form>

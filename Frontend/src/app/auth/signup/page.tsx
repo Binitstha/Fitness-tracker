@@ -9,24 +9,14 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { useState } from "react";
-import { Calendar } from "@/components/ui/calendar";
 import { toast } from "@/components/ui/use-toast";
-import { cn } from "@/lib/utils";
-import { CalendarIcon } from "@radix-ui/react-icons";
-import { format } from "date-fns";
 import { Eye, EyeOff } from "lucide-react";
 
 import {
@@ -37,6 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import countries from "@/lib/country";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const FormSchema = z.object({
   firstName: z
@@ -82,17 +73,19 @@ const Signin = () => {
       ),
     });
   };
-  const [showPassword, setShowPassword] = useState<Boolean>(true);
+  const [showPassword, setShowPassword] = useState<Boolean>(false);
 
   return (
     <main
       className={`${roboto.className} flex text-sm justify-center items-center w-full`}
     >
-      <div className="w-[35rem] flex flex-col justify-center items-center my-10 ">
+      <div className="w-[28rem] flex flex-col justify-center items-center my-10 ">
         <h1 className=" text-3xl m-6">Welcome to MyFitPal</h1>
         <div className="flex gap-1">
           <p className=" text-stone-400">Already a member?</p>{" "}
-          <Link href="/auth/login">Log In</Link>
+          <Link href="/auth/login" className="underline">
+            Log In
+          </Link>
         </div>
         <div className="my-10 mb-20 w-80">
           <Form {...form}>
@@ -146,7 +139,7 @@ const Signin = () => {
                       <div>
                         <Input
                           placeholder="Enter password"
-                          type={!showPassword ? "text" : "password"}
+                          type={showPassword ? "text" : "password"}
                           {...field}
                         />
                         <div className="absolute right-3 top-2">
@@ -226,7 +219,9 @@ const Signin = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Submit</Button>
+              <div className="flex justify-center items-center">
+                <Button type="submit">Sign up</Button>
+              </div>
             </form>
           </Form>
         </div>
