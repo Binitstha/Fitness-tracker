@@ -27,6 +27,8 @@ import { toast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
+import { Eye, EyeOff } from "lucide-react";
+
 import {
   Select,
   SelectContent,
@@ -80,6 +82,7 @@ const Signin = () => {
       ),
     });
   };
+  const [showPassword, setShowPassword] = useState<Boolean>(true);
 
   return (
     <main
@@ -139,8 +142,26 @@ const Signin = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter Password" {...field} />
+                    <FormControl className="relative">
+                      <div>
+                        <Input
+                          placeholder="Enter password"
+                          type={!showPassword ? "text" : "password"}
+                          {...field}
+                        />
+                        <div className="absolute right-3 top-2">
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                          >
+                            {showPassword ? (
+                              <Eye className="h-5 w-5 text-gray-400" />
+                            ) : (
+                              <EyeOff className="h-5 w-5 text-gray-400" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
