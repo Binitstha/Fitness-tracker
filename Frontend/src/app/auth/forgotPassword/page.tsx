@@ -24,8 +24,7 @@ const FormSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
 });
 
-const Signin = () => {
-  const [showPassword, setShowPassword] = useState<Boolean>(false);
+const ForgotPassword = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -54,10 +53,10 @@ const Signin = () => {
         <div className="flex gap-1">
           <p className=" text-stone-400 text-center">
             Forgot your password? No problem. Enter in your email address and
-            we&apos;ll send you a link to reset it.
+            we&apos;ll   send you a link to reset it.
           </p>
         </div>
-        <div className="my-10 mb-20 w-80">
+        <div className="my-10 mb-20 w-96">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
               <FormField
@@ -89,4 +88,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default ForgotPassword;

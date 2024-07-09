@@ -82,12 +82,12 @@ const Signin = () => {
       <div className="w-[28rem] flex flex-col justify-center items-center my-10 ">
         <h1 className=" text-3xl m-6">Welcome to MyFitPal</h1>
         <div className="flex gap-1">
-          <p className=" text-stone-400">Already a member?</p>{" "}
+          <p className=" text-stone-400">Already a member?</p>
           <Link href="/auth/login" className="underline">
             Log In
           </Link>
         </div>
-        <div className="my-10 mb-20 w-80">
+        <div className="my-10 mb-20 w-96">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
               <FormField

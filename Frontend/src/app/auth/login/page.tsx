@@ -28,7 +28,7 @@ const FormSchema = z.object({
     .max(50, { message: "Password must not exceed 50 characters" }),
 });
 
-const Signin = () => {
+const Login = () => {
   const [showPassword, setShowPassword] = useState<Boolean>(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -62,7 +62,7 @@ const Signin = () => {
             Sign Up
           </Link>
         </div>
-        <div className="my-10 mb-20 w-80">
+        <div className="my-10 mb-20 w-96">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
               <FormField
@@ -125,4 +125,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default Login;
