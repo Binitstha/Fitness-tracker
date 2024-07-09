@@ -43,7 +43,7 @@ const FormSchema = z.object({
     .string()
     .min(6, { message: "password must be at least 6 characters" })
     .max(50),
-  dateOfBirth: z.date({ message: "Invalid date of birth" }),
+  dateOfBirth: z.date({ required_error: "Invalid date of birth" }),
   gender: z.string({ required_error: "Gender is required" }),
   country: z.string({ required_error: "Country is required" }),
 });
@@ -56,9 +56,6 @@ const Signin = () => {
       lastName: "",
       email: "",
       password: "",
-      dateOfBirth: undefined,
-      gender: undefined,
-      country: undefined,
     },
   });
 
@@ -172,6 +169,10 @@ const Signin = () => {
                         type="date"
                         min="1900-01-01"
                         max={new Date().toISOString().split("T")[0]}
+                        onChange={(e) => {
+                          const selectedDate = new Date(e.target.value);
+                          field.onChange(selectedDate);
+                        }}
                       />
                     </div>
                     <FormMessage />
@@ -184,7 +185,12 @@ const Signin = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Gender</FormLabel>
-                    <Select>
+                    <Select
+                      value={field.value}
+                      onValueChange={(e) => {
+                        field.onChange(e);
+                      }}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select Gender" />
                       </SelectTrigger>
@@ -203,7 +209,12 @@ const Signin = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Country</FormLabel>
-                    <Select>
+                    <Select
+                      value={field.value}
+                      onValueChange={(e) => {
+                        field.onChange(e);
+                      }}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select Country" />
                       </SelectTrigger>
