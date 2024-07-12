@@ -18,7 +18,6 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { toast } from "@/components/ui/use-toast";
 import { Eye, EyeOff } from "lucide-react";
-
 import {
   Select,
   SelectContent,
@@ -27,7 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import countries from "@/lib/country";
-import { Checkbox } from "@/components/ui/checkbox";
+import { useRouter } from "next/navigation";
 
 const FormSchema = z.object({
   firstName: z
@@ -38,7 +37,7 @@ const FormSchema = z.object({
     .string()
     .min(2, { message: "Last name must be at least 2 characters" })
     .max(50, { message: "first name must not exceed 50 characters" }),
-  email: z.string().email({ message: "envalid email address" }),
+  email: z.string().email({ message: "invalid email address" }),
   password: z
     .string()
     .min(6, { message: "password must be at least 6 characters" })
@@ -58,19 +57,49 @@ const Signin = () => {
       password: "",
     },
   });
+  const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const onSubmit = (data: z.infer<typeof FormSchema>) => {
-    console.log(data);
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    setLoading(true);
+    try {
+      const response = await fetch("http://localhost:5000/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Registration successful",
+          description: "You have successfully registered. Redirecting to login...",
+          variant: "default",
+        });
+        setTimeout(() => {
+          router.push("/auth/login");
+        }, 3000);
+      } else {
+        toast({
+          title: "Registration failed",
+          description: "There was an error registering your account. Please try again.",
+          variant: "destructive",
+        });
+        throw new Error("Failed to register user");
+      }
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Failed to register user",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
-  const [showPassword, setShowPassword] = useState<Boolean>(false);
 
   return (
     <main
@@ -94,7 +123,7 @@ const Signin = () => {
                   <FormItem>
                     <FormLabel>First Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter First Name" {...field} />
+                      <Input placeholder="Enter First Name" {...field} disabled={loading} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -107,7 +136,7 @@ const Signin = () => {
                   <FormItem>
                     <FormLabel>Last Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter Last Name" {...field} />
+                      <Input placeholder="Enter Last Name" {...field} disabled={loading} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -120,7 +149,7 @@ const Signin = () => {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter Email" {...field} />
+                      <Input placeholder="Enter Email" {...field} disabled={loading} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -138,11 +167,13 @@ const Signin = () => {
                           placeholder="Enter password"
                           type={showPassword ? "text" : "password"}
                           {...field}
+                          disabled={loading}
                         />
                         <div className="absolute right-3 top-2">
                           <button
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
+                            disabled={loading}
                           >
                             {showPassword ? (
                               <Eye className="h-5 w-5 text-gray-400" />
@@ -173,6 +204,7 @@ const Signin = () => {
                           const selectedDate = new Date(e.target.value);
                           field.onChange(selectedDate);
                         }}
+                        disabled={loading}
                       />
                     </div>
                     <FormMessage />
@@ -190,6 +222,7 @@ const Signin = () => {
                       onValueChange={(e) => {
                         field.onChange(e);
                       }}
+                      disabled={loading}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select Gender" />
@@ -214,6 +247,7 @@ const Signin = () => {
                       onValueChange={(e) => {
                         field.onChange(e);
                       }}
+                      disabled={loading}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select Country" />
@@ -231,7 +265,9 @@ const Signin = () => {
                 )}
               />
               <div className="flex justify-center items-center">
-                <Button type="submit">Sign up</Button>
+                <Button type="submit" disabled={loading}>
+                  {loading ? "Submitting..." : "Sign up"}
+                </Button>
               </div>
             </form>
           </Form>

@@ -3,10 +3,12 @@ import express, { Request, Response } from 'express';
 import env from './src/config/env';
 import { errorHandler } from './src/errors/error.handler';
 import authRoutes from './src/routes/auth/auth.routes';
+import cors from 'cors'
 
 const app = express();
 const port = env.port;
 
+app.use(cors())
 app.use(express.json());
 
 // Routes
