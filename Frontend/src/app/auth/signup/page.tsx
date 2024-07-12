@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/select";
 import countries from "@/lib/country";
 import { useRouter } from "next/navigation";
+import Loader from "@/components/ui/loader";
 
 const FormSchema = z.object({
   firstName: z
@@ -75,16 +76,19 @@ const Signin = () => {
       if (response.ok) {
         toast({
           title: "Registration successful",
-          description: "You have successfully registered. Redirecting to login...",
+          description:
+            "You have successfully registered. Redirecting to login...",
           variant: "default",
         });
+
         setTimeout(() => {
           router.push("/auth/login");
         }, 3000);
       } else {
         toast({
           title: "Registration failed",
-          description: "There was an error registering your account. Please try again.",
+          description:
+            "There was an error registering your account. Please try again.",
           variant: "destructive",
         });
         throw new Error("Failed to register user");
@@ -123,7 +127,11 @@ const Signin = () => {
                   <FormItem>
                     <FormLabel>First Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter First Name" {...field} disabled={loading} />
+                      <Input
+                        placeholder="Enter First Name"
+                        {...field}
+                        disabled={loading}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -136,7 +144,11 @@ const Signin = () => {
                   <FormItem>
                     <FormLabel>Last Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter Last Name" {...field} disabled={loading} />
+                      <Input
+                        placeholder="Enter Last Name"
+                        {...field}
+                        disabled={loading}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -149,7 +161,11 @@ const Signin = () => {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter Email" {...field} disabled={loading} />
+                      <Input
+                        placeholder="Enter Email"
+                        {...field}
+                        disabled={loading}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -266,7 +282,7 @@ const Signin = () => {
               />
               <div className="flex justify-center items-center">
                 <Button type="submit" disabled={loading}>
-                  {loading ? "Submitting..." : "Sign up"}
+                  {loading ? <Loader /> : "Sign up"}
                 </Button>
               </div>
             </form>
