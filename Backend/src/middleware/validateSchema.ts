@@ -4,7 +4,7 @@ import { validationErrorResponse } from '../utils/response.handler';
 
 const validateSchema = (schema: ZodSchema<any>) => (req: Request, res: Response, next: NextFunction) => {
   try {
-    // schema.parse(req.body);
+    schema.parse(req.body);
     next();
   } catch (error:any) {
     validationErrorResponse(res,error)
