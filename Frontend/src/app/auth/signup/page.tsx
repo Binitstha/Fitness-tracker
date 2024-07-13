@@ -280,7 +280,7 @@ const Signin = () => {
                   </FormItem>
                 )}
               />
-              <div className="flex justify-center items-center">
+              {/* <div className="flex justify-center items-center"> */}
                 <Button type="submit" disabled={loading}>
                   {loading ? <Loader /> : "Sign up"}
                 </Button>
