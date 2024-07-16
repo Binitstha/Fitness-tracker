@@ -70,7 +70,6 @@ const Login = () => {
           description: result.message,
           variant: "destructive",
         });
-        throw new Error("Failed to login");
       }
     } catch (error) {
       console.error(error);
