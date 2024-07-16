@@ -16,7 +16,7 @@ CREATE TABLE `User` (
 -- CreateTable
 CREATE TABLE `RefreshToken` (
     `id` VARCHAR(191) NOT NULL,
-    `token` VARCHAR(191) NOT NULL,
+    `token` VARCHAR(400) NOT NULL,
     `userId` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `RefreshToken_token_key`(`token`),

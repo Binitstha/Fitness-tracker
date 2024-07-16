@@ -19,6 +19,7 @@ import { Eye, EyeOff } from "lucide-react";
 
 import { toast } from "@/components/ui/use-toast";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const FormSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -37,17 +38,51 @@ const Login = () => {
       password: "",
     },
   });
+  const router = useRouter()
+  const [loading, setLoading] = useState<Boolean>(false)
 
-  const onSubmit = (data: z.infer<typeof FormSchema>) => {
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     console.log(data);
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+    setLoading(true);
+    try {
+      const response = await fetch("http://localhost:5000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Login successful",
+          description:
+            "You have successfully logged in. Redirecting to dashboard...",
+          variant: "default",
+        });
+
+        setTimeout(() => {
+          router.push("/");
+        }, 3000);
+      } else {
+        toast({
+          title: "Login failed",
+          description:
+            "There was an error loggin your account. Please try again.",
+          variant: "destructive",
+        });
+        throw new Error("Failed to login");
+      }
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Failed to login",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

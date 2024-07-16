@@ -27,7 +27,7 @@ model User {
 
 model RefreshToken {
   id     String @id @default(uuid())
-  token  String @unique
+  token  String @unique @db.VarChar(400)
   userId String
   user   User   @relation(fields: [userId], references: [id])
 }

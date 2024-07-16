@@ -3,12 +3,15 @@ import { Request, Response } from "express";
 import prisma from "../../database/prisma";
 import bcrypt from "bcrypt";
 import {
+  notFoundResponse,
   serverErrorResponse,
   successResponse,
   validationErrorResponse,
 } from "../../utils/response.handler";
 import jwt from "jsonwebtoken";
-import crypto from "crypto";
+
+const JWT_SECRET = process.env.JWT_SECRET;
+const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -31,8 +34,7 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const data = req.body;
-    const { email, password } = data;
+    const { email, password } = req.body;
 
     const user = await prisma.user.findUnique({
       where: {
@@ -40,20 +42,20 @@ export const login = async (req: Request, res: Response) => {
       },
     });
 
-    if (!user) return validationErrorResponse(res, "Invalid email or password");
-
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordValid)
-      return validationErrorResponse(res, "Invalid email or password");
+    if (!user || !(await bcrypt.compare(password, user.password)))
+      return notFoundResponse(res, "Invalid email or password");
 
     const accessToken = jwt.sign(
       { userId: user.id, userEmail: user.email },
-      process.env.JWT_SECRET as string,
+      JWT_SECRET as string,
       { expiresIn: "15m" }
     );
 
-    const refreshToken = crypto.randomBytes(16).toString("hex");
+    const refreshToken = jwt.sign(
+      { userId: user.id, userEmail: user.email },
+      REFRESH_TOKEN_SECRET as string,
+      { expiresIn: "7d" }
+    );
 
     await prisma.refreshToken.create({
       data: {
@@ -95,7 +97,7 @@ export const refreshToken = async (req: Request, res: Response) => {
 
     const newAccessToken = jwt.sign(
       { userId: user.id, UserEmail: user.email },
-      process.env.JWT_SECRET as string,
+      JWT_SECRET as string,
       { expiresIn: "15m" }
     );
 
