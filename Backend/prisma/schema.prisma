@@ -14,12 +14,20 @@ datasource db {
 }
 
 model User {
-  id          String      @id @default(uuid())
-  firstName   String
-  lastName    String
-  email       String   @unique
-  password    String
-  dateOfBirth String
-  gender      String
-  country     String
+  id            String         @id @default(uuid())
+  firstName     String
+  lastName      String
+  email         String         @unique
+  password      String
+  dateOfBirth   String
+  gender        String
+  country       String
+  refreshTokens RefreshToken[]
+}
+
+model RefreshToken {
+  id     String @id @default(uuid())
+  token  String @unique
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 }
