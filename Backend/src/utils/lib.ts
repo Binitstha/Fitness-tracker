@@ -27,8 +27,13 @@ export const emailSender = async (email: string, userId: string) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
-    subject: "Reset Your Password",
-    html: `To reset your password, please click the link below: <br/> <hr/> <a href="${resetPasswordUrl}">click here</a> <br/> <hr/> If you did not request a password reset, please ignore this email.`,
+    subject: "Password Reset Request",
+    body: `<p>Dear User,</p>
+    <p>We received a request to reset your password. Please click the link below to set a new password:</p>
+    <a href="${resetPasswordUrl}">Reset Password</a>
+    <p>If you did not request a password reset, please disregard this email.</p>
+    <p>Thank you,</p>
+    <p>Your Company Name</p>`,
   };
 
   await transporter.sendMail(mailOptions);

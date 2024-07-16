@@ -26,3 +26,16 @@ export const refreshTokenSchema = z.object({
 export const forgetPasswordSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
 });
+
+export const resetPasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(6, { message: "Password must be at least 6 characters long" }),
+    confirmPassword: z
+      .string()
+      .min(6, { message: "Password must be at least 6 characters long" }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Password do not match",
+  });

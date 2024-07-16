@@ -33,7 +33,6 @@ const ForgotPassword = () => {
   });
 
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true);

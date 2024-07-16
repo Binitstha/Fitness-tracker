@@ -19,7 +19,7 @@ import { Eye, EyeOff } from "lucide-react";
 
 import { toast } from "@/components/ui/use-toast";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Loader from "@/components/ui/loader";
 
 const FormSchema = z
@@ -41,6 +41,10 @@ const FormSchema = z
 const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -50,9 +54,6 @@ const ResetPassword = () => {
     },
   });
 
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true);
     try {
@@ -61,7 +62,7 @@ const ResetPassword = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, token }),
       });
 
       const result = await response.json();

@@ -125,16 +125,46 @@ export const forgotPassword = async (req: Request, res: Response) => {
   try {
     const user = await prisma.user.findUnique({ where: { email } });
 
-    if (!user) return validationErrorResponse(res, "User not found. Please check your email address and try again.");
+    if (!user) {
+      return validationErrorResponse(res, "No account found with that email address. Please check and try again.");
+    }
 
-    await emailSender(user.email, user.id);
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1h' });
 
-    return successResponse(
-      res,
-      user.email,
-     "An email with a link to reset your password has been sent.");
+    await emailSender(user.email, token);
+
+    return successResponse(res, {}, "An email with instructions to reset your password has been sent. Please check your inbox.");
   } catch (error) {
     console.log(error);
-    serverErrorResponse(res, "Failed to reset password");
+    return serverErrorResponse(res, "An error occurred while processing your request. Please try again later.");
+  }
+};
+
+export const resetPassword = async (req: Request, res: Response) => {
+  const { password, confirmPassword, token } = req.body;
+
+  try {
+    const decode = jwt.verify(token, JWT_SECRET) ;
+    const userId = (decode as {userId: string}).userId;
+    const userEmail = (decode as {email: string}).email;
+
+    if (!userId) {
+      return validationErrorResponse(res, "Invalid or expired token. Please request a new password reset.");
+    }
+    
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await prisma.user.update({
+      where: {
+        id: userId,
+        email: userEmail
+      },
+      data: { password: hashedPassword },
+    });
+
+    return successResponse(res, {}, "Your password has been reset successfully. You can now log in with your new password.")
+  } catch (error) {
+    console.log(error);
+    serverErrorResponse(res, "An error occurred while resetting your password. Please try again later.");
   }
 };
