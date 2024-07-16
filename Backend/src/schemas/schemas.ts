@@ -22,3 +22,7 @@ export const userLoginSchema = z.object({
 export const refreshTokenSchema = z.object({
   token: z.string(),
 });
+
+export const forgetPasswordSchema = z.object({
+  email: z.string().email({ message: "Invalid email address" }),
+});

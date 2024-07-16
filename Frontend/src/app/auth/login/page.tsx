@@ -38,11 +38,10 @@ const Login = () => {
       password: "",
     },
   });
-  const router = useRouter()
-  const [loading, setLoading] = useState<Boolean>(false)
+  const router = useRouter();
+  const [loading, setLoading] = useState<Boolean>(false);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    console.log(data);
     setLoading(true);
     try {
       const response = await fetch("http://localhost:5000/auth/login", {
@@ -53,11 +52,11 @@ const Login = () => {
         body: JSON.stringify(data),
       });
 
+      const result = await response.json();
       if (response.ok) {
         toast({
           title: "Login successful",
-          description:
-            "You have successfully logged in. Redirecting to dashboard...",
+          description: result.message,
           variant: "default",
         });
 
@@ -67,8 +66,7 @@ const Login = () => {
       } else {
         toast({
           title: "Login failed",
-          description:
-            "There was an error loggin your account. Please try again.",
+          description: result.message,
           variant: "destructive",
         });
         throw new Error("Failed to login");

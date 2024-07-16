@@ -9,9 +9,12 @@ import {
   validationErrorResponse,
 } from "../../utils/response.handler";
 import jwt from "jsonwebtoken";
+import { url } from "inspector";
+import env from "../../config/env";
+import { emailSender } from "../../utils/lib";
 
-const JWT_SECRET = process.env.JWT_SECRET;
-const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
+const JWT_SECRET = env.JWT_SECRET;
+const REFRESH_TOKEN_SECRET = env.REFRESH_TOKEN_SECRET;
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -64,10 +67,14 @@ export const login = async (req: Request, res: Response) => {
       },
     });
 
+    res.cookie("Token", accessToken, {
+      httpOnly: true,
+    });
+
     successResponse(
       res,
       { accessToken, refreshToken },
-      "User logged in successfully",
+      `You have successfully logged in as ${user.email}`,
       200
     );
   } catch (error) {
@@ -110,5 +117,24 @@ export const refreshToken = async (req: Request, res: Response) => {
   } catch (error) {
     console.log(error);
     serverErrorResponse(res, "Error refreshing token");
+  }
+};
+
+export const forgotPassword = async (req: Request, res: Response) => {
+  const { email } = req.body;
+  try {
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user) return validationErrorResponse(res, "Email does not exist");
+
+    await emailSender(user.email, user.id);
+
+    return successResponse(
+      res,
+      user.email,
+     "An email with a link to reset your password has been sent.");
+  } catch (error) {
+    console.log(error);
+    serverErrorResponse(res, "Failed to reset password");
   }
 };

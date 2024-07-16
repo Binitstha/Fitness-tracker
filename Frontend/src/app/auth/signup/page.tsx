@@ -63,7 +63,6 @@ const Signin = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    console.log(data);
     setLoading(true);
     try {
       const response = await fetch("http://localhost:5000/auth/register", {
