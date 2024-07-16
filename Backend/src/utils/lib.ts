@@ -13,7 +13,7 @@ export const emailSender = async (email: string, userId: string) => {
     expiresIn: "1h",
   });
 
-  const resetPasswordUrl = `http://localhost:3000/forgotPassword/resetPassword?token=${token}`;
+  const resetPasswordUrl = `http://localhost:3000/auth/resetPassword?token=${token}`;
 
   const transporter = nodemailer.createTransport({
     host: "sandbox.smtp.mailtrap.io",

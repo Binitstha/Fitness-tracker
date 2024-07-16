@@ -125,7 +125,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
   try {
     const user = await prisma.user.findUnique({ where: { email } });
 
-    if (!user) return validationErrorResponse(res, "Email does not exist");
+    if (!user) return validationErrorResponse(res, "User not found. Please check your email address and try again.");
 
     await emailSender(user.email, user.id);
 

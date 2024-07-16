@@ -17,8 +17,8 @@ const Loader = () => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <CircularProgress color="secondary" />
+    <div className={classes.root + " w-full"}>
+      <CircularProgress color="secondary" className="p-2" />
     </div>
   );
 };

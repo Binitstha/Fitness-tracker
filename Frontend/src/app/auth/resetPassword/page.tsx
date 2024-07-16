@@ -22,30 +22,41 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/ui/loader";
 
-const FormSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address" }),
-  password: z
-    .string()
-    .min(1, { message: "Please enter your password" })
-    .max(50, { message: "Password must not exceed 50 characters" }),
-});
+const FormSchema = z
+  .object({
+    password: z
+      .string()
+      .min(1, { message: "Please enter your password" })
+      .max(50, { message: "Password must not exceed 50 characters" }),
+    confirmPassword: z
+      .string()
+      .min(1, { message: "Please confirm your password" })
+      .max(50, { message: "Password must not exceed 50 characters" }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
-const Login = () => {
-  const [showPassword, setShowPassword] = useState<Boolean>(false);
+const ResetPassword = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      email: "",
       password: "",
+      confirmPassword: "",
     },
   });
+
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/auth/login", {
+      const response = await fetch("http://localhost:5000/auth/resetPassword", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -56,26 +67,26 @@ const Login = () => {
       const result = await response.json();
       if (response.ok) {
         toast({
-          title: "Login successful",
+          title: "Password reset successful",
           description: result.message,
           variant: "default",
         });
 
         setTimeout(() => {
-          router.push("/");
+          router.push("/auth/login");
         }, 3000);
       } else {
         toast({
-          title: "Login failed",
+          title: "Password reset failed",
           description: result.message,
           variant: "destructive",
         });
-        throw new Error("Failed to login");
+        throw new Error("Failed to reset password");
       }
     } catch (error) {
       console.error(error);
       toast({
-        title: "Failed to login",
+        title: "Failed to reset password",
         description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
@@ -89,29 +100,10 @@ const Login = () => {
       className={`${roboto.className} flex text-sm justify-center items-center w-full`}
     >
       <div className="w-[28rem] flex flex-col justify-center items-center my-10 ">
-        <h1 className=" text-3xl m-6">Log In</h1>
-        <div className="flex gap-1">
-          <p className=" text-stone-400">Don&apos;t have an account?</p>
-          <Link href="/auth/signup" className="underline">
-            Sign Up
-          </Link>
-        </div>
+        <h1 className=" text-3xl m-6">Reset Password</h1>
         <div className="my-10 mb-20 w-96">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter Email" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <FormField
                 control={form.control}
                 name="password"
@@ -143,6 +135,39 @@ const Login = () => {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl className="relative">
+                      <div>
+                        <Input
+                          placeholder="Enter password"
+                          type={showConfirmPassword ? "text" : "password"}
+                          {...field}
+                        />
+                        <div className="absolute right-3 top-2">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setShowConfirmPassword(!showConfirmPassword)
+                            }
+                          >
+                            {showConfirmPassword ? (
+                              <Eye className="h-5 w-5 text-gray-400" />
+                            ) : (
+                              <EyeOff className="h-5 w-5 text-gray-400" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <div className="text-center">
                 <Link href={"/auth/forgotPassword"} className="underline">
                   Forgot Password?
@@ -150,7 +175,7 @@ const Login = () => {
               </div>
               <div className="flex justify-center items-center">
                 <Button type="submit" disabled={loading}>
-                  {loading ? <Loader /> : "Log In"}
+                  {loading ? <Loader /> : "Reset Password"}
                 </Button>
               </div>
             </form>
@@ -161,4 +186,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ResetPassword;
