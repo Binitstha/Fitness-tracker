@@ -20,8 +20,9 @@ import { useState } from "react";
 import { toast } from "@/components/ui/use-toast";
 import Loader from "@/components/ui/loader";
 import { useRouter } from "next/navigation";
-
 import Image from "next/image";
+import clsx from "clsx";
+
 const FormSchema = z.object({
   weight: z
     .string()
@@ -50,23 +51,12 @@ const Personalize = () => {
       profileImage: "",
     },
   });
+
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    console.log(data)
+    console.log(data);
     // setLoading(true);
     // try {
     //   const formData = new FormData();
@@ -113,6 +103,19 @@ const Personalize = () => {
     //   setLoading(false);
     // }
   };
+  const [imagePreview, setImagePreview] = useState<string | null>(null); // State to hold image preview URL
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+      //   form.setValue("profileImage", file); // Update form value
+    }
+  };
 
   return (
     <main
@@ -134,20 +137,22 @@ const Personalize = () => {
                           className="rounded-full h-24 w-24 opacity-0 absolute inset-0 cursor-pointer"
                           type="file"
                           accept="image/*"
-                          {...field}
-                          onChange={(e) => {
-                            handleImageChange(e);
-                            field.onChange(e.target.files);
-                          }}
+                          onChange={handleImageChange} // Call handleImageChange on file selection
                           disabled={loading}
                         />
-                        <div className="absolute inset-0 flex items-center justify-center rounded-full border border-dashed border-gray-300">
-                          {selectedImage ? (
+                        <div
+                          className={clsx(
+                            !imagePreview ? "border border-dashed" : "",
+                            "absolute inset-0 flex items-center justify-center rounded-full  border-gray-300",
+                          )}
+                        >
+                          {imagePreview ? (
                             <Image
-                              src={selectedImage}
+                              src={imagePreview}
                               height={100}
-                              alt="Profile"
-                              className="w-full h-full object-cover rounded-full"
+                              width={100}
+                              alt="Profile Preview"
+                              className="rounded-full h-24 w-24"
                             />
                           ) : (
                             <span className="text-gray-500">
