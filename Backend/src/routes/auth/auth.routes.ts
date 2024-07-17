@@ -17,3 +17,4 @@ router.post('/forgotPassword', validateSchema(forgetPasswordSchema), forgotPassw
 router.post('/resetPassword', validateSchema(resetPasswordSchema), resetPassword)
 
 export default router;
+

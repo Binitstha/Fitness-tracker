@@ -39,3 +39,14 @@ export const resetPasswordSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: "Password do not match",
   });
+
+export const personalizationSchema = z.object({
+  weight: z.string().regex(/^\d{1,2}kg$/, {
+    message: "Weight must be in the format '5kg'.",
+  }),
+  height: z.string().regex(/^\d{1,2}'\d{1,2}"$/, {
+    message: "Height must be in the format 5'11\"",
+  }),
+  city: z.string().min(1, { message: "City is required" }),
+  profileImage: z.any().optional(),
+});

@@ -22,6 +22,11 @@ model User {
   dateOfBirth   String
   gender        String
   country       String
+  weight        String?
+  heightFT      String?
+  heightIN      String?
+  city          String?
+  profileImage  String?
   refreshTokens RefreshToken[]
 }
 
@@ -29,5 +34,5 @@ model RefreshToken {
   id     String @id @default(uuid())
   token  String @unique @db.VarChar(400)
   userId String
-  user   User   @relation(fields: [userId], references: [id],onDelete: Cascade) 
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

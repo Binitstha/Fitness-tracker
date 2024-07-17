@@ -6,7 +6,7 @@ import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Camera } from "lucide-react";
+import { Camera, Weight } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -26,16 +26,16 @@ import clsx from "clsx";
 const FormSchema = z.object({
   weight: z
     .string()
-    .min(2, { message: "Weight must be at least 2 characters" })
-    .max(50, { message: "Weight must not exceed 50 characters" }),
+    .min(1, { message: "Weight must be at least 1 characters" })
+    .max(10, { message: "Weight must not exceed 10 characters" }),
   heightFT: z
     .string()
-    .min(2, { message: "Height must be at least 2 characters" })
-    .max(50, { message: "Height must not exceed 50 characters" }),
+    .min(1, { message: "Height must be at least 1 characters" })
+    .max(10, { message: "Height must not exceed 10 characters" }),
   heightIN: z
     .string()
-    .min(2, { message: "Height must be at least 2 characters" })
-    .max(50, { message: "Height must not exceed 50 characters" }),
+    .min(1, { message: "Height must be at least 1 characters" })
+    .max(10, { message: "Height must not exceed 10 characters" }),
   city: z.string(),
   profileImage: z.any().optional(),
 });
@@ -56,7 +56,12 @@ const Personalize = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    console.log(data);
+    const finalData = {
+      ...data,
+      height: `${data.heightFT}'${data.heightIN}"`,
+      Weight: `${Weight}kg`,
+    };
+    console.log(finalData);
     // setLoading(true);
     // try {
     //   const formData = new FormData();
@@ -177,6 +182,8 @@ const Personalize = () => {
                     <FormLabel>Weight kg</FormLabel>
                     <FormControl>
                       <Input
+                        type="number"
+                        min={0}
                         placeholder="Enter Weight"
                         {...field}
                         disabled={loading}
@@ -195,6 +202,8 @@ const Personalize = () => {
                       <FormLabel>Height (ft)</FormLabel>
                       <FormControl>
                         <Input
+                          type="number"
+                          min={0}
                           placeholder="Enter Height (ft)"
                           {...field}
                           disabled={loading}
@@ -212,6 +221,8 @@ const Personalize = () => {
                       <FormLabel>Height (in)</FormLabel>
                       <FormControl>
                         <Input
+                          type="number"
+                          min={0}
                           placeholder="Enter Height (in)"
                           {...field}
                           disabled={loading}
