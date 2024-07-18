@@ -45,14 +45,19 @@ export const login = async (req: Request, res: Response) => {
       },
     });
 
-    if (!user || !(await bcrypt.compare(password, user.password)))
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       return notFoundResponse(res, "Invalid email or password");
+    }
 
     const accessToken = jwt.sign(
       { userId: user.id, userEmail: user.email },
       JWT_SECRET as string,
-      { expiresIn: "15m" }
+      { expiresIn: "30m" }
     );
+
+    res.cookie("token", accessToken , {
+      httpOnly: true,
+    });
 
     const refreshToken = jwt.sign(
       { userId: user.id, userEmail: user.email },
@@ -67,20 +72,14 @@ export const login = async (req: Request, res: Response) => {
       },
     });
 
-    res.cookie('token', accessToken, {
-      httpOnly: true,
-      sameSite: 'none',
-    });    
-
     successResponse(
       res,
       { accessToken, refreshToken },
-      `You have successfully logged in as ${user.email}`,
-      200
+      `You have successfully logged in as ${user.email}`
     );
   } catch (error) {
-    console.log(error);
-    serverErrorResponse(res, "Error while loggin in");
+    console.error("Login error:", error);
+    serverErrorResponse(res, "Error while logging in");
   }
 };
 
@@ -127,17 +126,29 @@ export const forgotPassword = async (req: Request, res: Response) => {
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
-      return validationErrorResponse(res, "No account found with that email address. Please check and try again.");
+      return validationErrorResponse(
+        res,
+        "No account found with that email address. Please check and try again."
+      );
     }
 
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
     await emailSender(user.email, token);
 
-    return successResponse(res, {}, "An email with instructions to reset your password has been sent. Please check your inbox.");
+    return successResponse(
+      res,
+      {},
+      "An email with instructions to reset your password has been sent. Please check your inbox."
+    );
   } catch (error) {
     console.log(error);
-    return serverErrorResponse(res, "An error occurred while processing your request. Please try again later.");
+    return serverErrorResponse(
+      res,
+      "An error occurred while processing your request. Please try again later."
+    );
   }
 };
 
@@ -145,27 +156,37 @@ export const resetPassword = async (req: Request, res: Response) => {
   const { password, confirmPassword, token } = req.body;
 
   try {
-    const decode = jwt.verify(token, JWT_SECRET) ;
-    const userId = (decode as {userId: string}).userId;
-    const userEmail = (decode as {email: string}).email;
+    const decode = jwt.verify(token, JWT_SECRET);
+    const userId = (decode as { userId: string }).userId;
+    const userEmail = (decode as { email: string }).email;
 
     if (!userId) {
-      return validationErrorResponse(res, "Invalid or expired token. Please request a new password reset.");
+      return validationErrorResponse(
+        res,
+        "Invalid or expired token. Please request a new password reset."
+      );
     }
-    
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await prisma.user.update({
       where: {
         id: userId,
-        email: userEmail
+        email: userEmail,
       },
       data: { password: hashedPassword },
     });
 
-    return successResponse(res, {}, "Your password has been reset successfully. You can now log in with your new password.")
+    return successResponse(
+      res,
+      {},
+      "Your password has been reset successfully. You can now log in with your new password."
+    );
   } catch (error) {
     console.log(error);
-    serverErrorResponse(res, "An error occurred while resetting your password. Please try again later.");
+    serverErrorResponse(
+      res,
+      "An error occurred while resetting your password. Please try again later."
+    );
   }
 };

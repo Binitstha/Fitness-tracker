@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import env from "../config/env";
 import { unauthorizedResponse } from "../utils/response.handler";
 
-interface AuthenticatedRequest extends Request {
+export interface AuthenticatedRequest extends Request {
   userId?: string;
 }
 
@@ -16,6 +16,7 @@ export const authenticationMiddleware = (
 ) => {
   const token = req.cookies.token;
 
+  console.log(JWT_SECRET)
   if (!token) {
     console.log("Token not found in cookies");
     return unauthorizedResponse(res, "Unauthorized user");

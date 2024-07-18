@@ -64,11 +64,14 @@ const Personalize = () => {
     formData.append("weight", `${weight}kg`);
 
     try {
-      const response = await fetch(`http://localhost:5000/account/personalize`, {
-        method: "POST",
-        credentials: "include",
-        body: formData,
-      });
+      const response = await fetch(
+        `http://localhost:5000/account/personalize`,
+        {
+          method: "POST",
+          credentials: "include",
+          body: formData,
+        },
+      );
 
       const result = await response.json();
       console.log(result);
@@ -97,6 +100,17 @@ const Personalize = () => {
     }
   };
 
+  const dummy = async () => {
+    const response = await fetch(`http://localhost:5000/auth/dummy`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: null,
+    });
+  };
+  
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -244,6 +258,9 @@ const Personalize = () => {
             </form>
           </Form>
         </div>
+        <Button className="w-28" onClick={dummy}>
+          submit
+        </Button>
       </div>
     </main>
   );
