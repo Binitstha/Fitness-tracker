@@ -1,25 +1,32 @@
-// src/server.ts
-import express, { Request, Response } from 'express';
-import env from './src/config/env';
-import { errorHandler } from './src/errors/error.handler';
-import authRoutes from './src/routes/auth/auth.routes';
-import cors from 'cors'
+import express, { Request, Response } from "express";
+import env from "./src/config/env";
+import { errorHandler } from "./src/errors/error.handler";
+import authRoutes from "./src/routes/auth/auth.routes";
+import personalizationRoutes from "./src/routes/account/personalization.routes";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
 const app = express();
-const port = env.port;
 
-app.use(cors())
+const port = env.port || 5000;
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
+
 app.use(express.json());
+app.use(cookieParser());
 
-// Routes
-app.use('/auth', authRoutes);
+app.use("/auth", authRoutes);
+app.use("/account", personalizationRoutes);
 
-// Default route
-app.get('/', (req: Request, res: Response) => {
-  res.send('Welcome to the fitness tracker API!');
+app.get("/", (req: Request, res: Response) => {
+  res.send("Welcome to the fitness tracker API!");
 });
 
-// Error handling middleware
 app.use(errorHandler);
 
 app.listen(port, () => {

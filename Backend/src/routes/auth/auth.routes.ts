@@ -1,7 +1,7 @@
 // src/routes/auth/auth.routes.ts
 import { Router } from 'express';
 import { login, register, refreshToken, forgotPassword, resetPassword } from './auth.controller';
-import validateSchema from '../../middleware/validateSchema';
+import {validateSchema} from '../../middleware/validateSchema';
 import { forgetPasswordSchema, refreshTokenSchema, resetPasswordSchema, userLoginSchema, userRegisterSchema } from '../../schemas/schemas';
 
 const router = Router();

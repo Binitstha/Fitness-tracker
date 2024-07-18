@@ -8,6 +8,10 @@ CREATE TABLE `User` (
     `dateOfBirth` VARCHAR(191) NOT NULL,
     `gender` VARCHAR(191) NOT NULL,
     `country` VARCHAR(191) NOT NULL,
+    `weight` VARCHAR(191) NULL,
+    `height` VARCHAR(191) NULL,
+    `city` VARCHAR(191) NULL,
+    `profileImage` VARCHAR(191) NULL,
 
     UNIQUE INDEX `User_email_key`(`email`),
     PRIMARY KEY (`id`)
@@ -24,4 +28,4 @@ CREATE TABLE `RefreshToken` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `RefreshToken` ADD CONSTRAINT `RefreshToken_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `RefreshToken` ADD CONSTRAINT `RefreshToken_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

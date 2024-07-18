@@ -6,7 +6,7 @@ import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Camera, Weight } from "lucide-react";
+import { Camera } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -48,77 +48,60 @@ const Personalize = () => {
       heightFT: "",
       heightIN: "",
       city: "",
-      profileImage: "",
     },
   });
 
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    const finalData = {
-      ...data,
-      height: `${data.heightFT}'${data.heightIN}"`,
-      Weight: `${Weight}kg`,
-    };
-    console.log(finalData);
-    // setLoading(true);
-    // try {
-    //   const formData = new FormData();
-    //   formData.append("weight", data.weight);
-    //   formData.append("height", data.height);
-    //   formData.append("city", data.city);
-    //   if (data.profileImage) {
-    //     formData.append("profileImage", data.profileImage[0]);
-    //   }
+    const { weight, city, profileImage, heightFT, heightIN } = data;
+    const formData = new FormData();
+    formData.append("city", city);
+    formData.append("profileImage", profileImage); // Directly appending the file object
+    formData.append("height", `${heightFT}'${heightIN}"`);
+    formData.append("weight", `${weight}kg`);
 
-    //   const response = await fetch("http://localhost:5000/auth/register", {
-    //     method: "POST",
-    //     body: formData,
-    //   });
+    try {
+      const response = await fetch(`http://localhost:5000/account/personalize`, {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      });
 
-    //   if (response.ok) {
-    //     toast({
-    //       title: "Registration successful",
-    //       description:
-    //         "You have successfully registered. Redirecting to login...",
-    //       variant: "default",
-    //     });
-
-    //     setTimeout(() => {
-    //       router.push("/auth/login");
-    //     }, 3000);
-    //   } else {
-    //     toast({
-    //       title: "Registration failed",
-    //       description:
-    //         "There was an error registering your account. Please try again.",
-    //       variant: "destructive",
-    //     });
-    //     throw new Error("Failed to register user");
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    //   toast({
-    //     title: "Failed to register user",
-    //     description: "An unexpected error occurred. Please try again.",
-    //     variant: "destructive",
-    //   });
-    // } finally {
-    //   setLoading(false);
-    // }
+      const result = await response.json();
+      console.log(result);
+      if (!response.ok) {
+        toast({
+          title: "Error not found",
+          description: result.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Profile updated",
+          description: "Your profile has been updated successfully",
+          variant: "default",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Failed to update the personal detail",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
-  const [imagePreview, setImagePreview] = useState<string | null>(null); // State to hold image preview URL
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-      //   form.setValue("profileImage", file); // Update form value
+      setImagePreview(URL.createObjectURL(file));
+      form.setValue("profileImage", file);
     }
   };
 
@@ -127,7 +110,7 @@ const Personalize = () => {
       className={`${roboto.className} flex text-sm justify-center items-center w-full`}
     >
       <div className="w-[28rem] flex flex-col justify-center items-center my-10 ">
-        <h1 className=" text-3xl m-6">Personalize Profile</h1>
+        <h1 className="text-3xl m-6">Personalize Profile</h1>
         <div className="my-7 mb-20 w-96">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
@@ -142,7 +125,7 @@ const Personalize = () => {
                           className="rounded-full h-24 w-24 opacity-0 absolute inset-0 cursor-pointer"
                           type="file"
                           accept="image/*"
-                          onChange={handleImageChange} // Call handleImageChange on file selection
+                          onChange={handleImageChange}
                           disabled={loading}
                         />
                         <div
@@ -179,7 +162,7 @@ const Personalize = () => {
                 name="weight"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Weight kg</FormLabel>
+                    <FormLabel>Weight (kg)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -252,9 +235,9 @@ const Personalize = () => {
               />
               <div className="flex gap-3 justify-center items-center">
                 <Link href={"/"}>
-                  <Button className=" w-28">Skip for now</Button>
+                  <Button className="w-28">Skip for now</Button>
                 </Link>
-                <Button className=" w-28" type="submit" disabled={loading}>
+                <Button className="w-28" type="submit" disabled={loading}>
                   {loading ? <Loader /> : "Done"}
                 </Button>
               </div>

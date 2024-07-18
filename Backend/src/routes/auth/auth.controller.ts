@@ -67,9 +67,10 @@ export const login = async (req: Request, res: Response) => {
       },
     });
 
-    res.cookie("Token", accessToken, {
+    res.cookie('token', accessToken, {
       httpOnly: true,
-    });
+      sameSite: 'none',
+    });    
 
     successResponse(
       res,

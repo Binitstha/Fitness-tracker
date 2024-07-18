@@ -23,8 +23,7 @@ model User {
   gender        String
   country       String
   weight        String?
-  heightFT      String?
-  heightIN      String?
+  height        String?
   city          String?
   profileImage  String?
   refreshTokens RefreshToken[]
