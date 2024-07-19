@@ -7,7 +7,7 @@ import { Dumbbell } from "lucide-react";
 
 const NavLinks = () => {
   const links = [
-    { href: "/", name: "Dashboard", icon: House },
+    { href: "/dashboard", name: "Dashboard", icon: House },
     { href: "/Workout", name: "Workout", icon: Dumbbell },
     { href: "/Blogs", name: "Blogs", icon: NotebookText },
     { href: "/Workouts", name: "Workouts", icon: Dumbbell },

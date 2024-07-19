@@ -16,7 +16,6 @@ export const authenticationMiddleware = (
 ) => {
   const token = req.cookies.token;
 
-  console.log(JWT_SECRET);
   if (!token) {
     return unauthorizedResponse(
       res,

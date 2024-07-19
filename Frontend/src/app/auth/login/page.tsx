@@ -16,9 +16,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
-
 import { toast } from "@/components/ui/use-toast";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/ui/loader";
 import { useSession } from "@/context/authContext";
@@ -33,16 +32,9 @@ const FormSchema = z.object({
 
 const Login = () => {
   const router = useRouter();
-  const [showPassword, setShowPassword] = useState<Boolean>(false);
-
-  const { login, isAuthenticated } = useSession();
-
-  useEffect(() => {
-    console.log(isAuthenticated)
-    if (isAuthenticated) {
-      router.push("/"); // Redirect to home page if already authenticated
-    }
-  }, [isAuthenticated, router]);
+  const { isAuthenticated, setIsAuthenticated } = useSession();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -51,44 +43,39 @@ const Login = () => {
       password: "",
     },
   });
-  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true);
     try {
       const response = await fetch("http://localhost:5000/auth/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include", // Ensures cookies are sent with request
         body: JSON.stringify(data),
       });
 
       const result = await response.json();
-      if (response.ok) {
-        toast({
-          title: "Login successful",
-          description: result.message,
-          variant: "default",
-        });
 
-        setTimeout(() => {
-          router.push("/");
-        }, 3000);
-      } else {
+      if (!response.ok) {
+        setIsAuthenticated(false)
         toast({
           title: "Login failed",
           description: result.message,
           variant: "destructive",
         });
+      } else {
+        setIsAuthenticated(true)
+        toast({
+          title: "Login successful",
+          description: result.message,
+          variant: "default",
+        });
+        router.push("/dashboard");
       }
-      login();
     } catch (error) {
-      console.error(error);
       toast({
-        title: "Failed to login",
-        description: "An unexpected error occurred. Please try again.",
+        title: "An error occurred",
+        description: "Please try again later.",
         variant: "destructive",
       });
     } finally {
@@ -100,10 +87,10 @@ const Login = () => {
     <main
       className={`${roboto.className} flex text-sm justify-center items-center w-full`}
     >
-      <div className="w-[28rem] flex flex-col justify-center items-center my-10 ">
-        <h1 className=" text-3xl m-6">Log In</h1>
+      <div className="w-[28rem] flex flex-col justify-center items-center my-10">
+        <h1 className="text-3xl m-6">Log In</h1>
         <div className="flex gap-1">
-          <p className=" text-stone-400">Don&apos;t have an account?</p>
+          <p className="text-stone-400">Don&apos;t have an account?</p>
           <Link href="/auth/signup" className="underline">
             Sign Up
           </Link>

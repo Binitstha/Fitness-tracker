@@ -1,10 +1,9 @@
 "use client";
+
 import Link from "next/link";
 import NavLinks from "./ui/navLinks";
 import Image from "next/image";
 import { Button } from "./ui/button";
-
-import * as React from "react";
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 import {
@@ -14,12 +13,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { inter, roboto_mono } from "@/app/fonts";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { useSession } from "@/context/authContext";
 
 const NavBar = () => {
   const { setTheme } = useTheme();
-  const session = false;
+  const { isAuthenticated, user } = useSession();
+
   return (
-    <section className={` ${roboto_mono.className}`}>
+    <section className={`${roboto_mono.className}`}>
       <div className="fixed right-10 top-5">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -30,29 +32,28 @@ const NavBar = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setTheme("light")}>
-              Light
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("dark")}>
-              Dark
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("system")}>
-              System
-            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("light")}>Light</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("dark")}>Dark</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("system")}>System</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
       <div className="flex justify-between items-center border-b border-stone-500 h-16 px-[15rem]">
         <div className="text-3xl">
           <Link href={"/"}>
-            <Image src="/logo.svg" alt="logo" height={100} width={100}></Image>
+            <Image src="/logo.svg" alt="logo" height={100} width={100} />
           </Link>
         </div>
         <div className="flex gap-5 justify-center items-center">
           <NavLinks />
         </div>
-        {session ? (
-          <div>user</div>
+        {isAuthenticated ? (
+          <Avatar className="w-10 h-10 rounded-full overflow-hidden">
+            <AvatarImage src={user?.avatarUrl || "https://github.com/shadcn.png"} />
+            <AvatarFallback>
+              {user?.name?.charAt(0) || "U"}
+            </AvatarFallback>
+          </Avatar>
         ) : (
           <div className={`${inter.className} flex gap-3`}>
             <Link href="/auth/login">
@@ -67,4 +68,5 @@ const NavBar = () => {
     </section>
   );
 };
+
 export default NavBar;

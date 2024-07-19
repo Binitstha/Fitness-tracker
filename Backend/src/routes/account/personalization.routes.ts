@@ -1,6 +1,9 @@
 import express from "express";
 import multer from "multer";
-import { personalizeProfile } from "./personalization.controller";
+import {
+  getUserDetails,
+  personalizeProfile,
+} from "./personalization.controller";
 import { personalizationSchema } from "../../schemas/schemas";
 import { validateMultipartSchema } from "../../middleware/validateSchema";
 import upload from "../../config/multer.config";
@@ -15,5 +18,7 @@ router.post(
   validateMultipartSchema(personalizationSchema),
   personalizeProfile
 );
+
+router.get("/userDetail", authenticationMiddleware, getUserDetails);
 
 export default router;
