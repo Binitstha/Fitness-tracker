@@ -19,6 +19,16 @@ const REFRESH_TOKEN_SECRET = env.REFRESH_TOKEN_SECRET;
 export const register = async (req: Request, res: Response) => {
   try {
     const data = req.body;
+    const { email } = data;
+
+    const userExist = await prisma.user.findFirst({ where: { email } });
+
+    if (userExist)
+      return validationErrorResponse(
+        res,
+        "A user with this email already exists. Please use a different email address."
+      );
+
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
     const newUser = await prisma.user.create({
@@ -55,7 +65,7 @@ export const login = async (req: Request, res: Response) => {
       { expiresIn: "30m" }
     );
 
-    res.cookie("token", accessToken , {
+    res.cookie("token", accessToken, {
       httpOnly: true,
     });
 

@@ -72,26 +72,24 @@ const Signin = () => {
         },
         body: JSON.stringify(data),
       });
+      const result = await response.json();
 
       if (response.ok) {
         toast({
           title: "Registration successful",
-          description:
-            "You have successfully registered. Redirecting to login...",
+          description: result.message,
           variant: "default",
         });
 
         setTimeout(() => {
-          router.push("/auth/login");
-        }, 3000);
+          router.push("/account/personalize");
+        }, 1500);
       } else {
         toast({
           title: "Registration failed",
-          description:
-            "There was an error registering your account. Please try again.",
+          description: result.message,
           variant: "destructive",
         });
-        throw new Error("Failed to register user");
       }
     } catch (error) {
       console.error(error);

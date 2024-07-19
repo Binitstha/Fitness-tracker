@@ -18,9 +18,10 @@ import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
 
 import { toast } from "@/components/ui/use-toast";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/ui/loader";
+import { useSession } from "@/context/authContext";
 
 const FormSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -31,7 +32,18 @@ const FormSchema = z.object({
 });
 
 const Login = () => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState<Boolean>(false);
+
+  const { login, isAuthenticated } = useSession();
+
+  useEffect(() => {
+    console.log(isAuthenticated)
+    if (isAuthenticated) {
+      router.push("/"); // Redirect to home page if already authenticated
+    }
+  }, [isAuthenticated, router]);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -39,7 +51,6 @@ const Login = () => {
       password: "",
     },
   });
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
@@ -50,7 +61,7 @@ const Login = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
         body: JSON.stringify(data),
       });
 
@@ -72,6 +83,7 @@ const Login = () => {
           variant: "destructive",
         });
       }
+      login();
     } catch (error) {
       console.error(error);
       toast({

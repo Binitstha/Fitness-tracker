@@ -16,19 +16,21 @@ export const authenticationMiddleware = (
 ) => {
   const token = req.cookies.token;
 
-  console.log(JWT_SECRET)
+  console.log(JWT_SECRET);
   if (!token) {
-    console.log("Token not found in cookies");
-    return unauthorizedResponse(res, "Unauthorized user");
+    return unauthorizedResponse(
+      res,
+      "Access unauthorized. Please log in again."
+    );
   }
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
-    console.log("Token decoded:", decoded);
     (req as AuthenticatedRequest).userId = decoded.userId;
     next();
   } catch (err) {
     console.log("Token verification failed:", err);
-    return unauthorizedResponse(res, "Unauthorized user");
+    return unauthorizedResponse(res, "Session expired or invalid token. Please log in again.");
+
   }
 };

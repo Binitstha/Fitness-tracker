@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import NavBar from "@/components/navBar";
 import { Toaster } from "@/components/ui/toaster";
+import { AuthProvider } from "@/context/authContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,10 +27,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          
-          <NavBar/>
-          {children}
-          <Toaster/>
+          <AuthProvider>
+            <NavBar />
+            {children}
+            <Toaster />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
