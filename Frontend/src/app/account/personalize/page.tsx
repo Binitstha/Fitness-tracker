@@ -248,7 +248,7 @@ const Personalize = () => {
                 )}
               />
               <div className="flex gap-3 justify-center items-center">
-                <Link href={"/"}>
+                <Link href={"/dashboard"}>
                   <Button className="w-28">Skip for now</Button>
                 </Link>
                 <Button className="w-28" type="submit" disabled={loading}>
@@ -258,9 +258,6 @@ const Personalize = () => {
             </form>
           </Form>
         </div>
-        <Button className="w-28" onClick={dummy}>
-          submit
-        </Button>
       </div>
     </main>
   );

@@ -1,12 +1,21 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { toast } from "@/components/ui/use-toast";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 
 interface AuthContextType {
   isAuthenticated: boolean;
   user: any | null;
+  logOut: () => Promise<void>;
   fetchUserDetails: () => Promise<void>;
-  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>; // Add type for setIsAuthenticated
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -22,6 +31,7 @@ export const useSession = () => {
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<any | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const fetchUserDetails = useCallback(async () => {
     try {
@@ -44,6 +54,36 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.error(error);
       setIsAuthenticated(false);
       setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const logOut = useCallback(async () => {
+    try {
+      const response = await fetch("http://localhost:5000/account/logOut", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      const result = await response.json();
+      if (!response.ok) {
+        toast({
+          title: "Error not found",
+          description: result.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Logout Successfully",
+          description: result.message,
+          variant: "default",
+        });
+      }
+    } catch (error) {
+      console.error("Failed to log out:", error);
     }
   }, []);
 
@@ -52,7 +92,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [fetchUserDetails]);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, setIsAuthenticated, fetchUserDetails }}>
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        user,
+        setIsAuthenticated,
+        fetchUserDetails,
+        logOut,
+        loading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

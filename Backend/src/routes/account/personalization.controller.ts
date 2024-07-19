@@ -46,15 +46,30 @@ export const getUserDetails = async (
       return notFoundResponse(res, "User not found");
     }
 
-    const { password, ...result } = userDetail;
+    const { id, password, ...result } = userDetail;
 
-    successResponse(
-      res,
-      { result, authenticated: true },
-      "User details retrieved successfully"
-    );
+    successResponse(res, result, "User details retrieved successfully");
   } catch (error) {
     console.error("Failed to fetch the user data:", error);
     serverErrorResponse(res, "Failed to fetch user data");
+  }
+};
+
+export const logout = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    await prisma.refreshToken.deleteMany({
+      where: {
+        userId: req.userId,
+      },
+    });
+
+    res.clearCookie("token", {
+      httpOnly: true,
+    });
+
+    successResponse(res, null, "You have been successfully logged out.");
+  } catch (error) {
+    console.log(error);
+    serverErrorResponse(res, "An error occurred while logging out. Please try again later.");
   }
 };

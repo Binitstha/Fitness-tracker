@@ -12,6 +12,7 @@ import jwt from "jsonwebtoken";
 import { url } from "inspector";
 import env from "../../config/env";
 import { emailSender } from "../../utils/lib";
+import { AuthenticatedRequest } from "../../middleware/authentication";
 
 const JWT_SECRET = env.JWT_SECRET;
 const REFRESH_TOKEN_SECRET = env.REFRESH_TOKEN_SECRET;
@@ -200,3 +201,4 @@ export const resetPassword = async (req: Request, res: Response) => {
     );
   }
 };
+

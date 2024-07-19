@@ -6,16 +6,19 @@ import { useEffect } from "react";
 
 const Page = () => {
   const router = useRouter();
-  const { isAuthenticated,user } = useSession();
+  const { isAuthenticated, user, loading } = useSession();
 
   useEffect(() => {
-    console.log("page", isAuthenticated);
-    console.log(user)
-    if (!isAuthenticated) {
-
-      router.push("/auth/login");
+    if (!loading) {
+      if (!isAuthenticated) {
+        router.push("/auth/login");
+      }
     }
-  }, [isAuthenticated,user, router]);
+  }, [isAuthenticated, user, loading, router]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return <main>Hello, this is the dashboard page</main>;
 };

@@ -29,7 +29,9 @@ export const authenticationMiddleware = (
     next();
   } catch (err) {
     console.log("Token verification failed:", err);
-    return unauthorizedResponse(res, "Session expired or invalid token. Please log in again.");
-
+    return unauthorizedResponse(
+      res,
+      "Session expired or invalid token. Please log in again."
+    );
   }
 };

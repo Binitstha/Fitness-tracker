@@ -15,10 +15,23 @@ import {
 import { inter, roboto_mono } from "@/app/fonts";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { useSession } from "@/context/authContext";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const NavBar = () => {
   const { setTheme } = useTheme();
-  const { isAuthenticated, user } = useSession();
+  const { isAuthenticated, user, setIsAuthenticated, logOut } = useSession();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await logOut();
+    router.push("/auth/login");
+    setIsAuthenticated(false);
+  };
+
+  useEffect(() => {
+    // Force re-render when authentication state changes
+  }, [isAuthenticated, user]);
 
   return (
     <section className={`${roboto_mono.className}`}>
@@ -32,9 +45,15 @@ const NavBar = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setTheme("light")}>Light</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("dark")}>Dark</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("system")}>System</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("light")}>
+              Light
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("dark")}>
+              Dark
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("system")}>
+              System
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -48,12 +67,26 @@ const NavBar = () => {
           <NavLinks />
         </div>
         {isAuthenticated ? (
-          <Avatar className="w-10 h-10 rounded-full overflow-hidden">
-            <AvatarImage src={user?.avatarUrl || "https://github.com/shadcn.png"} />
-            <AvatarFallback>
-              {user?.name?.charAt(0) || "U"}
-            </AvatarFallback>
-          </Avatar>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Avatar className="w-10 h-10 rounded-full overflow-hidden border flex justify-center items-center cursor-pointer">
+                <AvatarImage
+                  src={`http://localhost:5000/public/image/user/${user?.data.profileImage}?${new Date().getTime()}`} // Cache busting
+                />
+                <AvatarFallback className="flex justify-center items-center">
+                  {user?.data.firstName?.charAt(0) || "U"}
+                </AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={() => router.push("/account/personalize")}
+              >
+                Personalize
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         ) : (
           <div className={`${inter.className} flex gap-3`}>
             <Link href="/auth/login">
