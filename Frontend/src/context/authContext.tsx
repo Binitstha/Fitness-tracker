@@ -61,7 +61,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logOut = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:5000/account/logOut", {
+      const response = await fetch("http://localhost:5000/auth/logOut", {
+        method: 'POST',
         headers: {
           "Content-Type": "application/json",
         },

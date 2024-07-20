@@ -2,7 +2,6 @@ import express from "express";
 import multer from "multer";
 import {
   getUserDetails,
-  logout,
   personalizeProfile,
 } from "./personalization.controller";
 import { personalizationSchema } from "../../schemas/schemas";
@@ -21,7 +20,5 @@ router.post(
 );
 
 router.get("/userDetail", authenticationMiddleware, getUserDetails);
-
-router.post("/logOut", authenticationMiddleware, logout);
 
 export default router;

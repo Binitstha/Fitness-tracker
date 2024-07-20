@@ -6,6 +6,7 @@ import {
   refreshToken,
   forgotPassword,
   resetPassword,
+  logout,
 } from "./auth.controller";
 import { validateSchema } from "../../middleware/validateSchema";
 import {
@@ -36,5 +37,8 @@ router.post(
   validateSchema(resetPasswordSchema),
   resetPassword
 );
+
+router.post("/logOut", authenticationMiddleware, logout);
+
 
 export default router;

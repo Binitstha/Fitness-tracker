@@ -5,6 +5,7 @@ import authRoutes from "./src/routes/auth/auth.routes";
 import personalizationRoutes from "./src/routes/account/personalization.routes";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import path from "path";
 
 const app = express();
 
@@ -16,6 +17,9 @@ app.use(
     credentials: true,
   })
 );
+
+app.use('/public', express.static(path.join(__dirname, 'public')));
+
 
 app.use(express.json());
 app.use(cookieParser());
