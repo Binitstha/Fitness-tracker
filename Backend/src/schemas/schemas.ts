@@ -50,3 +50,22 @@ export const personalizationSchema = z.object({
   city: z.string().min(1, { message: "City is required" }),
   profileImage: z.any().optional(),
 });
+
+export const workoutSchema = z.object({
+  id: z.string().uuid({ message: "Invalid workout ID format" }),
+  date: z
+    .string()
+    .transform((str) => new Date(str))
+    .refine((date) => !isNaN(date.getTime()), {
+      message: "Invalid date format",
+    }),
+  type: z.string().min(1, { message: "Workout type is required" }),
+  duration: z
+    .number()
+    .min(1, { message: "Duration must be at least 1 minute" }),
+  calories: z
+    .number()
+    .int()
+    .min(0, { message: "Calories must be a non-negative integer" }),
+  userId: z.string().uuid({ message: "Invalid user ID format" }),
+});

@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -22,11 +16,15 @@ model User {
   dateOfBirth   String
   gender        String
   country       String
-  weight        String?
-  height        String?
+  weight        Float?
+  height        Float?
   city          String?
   profileImage  String?
   refreshTokens RefreshToken[]
+  workouts      Workout[]
+  meals         Meal[]
+  goals         Goal[]
+  progress      Progress[]
 }
 
 model RefreshToken {
@@ -34,4 +32,43 @@ model RefreshToken {
   token  String @unique @db.VarChar(400)
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Workout {
+  id          String    @id @default(uuid())
+  date        DateTime
+  type        String
+  duration    Int
+  calories    Int
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Meal {
+  id          String    @id @default(uuid())
+  date        DateTime
+  type        String
+  calories    Int
+  description String?
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Goal {
+  id          String    @id @default(uuid())
+  description String
+  targetDate  DateTime
+  achieved    Boolean   @default(false)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Progress {
+  id          String    @id @default(uuid())
+  date        DateTime
+  weight      Float?
+  bodyFat     Float?
+  muscleMass  Float?
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

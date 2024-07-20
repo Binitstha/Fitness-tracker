@@ -203,7 +203,6 @@ export const resetPassword = async (req: Request, res: Response) => {
 };
 
 export const logout = async (req: AuthenticatedRequest, res: Response) => {
-  console.log(req.userId);
   try {
     await prisma.refreshToken.deleteMany({
       where: {
