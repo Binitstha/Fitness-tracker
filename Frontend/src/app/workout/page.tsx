@@ -74,7 +74,6 @@ const Page = () => {
 
   return (
     <main className="m-10 mx-28 flex gap-5">
-      <div className="flex flex-col gap-5">
         <section className="flex gap-5">
           <Card className="w-80">
             <CardHeader>
