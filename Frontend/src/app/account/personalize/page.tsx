@@ -56,13 +56,15 @@ const Personalize = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    setLoading(true)
     const { weight, city, profileImage, heightFT, heightIN } = data;
     const formData = new FormData();
     formData.append("city", city);
-    formData.append("profileImage", profileImage); // Directly appending the file object
+    formData.append("profileImage", profileImage);
     formData.append("height", `${heightFT}'${heightIN}"`);
     formData.append("weight", `${weight}kg`);
 
+    console.log(formData)
     try {
       const response = await fetch(
         `http://localhost:5000/account/personalize`,
@@ -74,10 +76,9 @@ const Personalize = () => {
       );
 
       const result = await response.json();
-      console.log(result);
       if (!response.ok) {
         toast({
-          title: "Error not found",
+          title: "Error not found",     
           description: result.message,
           variant: "destructive",
         });
@@ -89,7 +90,6 @@ const Personalize = () => {
         });
       }
     } catch (error) {
-      console.error(error);
       toast({
         title: "Failed to update the personal detail",
         description: "An unexpected error occurred. Please try again.",

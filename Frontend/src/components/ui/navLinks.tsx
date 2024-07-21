@@ -2,15 +2,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
-import { House,NotebookText} from "lucide-react";
-import { Dumbbell } from "lucide-react";
+import { House, Dumbbell, FileText, Utensils } from "lucide-react";
 
 const NavLinks = () => {
   const links = [
     { href: "/dashboard", name: "Dashboard", icon: House },
-    { href: "/Workout", name: "Workout", icon: Dumbbell },
-    { href: "/Blogs", name: "Blogs", icon: NotebookText },
-    { href: "/Workouts", name: "Workouts", icon: Dumbbell },
+    { href: "/workout", name: "Workout", icon: Dumbbell },
+    { href: "/nutritions", name: "Nutritions", icon: Utensils },
+    { href: "/blogs", name: "Blogs", icon: FileText },
   ];
 
   const pathname = usePathname();
@@ -23,8 +22,8 @@ const NavLinks = () => {
             key={link.name}
             href={link.href}
             className={clsx(
-              { " text-stone-400 border-b-2 border-stone-600": link.href === pathname },
-              ` h-[48px] text-sm font-medium hover:text-stone-600 transition-all duration-150 flex justify-center items-center gap-3`,
+              { "text-stone-400 border-b-2 border-stone-600": link.href === pathname },
+              `h-[48px] text-sm font-medium hover:text-stone-600 transition-all duration-150 flex justify-center items-center gap-3`,
             )}
           >
             <LinkIcon />
