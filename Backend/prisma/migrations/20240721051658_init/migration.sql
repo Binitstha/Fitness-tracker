@@ -8,8 +8,8 @@ CREATE TABLE `User` (
     `dateOfBirth` VARCHAR(191) NOT NULL,
     `gender` VARCHAR(191) NOT NULL,
     `country` VARCHAR(191) NOT NULL,
-    `weight` DOUBLE NULL,
-    `height` DOUBLE NULL,
+    `weight` VARCHAR(191) NULL,
+    `height` VARCHAR(191) NULL,
     `city` VARCHAR(191) NULL,
     `profileImage` VARCHAR(191) NULL,
 

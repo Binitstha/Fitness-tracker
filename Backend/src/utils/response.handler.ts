@@ -14,7 +14,7 @@ export const serverErrorResponse = (
   message = "Server Error",
   statusCode = 500
 ) => {
-  res.status(statusCode).json({ status: "erroasdasr", message });
+  res.status(statusCode).json({ status: "error", message });
 };
 
 export const validationErrorResponse = (

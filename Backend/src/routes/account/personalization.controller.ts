@@ -23,12 +23,13 @@ export const personalizeProfile = async (
         weight,
         height,
         city,
-        profileImage: profileImage?.filename, // Save the filename in your database
+        profileImage: profileImage?.filename,
       },
     });
 
     successResponse(res, null, "Profile updated successfully");
   } catch (error) {
+    console.log(error)
     serverErrorResponse(res, "failed to update the data");
   }
 };

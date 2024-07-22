@@ -7,6 +7,8 @@ import { createWorkout } from './workout.controller';
 const router = Router();
 
 router.post('/create', authenticationMiddleware, validateSchema(workoutSchema), createWorkout);
+
+
 // router.get('/', authenticationMiddleware, getWorkouts);
 // router.put('/update/:id', authenticationMiddleware, validateSchema(workoutSchema), updateWorkout);
 // router.delete('/delete/:id', authenticationMiddleware, deleteWorkout);

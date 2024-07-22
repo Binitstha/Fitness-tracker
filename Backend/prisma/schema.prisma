@@ -16,8 +16,8 @@ model User {
   dateOfBirth   String
   gender        String
   country       String
-  weight        Float?
-  height        Float?
+  weight        String?
+  height        String?
   city          String?
   profileImage  String?
   refreshTokens RefreshToken[]
