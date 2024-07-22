@@ -49,7 +49,7 @@ const workouts: Workout[] = [
 ];
 
 const FormSchema = z.object({
-  type: z.string().min(2, { message: "Workout type cannot be empty" }),
+  type: z.string().min(1, { message: "Please select a workout type to proceed." }),
   speed: z
     .string()
     .max(2, { message: "Speed cannot be more than 99" })
