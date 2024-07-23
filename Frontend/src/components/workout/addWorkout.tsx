@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -29,6 +29,7 @@ import {
 } from "../ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Loader from "@/components/ui/loader";
 
 type Workout = {
   type: string;
@@ -49,7 +50,9 @@ const workouts: Workout[] = [
 ];
 
 const FormSchema = z.object({
-  type: z.string().min(1, { message: "Please select a workout type to proceed." }),
+  type: z
+    .string()
+    .min(1, { message: "Please select a workout type to proceed." }),
   speed: z
     .string()
     .max(2, { message: "Speed cannot be more than 99" })
@@ -60,6 +63,7 @@ const FormSchema = z.object({
 const AddWorkout = () => {
   const [selectedWorkout, setSelectedWorkout] = useState<Workout | null>(null);
   const [calories, setCalories] = useState("0.00");
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -98,14 +102,15 @@ const AddWorkout = () => {
     setCalories(caloriesBurned.toFixed(2));
   };
 
-  const handleInputChange = () => {
+  const handleInputChange = useCallback(() => {
     const { speed, effort } = form.getValues();
     if (selectedWorkout) {
       calculateCalories(speed, effort, selectedWorkout.baseCaloriesPerHour);
     }
-  };
+  }, [selectedWorkout, form]);
 
   const onSubmit = (data: z.infer<typeof FormSchema>) => {
+    setLoading(true);
     console.log(data); // Replace this with your actual submit logic
   };
 
@@ -117,7 +122,7 @@ const AddWorkout = () => {
 
   useEffect(() => {
     handleInputChange();
-  }, [form.watch("speed"), form.watch("effort"), selectedWorkout]);
+  }, [handleInputChange, selectedWorkout]);
 
   return (
     <>
@@ -140,6 +145,7 @@ const AddWorkout = () => {
                         <Select
                           onValueChange={(value) => handleWorkoutChange(value)}
                           value={field.value}
+                          disabled={loading}
                         >
                           <SelectTrigger id="workoutType">
                             <SelectValue placeholder="Select a workout" />
@@ -170,6 +176,7 @@ const AddWorkout = () => {
                           <FormLabel htmlFor="speed">Speed (km/h)</FormLabel>
                           <FormControl>
                             <Input
+                              disabled={loading}
                               id="speed"
                               placeholder="Speed"
                               {...field}
@@ -197,6 +204,7 @@ const AddWorkout = () => {
                           <FormControl>
                             <Select
                               value={field.value || ""}
+                              disabled={loading}
                               onValueChange={(value) => {
                                 field.onChange(value);
                                 handleInputChange();
@@ -225,6 +233,7 @@ const AddWorkout = () => {
                       <Label htmlFor="calories">Calories Burned</Label>
                       <Input
                         id="calories"
+                        disabled={loading}
                         placeholder="Calories burned"
                         value={calories ? `${calories} calories` : ""}
                         readOnly
@@ -234,10 +243,17 @@ const AddWorkout = () => {
                 )}
               </div>
               <CardFooter className="flex justify-between mt-4">
-                <Button variant="outline" type="button" onClick={handleCancelBtn}>
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={handleCancelBtn}
+                  disabled={loading}
+                >
                   Cancel
                 </Button>
-                <Button type="submit">Save Workout</Button>
+                <Button type="submit" disabled={loading}>
+                  {loading ? <Loader /> : "Save Workout"}
+                </Button>
               </CardFooter>
             </form>
           </Form>
