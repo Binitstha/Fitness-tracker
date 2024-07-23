@@ -36,7 +36,7 @@ model RefreshToken {
 
 model Workout {
   id       String   @id @default(uuid())
-  date     DateTime
+  date     String
   type     String
   duration Int
   calories Int

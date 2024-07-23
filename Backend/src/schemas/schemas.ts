@@ -52,12 +52,9 @@ export const personalizationSchema = z.object({
 });
 
 export const workoutSchema = z.object({
-  date: z
-    .string()
-    .transform((str) => new Date(str))
-    .refine((date) => !isNaN(date.getTime()), {
-      message: "Invalid date format",
-    }),
+  date: z.string({
+    message: "Invalid date format",
+  }),
   type: z.string().min(1, { message: "Workout type is required" }),
   speed: z
     .number()

@@ -65,6 +65,7 @@ const FormSchema = z.object({
     .min(1, { message: "Duration must be at least 1 minute" })
     .max(999, { message: "Duration cannot be more than 999 minutes" })
     .optional(),
+  date: z.string().optional(),
 });
 
 const AddWorkout = () => {
@@ -78,7 +79,7 @@ const AddWorkout = () => {
       type: "",
       speed: undefined,
       effort: "low",
-      duration: undefined
+      duration: undefined,
     },
   });
 
@@ -120,16 +121,26 @@ const AddWorkout = () => {
   const handleInputChange = useCallback(() => {
     const { speed, effort, duration } = form.getValues();
     if (selectedWorkout) {
-      calculateCalories(speed, effort, duration, selectedWorkout.baseCaloriesPerHour);
+      calculateCalories(
+        speed,
+        effort,
+        duration,
+        selectedWorkout.baseCaloriesPerHour,
+      );
     }
   }, [selectedWorkout, form]);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true);
+    const date = new Date();
+    const formattedDate = date.toISOString().split("T")[0];
     try {
-      await createWorkout({ ...data, calories: calories });
+      await createWorkout({ ...data, date: formattedDate, calories: calories });
     } finally {
       setLoading(false);
+      setSelectedWorkout(null);
+      setCalories(0.0);
+      form.reset();
     }
   };
 
@@ -210,7 +221,8 @@ const AddWorkout = () => {
                           </FormControl>
                           <FormMessage />
                           <FormDescription>
-                            Optional: Enter the speed to refine calorie estimates.
+                            Optional: Enter the speed to refine calorie
+                            estimates.
                           </FormDescription>
                         </FormItem>
                       )}
@@ -220,7 +232,9 @@ const AddWorkout = () => {
                       name="duration"
                       render={({ field }) => (
                         <FormItem className="flex flex-col space-y-1.5">
-                          <FormLabel htmlFor="duration">Duration (min)</FormLabel>
+                          <FormLabel htmlFor="duration">
+                            Duration (min)
+                          </FormLabel>
                           <FormControl>
                             <Input
                               disabled={loading}
@@ -243,7 +257,9 @@ const AddWorkout = () => {
                       name="effort"
                       render={({ field }) => (
                         <FormItem className="flex flex-col space-y-1.5">
-                          <FormLabel htmlFor="effort">Effort (if applicable)</FormLabel>
+                          <FormLabel htmlFor="effort">
+                            Effort (if applicable)
+                          </FormLabel>
                           <FormControl>
                             <Select
                               value={field.value || ""}
@@ -258,13 +274,16 @@ const AddWorkout = () => {
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectItem value="low">Low</SelectItem>
-                                <SelectItem value="moderate">Moderate</SelectItem>
+                                <SelectItem value="moderate">
+                                  Moderate
+                                </SelectItem>
                                 <SelectItem value="high">High</SelectItem>
                               </SelectContent>
                             </Select>
                           </FormControl>
                           <FormDescription>
-                            Optional: Select the effort level to adjust calorie estimates.
+                            Optional: Select the effort level to adjust calorie
+                            estimates.
                           </FormDescription>
                         </FormItem>
                       )}

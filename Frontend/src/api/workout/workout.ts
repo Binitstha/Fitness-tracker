@@ -12,7 +12,6 @@ export const createWorkout = async (data: any) => {
     });
     const result = await response.json();
 
-    console.log(result)
     if (response.ok) {
       toast({
         title: "Workout created successfully",

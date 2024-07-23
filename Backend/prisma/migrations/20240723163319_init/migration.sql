@@ -30,7 +30,7 @@ CREATE TABLE `RefreshToken` (
 -- CreateTable
 CREATE TABLE `Workout` (
     `id` VARCHAR(191) NOT NULL,
-    `date` DATETIME(3) NOT NULL,
+    `date` VARCHAR(191) NOT NULL,
     `type` VARCHAR(191) NOT NULL,
     `duration` INTEGER NOT NULL,
     `calories` INTEGER NOT NULL,
