@@ -30,6 +30,7 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Loader from "@/components/ui/loader";
+import { createWorkout } from "@/api/workout/workout";
 
 type Workout = {
   type: string;
@@ -54,23 +55,30 @@ const FormSchema = z.object({
     .string()
     .min(1, { message: "Please select a workout type to proceed." }),
   speed: z
-    .string()
-    .max(2, { message: "Speed cannot be more than 99" })
+    .number()
+    .min(0)
+    .max(99, { message: "Speed cannot be more than 99" })
     .optional(),
   effort: z.string().optional(),
+  duration: z
+    .number()
+    .min(1, { message: "Duration must be at least 1 minute" })
+    .max(999, { message: "Duration cannot be more than 999 minutes" })
+    .optional(),
 });
 
 const AddWorkout = () => {
   const [selectedWorkout, setSelectedWorkout] = useState<Workout | null>(null);
-  const [calories, setCalories] = useState("0.00");
+  const [calories, setCalories] = useState(0.0);
   const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       type: "",
-      speed: "0",
+      speed: undefined,
       effort: "low",
+      duration: undefined
     },
   });
 
@@ -79,45 +87,56 @@ const AddWorkout = () => {
     setSelectedWorkout(workout);
     form.setValue("type", value);
     form.clearErrors("type");
-    setCalories("0.00");
+    setCalories(0.0);
   };
 
   const calculateCalories = (
-    speed: string | undefined,
+    speed: number | undefined,
     effort: string | undefined,
+    duration: number | undefined,
     baseCalories: number,
   ) => {
     let caloriesBurned = baseCalories;
+
     if (speed) {
-      const speedNum = parseFloat(speed);
-      if (!isNaN(speedNum)) {
-        caloriesBurned = baseCalories * (speedNum / 10);
+      if (!isNaN(speed)) {
+        caloriesBurned = baseCalories * (speed / 10);
       }
     }
+
     if (effort) {
       const effortNum =
         effort === "low" ? 0.8 : effort === "moderate" ? 1.0 : 1.2;
       caloriesBurned = baseCalories * effortNum;
     }
-    setCalories(caloriesBurned.toFixed(2));
+
+    if (duration) {
+      caloriesBurned = (caloriesBurned / 60) * duration; // Adjust for duration in minutes
+    }
+
+    setCalories(Number(Math.floor(caloriesBurned)));
   };
 
   const handleInputChange = useCallback(() => {
-    const { speed, effort } = form.getValues();
+    const { speed, effort, duration } = form.getValues();
     if (selectedWorkout) {
-      calculateCalories(speed, effort, selectedWorkout.baseCaloriesPerHour);
+      calculateCalories(speed, effort, duration, selectedWorkout.baseCaloriesPerHour);
     }
   }, [selectedWorkout, form]);
 
-  const onSubmit = (data: z.infer<typeof FormSchema>) => {
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true);
-    console.log(data); // Replace this with your actual submit logic
+    try {
+      await createWorkout({ ...data, calories: calories });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCancelBtn = () => {
     setSelectedWorkout(null);
-    setCalories("0.00");
-    form.reset(); // Reset form fields to default values
+    setCalories(0.0);
+    form.reset();
   };
 
   useEffect(() => {
@@ -177,19 +196,45 @@ const AddWorkout = () => {
                           <FormControl>
                             <Input
                               disabled={loading}
+                              type="number"
                               id="speed"
+                              min={0}
+                              max={99}
                               placeholder="Speed"
                               {...field}
                               onChange={(e) => {
-                                field.onChange(e);
+                                field.onChange(Number(e.target.value));
                                 handleInputChange();
                               }}
                             />
                           </FormControl>
+                          <FormMessage />
                           <FormDescription>
-                            Optional: Enter the speed to refine calorie
-                            estimates.
+                            Optional: Enter the speed to refine calorie estimates.
                           </FormDescription>
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="duration"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col space-y-1.5">
+                          <FormLabel htmlFor="duration">Duration (min)</FormLabel>
+                          <FormControl>
+                            <Input
+                              disabled={loading}
+                              type="number"
+                              id="duration"
+                              placeholder="Duration"
+                              {...field}
+                              onChange={(e) => {
+                                field.onChange(Number(e.target.value));
+                                handleInputChange();
+                              }}
+                            />
+                          </FormControl>
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -198,9 +243,7 @@ const AddWorkout = () => {
                       name="effort"
                       render={({ field }) => (
                         <FormItem className="flex flex-col space-y-1.5">
-                          <FormLabel htmlFor="effort">
-                            Effort (if applicable)
-                          </FormLabel>
+                          <FormLabel htmlFor="effort">Effort (if applicable)</FormLabel>
                           <FormControl>
                             <Select
                               value={field.value || ""}
@@ -215,16 +258,13 @@ const AddWorkout = () => {
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectItem value="low">Low</SelectItem>
-                                <SelectItem value="moderate">
-                                  Moderate
-                                </SelectItem>
+                                <SelectItem value="moderate">Moderate</SelectItem>
                                 <SelectItem value="high">High</SelectItem>
                               </SelectContent>
                             </Select>
                           </FormControl>
                           <FormDescription>
-                            Optional: Select the effort level to adjust calorie
-                            estimates.
+                            Optional: Select the effort level to adjust calorie estimates.
                           </FormDescription>
                         </FormItem>
                       )}

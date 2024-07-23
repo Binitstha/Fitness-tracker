@@ -9,18 +9,21 @@ import { AuthenticatedRequest } from "../../middleware/authentication";
 
 const prisma = new PrismaClient();
 
-export const createWorkout = async (req: AuthenticatedRequest, res: Response) => {
+export const createWorkout = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
   try {
     const data = req.body;
 
-    // const workout = await prisma.workout.create({
-    //   data: {
-    //     ...data,
-    //     date: new Date(data.date),
-    //     userId: req.userId,
-    //   },
-    // });
-    successResponse(res, null, "Successfully created workout");
+    const workout = await prisma.workout.create({
+      data: {
+        ...data,
+        date: new Date(data.date),
+        userId: req.userId,
+      },
+    });
+    successResponse(res, workout, "Successfully created workout");
   } catch (error) {
     console.error(error);
     return serverErrorResponse(res, "Failed to create workout");

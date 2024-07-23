@@ -52,7 +52,6 @@ export const personalizationSchema = z.object({
 });
 
 export const workoutSchema = z.object({
-  id: z.string().uuid({ message: "Invalid workout ID format" }),
   date: z
     .string()
     .transform((str) => new Date(str))
@@ -60,6 +59,12 @@ export const workoutSchema = z.object({
       message: "Invalid date format",
     }),
   type: z.string().min(1, { message: "Workout type is required" }),
+  speed: z
+    .number()
+    .min(0)
+    .max(99, { message: "Speed cannot be more than 99" })
+    .optional(),
+  effort: z.string().optional(),
   duration: z
     .number()
     .min(1, { message: "Duration must be at least 1 minute" }),
@@ -67,5 +72,4 @@ export const workoutSchema = z.object({
     .number()
     .int()
     .min(0, { message: "Calories must be a non-negative integer" }),
-  userId: z.string().uuid({ message: "Invalid user ID format" }),
 });

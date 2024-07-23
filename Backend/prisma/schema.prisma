@@ -35,40 +35,42 @@ model RefreshToken {
 }
 
 model Workout {
-  id          String    @id @default(uuid())
-  date        DateTime
-  type        String
-  duration    Int
-  calories    Int
-  userId      String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id       String   @id @default(uuid())
+  date     DateTime
+  type     String
+  duration Int
+  calories Int
+  userId   String
+  speed    Int
+  effort   String
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Meal {
-  id          String    @id @default(uuid())
+  id          String   @id @default(uuid())
   date        DateTime
   type        String
   calories    Int
   description String?
   userId      String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Goal {
-  id          String    @id @default(uuid())
+  id          String   @id @default(uuid())
   description String
   targetDate  DateTime
-  achieved    Boolean   @default(false)
+  achieved    Boolean  @default(false)
   userId      String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Progress {
-  id          String    @id @default(uuid())
-  date        DateTime
-  weight      Float?
-  bodyFat     Float?
-  muscleMass  Float?
-  userId      String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id         String   @id @default(uuid())
+  date       DateTime
+  weight     Float?
+  bodyFat    Float?
+  muscleMass Float?
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
