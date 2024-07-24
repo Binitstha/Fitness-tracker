@@ -64,7 +64,8 @@ export const workoutSchema = z.object({
   effort: z.string().optional(),
   duration: z
     .number()
-    .min(1, { message: "Duration must be at least 1 minute" }),
+    .min(1, { message: "Duration must be at least 1 minute" })
+    .optional(),
   calories: z
     .number()
     .int()

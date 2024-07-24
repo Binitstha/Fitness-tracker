@@ -31,10 +31,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Loader from "@/components/ui/loader";
 import { createWorkout } from "@/api/workout/workout";
+import { workoutType } from "@/types/types";
 
 type Workout = {
   type: string;
   baseCaloriesPerHour: number;
+};
+
+type onAddWorkType = {
+  onAddWork: () => void;
 };
 
 const workouts: Workout[] = [
@@ -68,7 +73,7 @@ const FormSchema = z.object({
   date: z.string().optional(),
 });
 
-const AddWorkout = () => {
+const AddWorkout = ({ onAddWork }: onAddWorkType) => {
   const [selectedWorkout, setSelectedWorkout] = useState<Workout | null>(null);
   const [calories, setCalories] = useState(0.0);
   const [loading, setLoading] = useState(false);
@@ -136,6 +141,7 @@ const AddWorkout = () => {
     const formattedDate = date.toISOString().split("T")[0];
     try {
       await createWorkout({ ...data, date: formattedDate, calories: calories });
+      onAddWork()
     } finally {
       setLoading(false);
       setSelectedWorkout(null);

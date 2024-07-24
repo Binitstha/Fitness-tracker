@@ -38,10 +38,10 @@ model Workout {
   id       String   @id @default(uuid())
   date     String
   type     String
-  duration Int
+  duration Int?
   calories Int
   userId   String
-  speed    Int
+  speed    Int?
   effort   String
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

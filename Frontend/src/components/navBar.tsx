@@ -35,7 +35,7 @@ const NavBar = () => {
 
   return (
     <section className={`${roboto_mono.className}`}>
-      <div className="fixed right-10 top-5">
+      <div className="fixed right-10 top-4 z-20">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon">
@@ -57,7 +57,7 @@ const NavBar = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="flex justify-between items-center border-b border-stone-500 h-16 px-[15rem]">
+      <div className="flex justify-between items-center border-b border-stone-500 h-16 px-[15rem] sticky top-0">
         <div className="text-3xl">
           <Link href={"/"}>
             <Image src="/logo.svg" alt="logo" height={100} width={100} />

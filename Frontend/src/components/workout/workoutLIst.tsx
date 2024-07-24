@@ -1,3 +1,5 @@
+"use client";
+import { useState, useEffect } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,7 +20,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-
 import {
   Carousel,
   CarouselContent,
@@ -26,8 +27,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { workoutType } from "@/types/types";
 
-const WorkoutList = () => {
+const WorkoutList = ({ workoutData }: { workoutData: workoutType[] }) => {
   return (
     <Carousel
       opts={{
@@ -37,44 +39,73 @@ const WorkoutList = () => {
       className="w-full py-2 mb-10"
     >
       <CarouselContent>
-        {Array.from({ length: 5 }).map((_, index) => (
-          <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+        {workoutData.length > 0 ? (
+          workoutData.map((workout, index) => (
+            <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+              <Card className="w-[20.9rem] h-full">
+                <CardHeader>
+                  <CardTitle className="flex justify-between">
+                    <div>{workout.type}</div>
+                    <div>{workout.date}</div>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="grid grid-cols-2 gap-2 h-[3rem]">
+                    <div>Calories: {workout.calories} Kcal</div>
+                    {workout.effort && <div>Effort: {workout.effort}</div>}
+                    {workout.speed && <div>Speed: {workout.speed} km/h</div>}
+                    {workout.duration && (
+                      <div>Duration: {workout.duration} min</div>
+                    )}
+                  </CardDescription>
+                </CardContent>
+                <CardFooter className="flex justify-between bottom-0">
+                  <Button variant="outline">Update</Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="destructive">Delete</Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action is irreversible. Deleting this workout
+                          will permanently remove it from your records. Are you
+                          sure you want to proceed?
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction>Continue</AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </CardFooter>
+              </Card>
+            </CarouselItem>
+          ))
+        ) : (
+          <CarouselItem className="md:basis-1/2 lg:basis-1/3">
             <Card className="w-[20.8rem]">
               <CardHeader>
-                <CardTitle>Workout title</CardTitle>
+                <CardTitle>No Workouts</CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription>Workout description</CardDescription>
+                <CardDescription>
+                  You have no workouts logged. Add some workouts to see them
+                  here.
+                </CardDescription>
               </CardContent>
-              <CardFooter className="flex justify-between">
-                <Button variant="outline">Update</Button>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="destructive">Delete</Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Are you absolutely sure?
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. This will permanently
-                        delete your workout data from our servers.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction>Continue</AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </CardFooter>
             </Card>
           </CarouselItem>
-        ))}
+        )}
       </CarouselContent>
-      <CarouselPrevious className=" left-[30rem] top-[210px]" />
-      <CarouselNext className=" right-[30rem] top-[210px]" />
+      {workoutData.length > 3 && (
+        <>
+          <CarouselPrevious className="left-[30rem] top-[235px]" />
+          <CarouselNext className="right-[30rem] top-[235px]" />
+        </>
+      )}
     </Carousel>
   );
 };

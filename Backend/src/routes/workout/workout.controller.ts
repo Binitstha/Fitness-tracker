@@ -29,17 +29,17 @@ export const createWorkout = async (
   }
 };
 
-// export const getWorkouts = async (req: Request, res: Response) => {
-//   try {
-//     const workouts = await prisma.workout.findMany({
-//       where: { userId: req.userId },
-//     });
-//     res.status(200).json(workouts);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Failed to get workouts' });
-//   }
-// };
+export const getWorkouts = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const workouts = await prisma.workout.findMany({
+      where: { userId: req.userId },
+    });
+    successResponse(res, workouts, "Successfully retrieve workouts");
+  } catch (error) {
+    console.error(error);
+    return serverErrorResponse(res, "Failed to create workout");
+  }
+};
 
 // export const updateWorkout = async (req: Request, res: Response) => {
 //   try {

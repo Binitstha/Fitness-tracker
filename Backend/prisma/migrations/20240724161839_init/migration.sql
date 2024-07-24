@@ -32,10 +32,10 @@ CREATE TABLE `Workout` (
     `id` VARCHAR(191) NOT NULL,
     `date` VARCHAR(191) NOT NULL,
     `type` VARCHAR(191) NOT NULL,
-    `duration` INTEGER NOT NULL,
+    `duration` INTEGER NULL,
     `calories` INTEGER NOT NULL,
     `userId` VARCHAR(191) NOT NULL,
-    `speed` INTEGER NOT NULL,
+    `speed` INTEGER NULL,
     `effort` VARCHAR(191) NOT NULL,
 
     PRIMARY KEY (`id`)

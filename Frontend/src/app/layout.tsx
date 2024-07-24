@@ -28,7 +28,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            <NavBar />
+            <section className="sticky top-0 z-10 backdrop-blur-lg">
+              <NavBar />
+            </section>
             {children}
             <Toaster />
           </AuthProvider>
