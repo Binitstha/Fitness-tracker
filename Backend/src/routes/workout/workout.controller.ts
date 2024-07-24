@@ -22,10 +22,10 @@ export const createWorkout = async (
         userId: req.userId,
       },
     });
-    successResponse(res, workout, "Successfully created workout");
+    successResponse(res, workout, "Workout created successfully.");
   } catch (error) {
-    console.error(error);
-    return serverErrorResponse(res, "Failed to create workout");
+    console.error("Error creating workout:", error);
+    return serverErrorResponse(res, "An error occurred while creating the workout.");
   }
 };
 
@@ -34,12 +34,24 @@ export const getWorkouts = async (req: AuthenticatedRequest, res: Response) => {
     const workouts = await prisma.workout.findMany({
       where: { userId: req.userId },
     });
-    successResponse(res, workouts, "Successfully retrieve workouts");
+    successResponse(res, workouts, "Workouts retrieved successfully.");
   } catch (error) {
-    console.error(error);
-    return serverErrorResponse(res, "Failed to create workout");
+    console.error("Error retrieving workouts:", error);
+    return serverErrorResponse(res, "An error occurred while retrieving workouts.");
   }
 };
+
+export const deleteWorkout = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    await prisma.workout.delete({ where: { id } });
+    successResponse(res, null, "Workout deleted successfully.");
+  } catch (error) {
+    console.error("Error deleting workout:", error);
+    return serverErrorResponse(res, "An error occurred while deleting the workout.");
+  }
+};
+
 
 // export const updateWorkout = async (req: Request, res: Response) => {
 //   try {
@@ -58,16 +70,5 @@ export const getWorkouts = async (req: AuthenticatedRequest, res: Response) => {
 //   } catch (error) {
 //     console.error(error);
 //     res.status(500).json({ error: 'Failed to update workout' });
-//   }
-// };
-
-// export const deleteWorkout = async (req: Request, res: Response) => {
-//   try {
-//     const { id } = req.params;
-//     await prisma.workout.delete({ where: { id } });
-//     res.status(204).send();
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Failed to delete workout' });
 //   }
 // };

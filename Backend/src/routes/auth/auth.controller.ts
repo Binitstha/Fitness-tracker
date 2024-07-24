@@ -63,7 +63,7 @@ export const login = async (req: Request, res: Response) => {
     const accessToken = jwt.sign(
       { userId: user.id, userEmail: user.email },
       JWT_SECRET as string,
-      { expiresIn: "30m" }
+      { expiresIn: "3d" }
     );
 
     res.cookie("token", accessToken, {
