@@ -25,7 +25,10 @@ export const createWorkout = async (
     successResponse(res, workout, "Workout created successfully.");
   } catch (error) {
     console.error("Error creating workout:", error);
-    return serverErrorResponse(res, "An error occurred while creating the workout.");
+    return serverErrorResponse(
+      res,
+      "An error occurred while creating the workout."
+    );
   }
 };
 
@@ -37,38 +40,50 @@ export const getWorkouts = async (req: AuthenticatedRequest, res: Response) => {
     successResponse(res, workouts, "Workouts retrieved successfully.");
   } catch (error) {
     console.error("Error retrieving workouts:", error);
-    return serverErrorResponse(res, "An error occurred while retrieving workouts.");
+    return serverErrorResponse(
+      res,
+      "An error occurred while retrieving workouts."
+    );
   }
 };
 
-export const deleteWorkout = async (req: AuthenticatedRequest, res: Response) => {
+export const deleteWorkout = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
   try {
     const { id } = req.params;
     await prisma.workout.delete({ where: { id } });
     successResponse(res, null, "Workout deleted successfully.");
   } catch (error) {
     console.error("Error deleting workout:", error);
-    return serverErrorResponse(res, "An error occurred while deleting the workout.");
+    return serverErrorResponse(
+      res,
+      "An error occurred while deleting the workout."
+    );
   }
 };
 
-
-// export const updateWorkout = async (req: Request, res: Response) => {
-//   try {
-//     const { id } = req.params;
-//     const { date, type, duration, calories } = req.body;
-//     const workout = await prisma.workout.update({
-//       where: { id },
-//       data: {
-//         date: new Date(date),
-//         type,
-//         duration,
-//         calories,
-//       },
-//     });
-//     res.status(200).json(workout);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Failed to update workout' });
-//   }
-// };
+export const updateWorkout = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { date, duration, calories, speed, effort } = req.body;
+    const workout = await prisma.workout.update({
+      where: { id },
+      data: {
+        date,
+        duration,
+        calories,
+        speed,
+        effort,
+      },
+    });
+    successResponse(res, null, "Workout updated successfully.");
+  } catch (error) {
+    console.error(error);
+    return serverErrorResponse(
+      res,
+      "An error occurred while updating the workout."
+    );
+  }
+};
