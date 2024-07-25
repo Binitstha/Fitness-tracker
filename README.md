@@ -1,7 +1,3 @@
-Sure! Here's a basic `README.md` file for your fitness tracker project:
-
----
-
 # Fitness Tracker
 
 ## Overview
@@ -25,7 +21,7 @@ The Fitness Tracker is a web application designed to help users log and track th
 - Styling: Tailwind CSS
 - State Management: React Context
 - Form Handling: React Hook Form, Zod
-- UI Components: Custom components using Tailwind and Headless UI
+- UI Components: Custom components using Tailwind and Shadcn UI
 
 ## Getting Started
 
