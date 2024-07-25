@@ -41,7 +41,7 @@ export const getWorkouts = async (req: AuthenticatedRequest, res: Response) => {
   }
 };
 
-export const deleteWorkout = async (req: Request, res: Response) => {
+export const deleteWorkout = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { id } = req.params;
     await prisma.workout.delete({ where: { id } });

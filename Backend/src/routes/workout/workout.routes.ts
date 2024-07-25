@@ -10,7 +10,6 @@ router.post('/create', authenticationMiddleware, validateSchema(workoutSchema), 
 router.get('/', authenticationMiddleware, getWorkouts);
 router.delete('/delete/:id', authenticationMiddleware, deleteWorkout);
 
-
 // router.put('/update/:id', authenticationMiddleware, validateSchema(workoutSchema), updateWorkout);
 
 export default router;

@@ -28,8 +28,24 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { workoutType } from "@/types/types";
+import { deleteWorkout } from "@/api/workout/workout";
 
-const WorkoutList = ({ workoutData }: { workoutData: workoutType[] }) => {
+const WorkoutList = ({
+  workoutData,
+  setWorkoutData,
+}: {
+  workoutData: workoutType[];
+  setWorkoutData: React.Dispatch<React.SetStateAction<workoutType[]>>;
+}) => {
+  const handleDelete = (id: string) => {
+    try {
+      deleteWorkout(id);
+      setWorkoutData((prev) => prev.filter((workout) => workout.id !== id));
+    } catch (error) {
+      console.log(error);
+    } finally {
+    }
+  };
   return (
     <Carousel
       opts={{
@@ -76,7 +92,11 @@ const WorkoutList = ({ workoutData }: { workoutData: workoutType[] }) => {
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction>Continue</AlertDialogAction>
+                        <AlertDialogAction
+                          onClick={() => handleDelete(workout.id)}
+                        >
+                          Continue
+                        </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>

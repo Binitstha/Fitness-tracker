@@ -38,7 +38,7 @@ const Page = () => {
   }, [addWorkout]);
 
   const handleAddWorkout = () => {
-    setAddWorkout((prev) => !prev); // Toggle to trigger re-fetch
+    setAddWorkout((prev) => !prev);
   };
 
   if (loading) {
@@ -49,7 +49,7 @@ const Page = () => {
     <main className="m-5 mx-28 flex gap-5 justify-center">
       <div className="flex flex-col w-[65rem] gap-5">
         <section className="flex gap-5">
-          <WorkoutList workoutData={workoutData} />
+          <WorkoutList workoutData={workoutData} setWorkoutData={setWorkoutData}/>
         </section>
         <section className="border rounded-md w-full flex justify-center items-center">
           <WorkOutChart />
