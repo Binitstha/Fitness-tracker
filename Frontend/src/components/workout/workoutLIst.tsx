@@ -1,5 +1,4 @@
-"use client";
-import { useState, useEffect } from "react";
+import { workoutType } from "@/types/types";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,15 +26,17 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { workoutType } from "@/types/types";
 import { deleteWorkout } from "@/api/workout/workout";
+import { UpdateWorkout } from "./updateWorkout";
 
 const WorkoutList = ({
   workoutData,
   setWorkoutData,
+  onWorkoutUpdate,
 }: {
   workoutData: workoutType[];
   setWorkoutData: React.Dispatch<React.SetStateAction<workoutType[]>>;
+  onWorkoutUpdate: () => void;
 }) => {
   const handleDelete = (id: string) => {
     try {
@@ -43,9 +44,9 @@ const WorkoutList = ({
       setWorkoutData((prev) => prev.filter((workout) => workout.id !== id));
     } catch (error) {
       console.log(error);
-    } finally {
     }
   };
+
   return (
     <Carousel
       opts={{
@@ -76,7 +77,7 @@ const WorkoutList = ({
                   </CardDescription>
                 </CardContent>
                 <CardFooter className="flex justify-between bottom-0">
-                  <Button variant="outline">Update</Button>
+                  <UpdateWorkout workout={workout} onWorkoutUpdate={onWorkoutUpdate} />
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant="destructive">Delete</Button>

@@ -31,29 +31,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Loader from "@/components/ui/loader";
 import { createWorkout } from "@/api/workout/workout";
-import { workoutType } from "@/types/types";
-
-type Workout = {
-  type: string;
-  baseCaloriesPerHour: number;
-};
+import { formattedDate, Workout, workouts } from "@/lib/utils";
 
 type onAddWorkType = {
   onAddWork: () => void;
 };
-
-const workouts: Workout[] = [
-  { type: "Running", baseCaloriesPerHour: 700 },
-  { type: "Walking", baseCaloriesPerHour: 275 },
-  { type: "Cycling", baseCaloriesPerHour: 550 },
-  { type: "Jumping Rope", baseCaloriesPerHour: 800 },
-  { type: "Swimming", baseCaloriesPerHour: 500 },
-  { type: "HIIT", baseCaloriesPerHour: 750 },
-  { type: "Rowing", baseCaloriesPerHour: 500 },
-  { type: "Stair Climbing", baseCaloriesPerHour: 600 },
-  { type: "Elliptical Trainer", baseCaloriesPerHour: 600 },
-  { type: "Strength Training", baseCaloriesPerHour: 400 },
-];
 
 const FormSchema = z.object({
   type: z
@@ -117,7 +99,7 @@ const AddWorkout = ({ onAddWork }: onAddWorkType) => {
     }
 
     if (duration) {
-      caloriesBurned = (caloriesBurned / 60) * duration; // Adjust for duration in minutes
+      caloriesBurned = (caloriesBurned / 60) * duration;
     }
 
     setCalories(Number(Math.floor(caloriesBurned)));
@@ -137,8 +119,7 @@ const AddWorkout = ({ onAddWork }: onAddWorkType) => {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true);
-    const date = new Date();
-    const formattedDate = date.toISOString().split("T")[0];
+
     try {
       await createWorkout({ ...data, date: formattedDate, calories: calories });
       onAddWork()

@@ -55,7 +55,7 @@ export const workoutSchema = z.object({
   date: z.string({
     message: "Invalid date format",
   }),
-  type: z.string().min(1, { message: "Workout type is required" }),
+  type: z.string().min(1, { message: "Workout type is required" }).optional(),
   speed: z
     .number()
     .min(0)

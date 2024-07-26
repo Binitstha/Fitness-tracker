@@ -13,7 +13,6 @@ const Page = () => {
   const router = useRouter();
   const { isAuthenticated, user, loading } = useSession();
 
-  // Use useState and useEffect unconditionally
   const [workoutData, setWorkoutData] = useState<workoutType[]>([]);
   const [addWorkout, setAddWorkout] = useState<Boolean>(false);
 
@@ -41,6 +40,10 @@ const Page = () => {
     setAddWorkout((prev) => !prev);
   };
 
+  const handleUpdateWorkout = () => {
+    setAddWorkout((prev) => !prev); // Toggle the state to trigger re-fetch
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -49,7 +52,7 @@ const Page = () => {
     <main className="m-5 mx-28 flex gap-5 justify-center">
       <div className="flex flex-col w-[65rem] gap-5">
         <section className="flex gap-5">
-          <WorkoutList workoutData={workoutData} setWorkoutData={setWorkoutData}/>
+          <WorkoutList workoutData={workoutData} setWorkoutData={setWorkoutData} onWorkoutUpdate={handleUpdateWorkout} />
         </section>
         <section className="border rounded-md w-full flex justify-center items-center">
           <WorkOutChart />

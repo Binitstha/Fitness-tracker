@@ -9,6 +9,10 @@ import { AuthenticatedRequest } from "../../middleware/authentication";
 
 const prisma = new PrismaClient();
 
+const getUserWorkouts = async (userId: string| undefined) => {
+  return await prisma.workout.findMany({ where: { userId } });
+};
+
 export const createWorkout = async (
   req: AuthenticatedRequest,
   res: Response
@@ -16,13 +20,15 @@ export const createWorkout = async (
   try {
     const data = req.body;
 
-    const workout = await prisma.workout.create({
+    await prisma.workout.create({
       data: {
         ...data,
         userId: req.userId,
       },
     });
-    successResponse(res, workout, "Workout created successfully.");
+
+    const workouts = await getUserWorkouts(req.userId);
+    successResponse(res, workouts, "Workout created successfully.");
   } catch (error) {
     console.error("Error creating workout:", error);
     return serverErrorResponse(
@@ -34,9 +40,7 @@ export const createWorkout = async (
 
 export const getWorkouts = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const workouts = await prisma.workout.findMany({
-      where: { userId: req.userId },
-    });
+    const workouts = await getUserWorkouts(req.userId);
     successResponse(res, workouts, "Workouts retrieved successfully.");
   } catch (error) {
     console.error("Error retrieving workouts:", error);
@@ -54,7 +58,9 @@ export const deleteWorkout = async (
   try {
     const { id } = req.params;
     await prisma.workout.delete({ where: { id } });
-    successResponse(res, null, "Workout deleted successfully.");
+
+    const workouts = await getUserWorkouts(req.userId);
+    successResponse(res, workouts, "Workout deleted successfully.");
   } catch (error) {
     console.error("Error deleting workout:", error);
     return serverErrorResponse(
@@ -64,11 +70,11 @@ export const deleteWorkout = async (
   }
 };
 
-export const updateWorkout = async (req: Request, res: Response) => {
+export const updateWorkout = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { id } = req.params;
     const { date, duration, calories, speed, effort } = req.body;
-    const workout = await prisma.workout.update({
+    await prisma.workout.update({
       where: { id },
       data: {
         date,
@@ -78,7 +84,9 @@ export const updateWorkout = async (req: Request, res: Response) => {
         effort,
       },
     });
-    successResponse(res, null, "Workout updated successfully.");
+
+    const workouts = await getUserWorkouts(req.userId);
+    successResponse(res, workouts, "Workout updated successfully.");
   } catch (error) {
     console.error(error);
     return serverErrorResponse(
