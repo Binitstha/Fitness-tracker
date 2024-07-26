@@ -1,15 +1,6 @@
 "use client";
 
-import * as React from "react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
   ChartConfig,
   ChartContainer,
@@ -18,83 +9,74 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { workoutType } from "@/types/types";
+import { useState, useEffect } from "react";
 
 export const description = "An interactive bar chart";
 
-const chartData = [
-  { date: "2024-04-01", desktop: 222, mobile: 150 },
-  { date: "2024-04-02", desktop: 97, mobile: 180 },
-  { date: "2024-04-03", desktop: 167, mobile: 120 },
-  { date: "2024-06-18", desktop: 107, mobile: 170 },
-  { date: "2024-06-19", desktop: 341, mobile: 290 },
-  { date: "2024-06-20", desktop: 408, mobile: 450 },
-  { date: "2024-06-21", desktop: 169, mobile: 210 },
-  { date: "2024-06-22", desktop: 317, mobile: 270 },
-  { date: "2024-06-23", desktop: 480, mobile: 530 },
-  { date: "2024-06-24", desktop: 132, mobile: 180 },
-  { date: "2024-06-25", desktop: 141, mobile: 190 },
-  { date: "2024-06-26", desktop: 434, mobile: 380 },
-  { date: "2024-06-27", desktop: 448, mobile: 490 },
-  { date: "2024-06-28", desktop: 149, mobile: 200 },
-  { date: "2024-06-29", desktop: 103, mobile: 160 },
-  { date: "2024-06-30", desktop: 446, mobile: 400 },
-];
-
 const chartConfig = {
-  views: {
-    label: "WorkOutChart Views",
-  },
-  desktop: {
-    label: "Desktop",
+  calories: {
+    label: "Calories Burned",
     color: "hsl(var(--chart-1))",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig;
 
-const WorkOutChart = () => {
-  const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 20, mobile: 140 },
-    { month: "June", desktop: 200, mobile: 140 },
-    { month: "June", desktop: 114, mobile: 140 },
-    { month: "June", desktop: 150, mobile: 140 },
-    { month: "June", desktop: 214, mobile: 140 },
-    { month: "June", desktop: 180, mobile: 140 },
-  ];
+type ChartData = {
+  date: string;
+  calories: number;
+};
 
-  const chartConfig = {
-    desktop: {
-      label: "Desktop",
-      color: "#2563eb",
-    },
-    mobile: {
-      label: "Mobile",
-      color: "#60a5fa",
-    },
-  } satisfies ChartConfig;
+const WorkOutChart = ({ workoutData }: { workoutData: workoutType[] }) => {
+  const [chartData, setChartData] = useState<ChartData[]>([]);
+
+  useEffect(() => {
+    const aggregateCalories = (data: workoutType[]): ChartData[] => {
+      const calorieMap: { [key: string]: number } = {};
+
+      data.forEach((workout) => {
+        const { date, calories } = workout;
+        if (calorieMap[date]) {
+          calorieMap[date] += calories;
+        } else {
+          calorieMap[date] = calories;
+        }
+      });
+
+      return Object.keys(calorieMap)
+        .map((date) => ({
+          date,
+          calories: calorieMap[date],
+        }))
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    };
+
+    const aggregatedData = aggregateCalories(workoutData);
+
+    const latest15Data = aggregatedData.slice(-15);
+    setChartData(latest15Data);
+  }, [workoutData]);
 
   return (
-    <div className="w-[90%]">
-      <ChartContainer config={chartConfig} className=" w-full">
-        <BarChart accessibilityLayer data={chartData}>
+    <div className="w-[90%] py-3">
+      <ChartContainer config={chartConfig} className="w-full">
+        <BarChart data={chartData}>
           <CartesianGrid vertical={false} />
           <XAxis
-            dataKey="month"
-            tickLine={true}
+            dataKey="date"
+            tickLine={false}
             tickMargin={10}
             axisLine={false}
-            tickFormatter={(value) => value.slice(0, 3)}
+            tickFormatter={(value) => value.slice(5)}
           />
-          <ChartTooltip content={<ChartTooltipContent />} />
+          <YAxis />
+          <ChartTooltip content={<ChartTooltipContent nameKey="calories" />} />
           <ChartLegend content={<ChartLegendContent />} />
-          <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
+          <Bar
+            dataKey="calories"
+            fill="var(--color-calories)"
+            radius={4}
+            barSize={30}
+          />
         </BarChart>
       </ChartContainer>
     </div>

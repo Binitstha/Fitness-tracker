@@ -57,7 +57,7 @@ const WorkoutList = ({
     >
       <CarouselContent>
         {workoutData.length > 0 ? (
-          workoutData.map((workout, index) => (
+          workoutData.slice(0,3).map((workout, index) => (
             <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
               <Card className="w-[20.9rem] h-full">
                 <CardHeader>
