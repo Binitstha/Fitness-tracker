@@ -2,6 +2,7 @@
 
 import { getWorkouts } from "@/api/workout/workout";
 import AddWorkout from "@/components/workout/addWorkout";
+import Goal from "@/components/workout/goal";
 import WorkOutChart from "@/components/workout/workoutChart";
 import WorkoutList from "@/components/workout/workoutLIst";
 import { useSession } from "@/context/authContext";
@@ -62,9 +63,12 @@ const Page = () => {
           <WorkOutChart workoutData={workoutData} />
         </section>
       </div>
-      <div className="sticky top-4">
+      <div className="sticky top-4 flex flex-col gap-5">
         <section>
           <AddWorkout onAddWork={handleAddWorkout} />
+        </section>
+        <section>
+          <Goal/>
         </section>
       </div>
     </main>

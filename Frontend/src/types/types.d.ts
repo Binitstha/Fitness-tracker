@@ -8,3 +8,7 @@ export type workoutType = {
   type: string;
   userId: string;
 };
+
+export type goal = {
+  
+}

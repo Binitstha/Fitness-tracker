@@ -57,12 +57,24 @@ model Meal {
 }
 
 model Goal {
+  id             String         @id @default(uuid())
+  description    String
+  targetDate     DateTime
+  achieved       Boolean        @default(false)
+  targetCalories Int
+  currentCalories Int           @default(0)
+  userId         String
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievements   Achievement[]
+}
+
+model Achievement {
   id          String   @id @default(uuid())
+  title       String
   description String
-  targetDate  DateTime
-  achieved    Boolean  @default(false)
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date        DateTime
+  goalId      String
+  goal        Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
 }
 
 model Progress {

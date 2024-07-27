@@ -69,7 +69,7 @@ const WorkOutChart = ({ workoutData }: { workoutData: workoutType[] }) => {
             tickFormatter={(value) => value.slice(5)}
           />
           <YAxis />
-          <ChartTooltip content={<ChartTooltipContent nameKey="calories" />} />
+          <ChartTooltip content={<ChartTooltipContent nameKey="indeicator" />} />
           <ChartLegend content={<ChartLegendContent />} />
           <Bar
             dataKey="calories"
