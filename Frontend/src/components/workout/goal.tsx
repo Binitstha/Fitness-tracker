@@ -27,6 +27,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
 import Loader from "../ui/loader";
 import { formattedDate } from "@/lib/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 
 type PropsType = {
   goalData: goalType | null;
@@ -49,11 +57,11 @@ const Goal = ({ goalData, onAddGoal }: PropsType) => {
   const progress = goal ? (currentCalories / goal.targetCalories) * 100 : 0;
 
   const formSchema = z.object({
-    description: z.string().min(0, { message: "Description cannot be empty" }),
-    targetDate: z.string().nonempty({ message: "Date cannot be empty" }),
+    description: z.string().min(1, { message: "Description cannot be empty" }),
+    targetDate: z.string().min(1, { message: "Date cannot be empty" }),
     targetCalories: z
       .number()
-      .min(0, { message: "Target calories cannot be lower than 0" }),
+      .min(1, { message: "Target calories must be at least 1" }),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -61,13 +69,14 @@ const Goal = ({ goalData, onAddGoal }: PropsType) => {
     defaultValues: {
       description: "",
       targetDate: "",
-      targetCalories: 0, // Set default value to 0
+      targetCalories: 1,
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values);
-    onAddGoal(values);
+    await onAddGoal(values);
+    form.reset();
   };
 
   return (
@@ -81,7 +90,10 @@ const Goal = ({ goalData, onAddGoal }: PropsType) => {
       <CardContent className="text-center">
         {goal ? (
           <div className="my-4">
-            <Progress value={progress} className="w-full h-4 rounded-full" />
+            <Progress
+              value={progress}
+              className="w-full h-4 rounded-full bg-gradient-to-r from-green-400 to-yellow-400"
+            />
             <p className="mt-2 text-sm">
               {currentCalories} / {goal.targetCalories} calories burned
             </p>
@@ -91,69 +103,6 @@ const Goal = ({ goalData, onAddGoal }: PropsType) => {
             No goal set. Set a new goal below.
           </p>
         )}
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 text-start"
-          >
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter goal description" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="targetDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Target Date</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} min={formattedDate} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="targetCalories"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Target Calories (kcal)</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Enter target calories"
-                      {...field}
-                      onChange={(e) => {
-                        field.onChange(Number(e.target.value));
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <CardFooter className="flex justify-between mt-4">
-              <Button
-                variant="outline"
-                type="button"
-                onClick={() => form.reset()}
-              >
-                Cancel
-              </Button>
-              <Button type="submit">Save Goal</Button>
-            </CardFooter>
-          </form>
-        </Form>
         <div className="mt-6">
           <p className="text-gray-600 italic">
             &quot;Keep going! Every step counts.&quot;
@@ -166,7 +115,7 @@ const Goal = ({ goalData, onAddGoal }: PropsType) => {
               {goal.achievements?.map((achievement) => (
                 <div
                   key={achievement.id}
-                  className="bg-yellow-400 p-2 rounded-full"
+                  className="bg-yellow-400 p-2 rounded-full flex items-center"
                 >
                   🏅 {achievement.title}
                 </div>
@@ -174,6 +123,80 @@ const Goal = ({ goalData, onAddGoal }: PropsType) => {
             </div>
           </div>
         )}
+        <div className="mt-4 flex justify-end">
+          <Dialog>
+            <DialogTrigger>
+              <Button>Add Goal</Button>
+            </DialogTrigger>
+            <DialogContent className="w-96">
+              <DialogHeader>
+                <DialogTitle>Add Your Calorie Goal</DialogTitle>
+                <DialogDescription>
+                  Fill in the details below to set a new calorie-burning goal.
+                </DialogDescription>
+              </DialogHeader>
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-4 text-start"
+                >
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="E.g., Burn 500 calories in a week"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="targetDate"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Target Date</FormLabel>
+                        <FormControl>
+                          <Input type="date" {...field} min={formattedDate} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="targetCalories"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Target Calories (kcal)</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder="Enter target calories"
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(Number(e.target.value));
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className=" flex justify-between">
+                    <Button type="submit">Save Goal</Button>
+                  </div>
+                </form>
+              </Form>
+            </DialogContent>
+          </Dialog>
+        </div>
       </CardContent>
     </Card>
   );

@@ -83,5 +83,4 @@ export const goalSchema = z.object({
     .number()
     .min(0, { message: "Current calories cannot be negative" })
     .default(0),
-  userId: z.string().min(1, { message: "User ID cannot be empty" }),
 });

@@ -1,7 +1,7 @@
 import { toast } from "@/components/ui/use-toast";
 import { goalType } from "@/types/types";
 
-export const getWorkouts = async (data: goalType) => {
+export const addGoal = async (data: Omit<goalType, "id" | "achieved">) => {
   try {
     const response = await fetch("http://localhost:5000/goal/addGoal", {
       method: "POST",
@@ -13,11 +13,27 @@ export const getWorkouts = async (data: goalType) => {
     });
     const result = await response.json();
 
-    return result.data;
+    
+    console.log(result)
+    // if (response.ok) {
+    //   toast({
+    //     title: "Goal added",
+    //     description: "Your goal has been successfully added.",
+    //     variant: "default",
+    //   });
+    //   return result.data;
+    // } else {
+    //   toast({
+    //     title: "Failed to add goal",
+    //     description: result.message || "An unexpected error occurred. Please try again.",
+    //     variant: "destructive",
+    //   });
+    // }
+    return result
   } catch (error) {
     console.error(error);
     toast({
-      title: "Failed to fetch workouts",
+      title: "Failed to add goal",
       description: "An unexpected error occurred. Please try again.",
       variant: "destructive",
     });

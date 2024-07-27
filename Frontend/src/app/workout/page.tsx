@@ -1,5 +1,6 @@
 "use client";
 
+import { addGoal } from "@/api/goal/goal";
 import { getWorkouts } from "@/api/workout/workout";
 import AddWorkout from "@/components/workout/addWorkout";
 import Goal from "@/components/workout/goal";
@@ -45,12 +46,12 @@ const Page = () => {
   };
 
   const handleAddGoal = async (newGoal: Omit<goalType, "id" | "achieved" | "userId">) => {
-    // try {
-    //   const addedGoal = await addGoal(newGoal);
-    //   setGoalData(addedGoal);
-    // } catch (error) {
-    //   console.error("Error adding goal:", error);
-    // }
+    try {
+      const addedGoal = await addGoal(newGoal);
+      setGoalData(addedGoal);
+    } catch (error) {
+      console.error("Error adding goal:", error);
+    }
   };
 
   if (loading) {
