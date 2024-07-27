@@ -71,3 +71,17 @@ export const workoutSchema = z.object({
     .int()
     .min(0, { message: "Calories must be a non-negative integer" }),
 });
+
+export const goalSchema = z.object({
+  description: z.string().min(1, { message: "Description cannot be empty" }),
+  targetDate: z.string({ message: "Target date cannot be in the past" }),
+  achieved: z.boolean().default(false),
+  targetCalories: z
+    .number()
+    .min(1, { message: "Target calories must be at least 1 calorie" }),
+  currentCalories: z
+    .number()
+    .min(0, { message: "Current calories cannot be negative" })
+    .default(0),
+  userId: z.string().min(1, { message: "User ID cannot be empty" }),
+});

@@ -57,7 +57,7 @@ const WorkOutChart = ({ workoutData }: { workoutData: workoutType[] }) => {
   }, [workoutData]);
 
   return (
-    <div className="w-[90%] py-3">
+    <div className="w-[90%] py-3 ">
       <ChartContainer config={chartConfig} className="w-full">
         <BarChart data={chartData}>
           <CartesianGrid vertical={false} />

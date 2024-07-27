@@ -49,7 +49,7 @@ const Goal = ({ goalData, onAddGoal }: PropsType) => {
   const progress = goal ? (currentCalories / goal.targetCalories) * 100 : 0;
 
   const formSchema = z.object({
-    description: z.string().nonempty({ message: "Description cannot be empty" }),
+    description: z.string().min(0, { message: "Description cannot be empty" }),
     targetDate: z.string().nonempty({ message: "Date cannot be empty" }),
     targetCalories: z
       .number()
@@ -61,16 +61,13 @@ const Goal = ({ goalData, onAddGoal }: PropsType) => {
     defaultValues: {
       description: "",
       targetDate: "",
-      targetCalories: undefined,
+      targetCalories: 0, // Set default value to 0
     },
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    const newGoal = {
-      ...values,
-      targetCalories: Number(values.targetCalories),
-    };
-    onAddGoal(newGoal);
+    console.log(values);
+    onAddGoal(values);
   };
 
   return (
@@ -90,10 +87,15 @@ const Goal = ({ goalData, onAddGoal }: PropsType) => {
             </p>
           </div>
         ) : (
-          <p className="my-4 text-gray-500">No goal set. Set a new goal below.</p>
+          <p className="my-4 text-gray-500">
+            No goal set. Set a new goal below.
+          </p>
         )}
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 text-start">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4 text-start"
+          >
             <FormField
               control={form.control}
               name="description"
@@ -114,7 +116,7 @@ const Goal = ({ goalData, onAddGoal }: PropsType) => {
                 <FormItem>
                   <FormLabel>Target Date</FormLabel>
                   <FormControl>
-                    <Input type="date" {...field} min={formattedDate}/>
+                    <Input type="date" {...field} min={formattedDate} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -127,31 +129,45 @@ const Goal = ({ goalData, onAddGoal }: PropsType) => {
                 <FormItem>
                   <FormLabel>Target Calories (kcal)</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="Enter target calories" {...field} />
+                    <Input
+                      type="number"
+                      placeholder="Enter target calories"
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(Number(e.target.value));
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <CardFooter className="flex justify-between mt-4">
-              <Button variant="outline" type="button">
+              <Button
+                variant="outline"
+                type="button"
+                onClick={() => form.reset()}
+              >
                 Cancel
               </Button>
-              <Button type="submit">
-                Save Goal
-              </Button>
+              <Button type="submit">Save Goal</Button>
             </CardFooter>
           </form>
         </Form>
         <div className="mt-6">
-          <p className="text-gray-600 italic">&quot;Keep going! Every step counts.&quot;</p>
+          <p className="text-gray-600 italic">
+            &quot;Keep going! Every step counts.&quot;
+          </p>
         </div>
         {goal && (
           <div className="mt-6">
             <p className="text-sm font-bold">Achievement Badges:</p>
             <div className="flex justify-center gap-2 mt-2">
               {goal.achievements?.map((achievement) => (
-                <div key={achievement.id} className="bg-yellow-400 p-2 rounded-full">
+                <div
+                  key={achievement.id}
+                  className="bg-yellow-400 p-2 rounded-full"
+                >
                   🏅 {achievement.title}
                 </div>
               ))}

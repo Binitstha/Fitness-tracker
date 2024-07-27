@@ -57,27 +57,28 @@ const WorkoutList = ({
     >
       <CarouselContent>
         {workoutData.length > 0 ? (
-          workoutData.slice(0,3).map((workout, index) => (
+          workoutData.slice(0, 3).map((workout, index) => (
             <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
               <Card className="w-[20.9rem] h-full">
                 <CardHeader>
                   <CardTitle className="flex justify-between">
-                    <div>{workout.type}</div>
-                    <div>{workout.date}</div>
+                    <span>{workout.type}</span>
+                    <span>{workout.date}</span>
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent >
                   <CardDescription className="grid grid-cols-2 gap-2 h-[3rem]">
-                    <div>Calories: {workout.calories} Kcal</div>
-                    {workout.effort && <div>Effort: {workout.effort}</div>}
-                    {workout.speed && <div>Speed: {workout.speed} km/h</div>}
-                    {workout.duration && (
-                      <div>Duration: {workout.duration} min</div>
-                    )}
+                  <span>Calories: {workout.calories} Kcal</span>
+                  {workout.effort && <span>Effort: {workout.effort}</span>}
+                  {workout.speed && <span>Speed: {workout.speed} km/h</span>}
+                  {workout.duration && <span>Duration: {workout.duration} min</span>}
                   </CardDescription>
                 </CardContent>
                 <CardFooter className="flex justify-between bottom-0">
-                  <UpdateWorkout workout={workout} onWorkoutUpdate={onWorkoutUpdate} />
+                  <UpdateWorkout
+                    workout={workout}
+                    onWorkoutUpdate={onWorkoutUpdate}
+                  />
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant="destructive">Delete</Button>
