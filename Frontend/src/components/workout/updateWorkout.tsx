@@ -122,7 +122,7 @@ export const UpdateWorkout = ({
         calories,
         date: formattedDate,
       });
-      onWorkoutUpdate(); // Call the callback to update the workouts list
+      onWorkoutUpdate();
     } finally {
       setLoading(false);
     }

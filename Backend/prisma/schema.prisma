@@ -59,7 +59,7 @@ model Meal {
 model Goal {
   id             String         @id @default(uuid())
   description    String
-  targetDate     DateTime
+  targetDate     String
   achieved       Boolean        @default(false)
   targetCalories Int
   currentCalories Int           @default(0)

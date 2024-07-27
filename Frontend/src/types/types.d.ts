@@ -9,6 +9,12 @@ export type workoutType = {
   userId: string;
 };
 
-export type goal = {
-  
-}
+export type goalType = {
+  id: string;
+  description: string;
+  targetDate: string;
+  achieved: boolean;
+  targetCalories: number;
+  currentCalories?: number;
+  achievements?: { id: string; title: string }[];
+};

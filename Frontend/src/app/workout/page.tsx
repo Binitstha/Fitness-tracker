@@ -6,7 +6,7 @@ import Goal from "@/components/workout/goal";
 import WorkOutChart from "@/components/workout/workoutChart";
 import WorkoutList from "@/components/workout/workoutLIst";
 import { useSession } from "@/context/authContext";
-import { workoutType } from "@/types/types";
+import { goalType, workoutType } from "@/types/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -15,13 +15,12 @@ const Page = () => {
   const { isAuthenticated, user, loading } = useSession();
 
   const [workoutData, setWorkoutData] = useState<workoutType[]>([]);
-  const [addWorkout, setAddWorkout] = useState<Boolean>(false);
+  const [addWorkout, setAddWorkout] = useState<boolean>(false);
+  const [goalData, setGoalData] = useState<goalType | null>(null);
 
   useEffect(() => {
-    if (!loading) {
-      if (!isAuthenticated) {
-        router.push("/auth/login");
-      }
+    if (!loading && !isAuthenticated) {
+      router.push("/auth/login");
     }
   }, [isAuthenticated, loading, router]);
 
@@ -43,6 +42,15 @@ const Page = () => {
 
   const handleUpdateWorkout = () => {
     setAddWorkout((prev) => !prev); // Toggle the state to trigger re-fetch
+  };
+
+  const handleAddGoal = async (newGoal: Omit<goalType, "id" | "achieved" | "userId">) => {
+    // try {
+    //   const addedGoal = await addGoal(newGoal);
+    //   setGoalData(addedGoal);
+    // } catch (error) {
+    //   console.error("Error adding goal:", error);
+    // }
   };
 
   if (loading) {
@@ -68,7 +76,7 @@ const Page = () => {
           <AddWorkout onAddWork={handleAddWorkout} />
         </section>
         <section>
-          <Goal/>
+          <Goal goalData={goalData} onAddGoal={handleAddGoal} />
         </section>
       </div>
     </main>
