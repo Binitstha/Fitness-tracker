@@ -1,6 +1,6 @@
 "use client";
 
-import { addGoal } from "@/api/goal/goal";
+import { addGoal, getGoal } from "@/api/goal/goal";
 import { getWorkouts } from "@/api/workout/workout";
 import AddWorkout from "@/components/workout/addWorkout";
 import Goal from "@/components/workout/goal";
@@ -37,6 +37,18 @@ const Page = () => {
     fetchData();
   }, [addWorkout]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const goal = await getGoal();
+        setGoalData(goal);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, [addWorkout,workoutData]);
+
   const handleAddWorkout = () => {
     setAddWorkout((prev) => !prev);
   };
@@ -45,7 +57,9 @@ const Page = () => {
     setAddWorkout((prev) => !prev); // Toggle the state to trigger re-fetch
   };
 
-  const handleAddGoal = async (newGoal: Omit<goalType, "id" | "achieved" | "userId">) => {
+  const handleAddGoal = async (
+    newGoal: Omit<goalType, "id" | "achieved" | "userId">,
+  ) => {
     try {
       const addedGoal = await addGoal(newGoal);
       setGoalData(addedGoal);
@@ -53,6 +67,8 @@ const Page = () => {
       console.error("Error adding goal:", error);
     }
   };
+
+  const handleUpdateGoal = () => {};
 
   if (loading) {
     return <div>Loading...</div>;
@@ -77,7 +93,11 @@ const Page = () => {
           <AddWorkout onAddWork={handleAddWorkout} />
         </section>
         <section>
-          <Goal goalData={goalData} onAddGoal={handleAddGoal} />
+          <Goal
+            goalData={goalData}
+            onAddGoal={handleAddGoal}
+            onUpdateGoal={handleUpdateGoal}
+          />
         </section>
       </div>
     </main>

@@ -33,3 +33,22 @@ export const addGoal = async (req: AuthenticatedRequest, res: Response) => {
     serverErrorResponse(res, "User is empty try again");
   }
 };
+
+export const goalData = async (req: AuthenticatedRequest, res: Response) => {
+  const userId = req.userId;
+
+  try {
+    const goal = await prisma.goal.findFirst({
+      where: { userId },
+    });
+
+    if (!goal) {
+      return serverErrorResponse(res, "No goal found for the user.");
+    }
+
+    successResponse(res, goal, "Goal fetched successfully");
+  } catch (error) {
+    console.error("Error fetching goal:", error);
+    serverErrorResponse(res, "An error occurred while fetching the goal.");
+  }
+};
