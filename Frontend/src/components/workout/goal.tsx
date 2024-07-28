@@ -35,18 +35,13 @@ import { goalType } from "@/types/types";
 type GoalProps = {
   goalData: goalType | null;
   onAddGoal: (goal: Omit<goalType, "id" | "achieved" | "userId">) => void;
-  onUpdateGoal: (goal: Omit<goalType, "id" | "achieved" | "userId">) => void;
-  onCompleteGoal: (goalId: string) => void;
-  onDeleteGoal: (goalId: string) => void;
+  onUpdateGoal: (
+    goalId: string,
+    goal: Omit<goalType, "id" | "achieved" | "userId">,
+  ) => void;
 };
 
-const Goal = ({
-  goalData,
-  onAddGoal,
-  onUpdateGoal,
-  onCompleteGoal,
-  onDeleteGoal,
-}: GoalProps) => {
+const Goal = ({ goalData, onAddGoal, onUpdateGoal }: GoalProps) => {
   const [goal, setGoal] = useState<goalType | null>(goalData);
   const [currentCalories, setCurrentCalories] = useState<number>(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -105,21 +100,20 @@ const Goal = ({
   };
 
   const remainingDays = calculateRemainingDays();
+  const isGoalFailed = goal && remainingDays === 0 && progress < 100;
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     if (goal) {
-      onUpdateGoal(values);
+      onUpdateGoal(goal.id, values);
     } else {
       onAddGoal(values);
     }
     form.reset();
-    setIsDialogOpen(false); // Close the dialog on successful form submission
+    setIsDialogOpen(false);
   };
 
-  const handleGoalCompletion = () => {
+  const handleSetNewGoal = () => {
     if (goal) {
-      onCompleteGoal(goal.id);
-      onDeleteGoal(goal.id); // Delete the current goal
     }
   };
 
@@ -153,12 +147,20 @@ const Goal = ({
             <p className="mt-2 text-sm">
               {remainingDays} {remainingDays === 1 ? "day" : "days"} remaining
             </p>
+            {isGoalFailed && (
+              <div className="mt-6 p-4 rounded-lg bg-red-100 text-red-600">
+                <p className="text-lg font-bold">❌ Goal Failed</p>
+                <p>You did not achieve your calorie-burning goal.</p>
+                <Button onClick={handleSetNewGoal} className="mt-4">
+                  Set New Goal
+                </Button>
+              </div>
+            )}
             {progress >= 100 && (
-              <div className="mt-6 p-4 rounded-lg">
+              <div className="mt-6 p-4 rounded-lg bg-green-100 text-green-600">
                 <p className="text-lg font-bold">🏅 Congratulations!</p>
                 <p>You have achieved your calorie-burning goal!</p>
-                <p>{goal.achieved}</p>
-                <Button onClick={handleGoalCompletion} className="mt-4">
+                <Button onClick={handleSetNewGoal} className="mt-4">
                   Set New Goal
                 </Button>
               </div>

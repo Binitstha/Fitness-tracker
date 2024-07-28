@@ -9,17 +9,25 @@ import {
 const prisma = new PrismaClient();
 
 export const addGoal = async (req: AuthenticatedRequest, res: Response) => {
-  const { description, targetDate, targetCalories, currentCalories } = req.body;
+  const { description, targetDate, targetCalories } = req.body;
   const userId = req.userId;
 
   if (userId) {
     try {
+      const prevGoal = await prisma.goal.findFirst({
+        where: { userId },
+      });
+
+      if (prevGoal) {
+        await prisma.goal.delete({ where: { id: prevGoal.id } });
+      }
+
       const newGoal = await prisma.goal.create({
         data: {
           description,
           targetDate,
           targetCalories,
-          currentCalories,
+          currentCalories: 0,
           userId,
         },
       });
@@ -53,40 +61,23 @@ export const goalData = async (req: AuthenticatedRequest, res: Response) => {
   }
 };
 
-export const onGoalComplete = async (
-  req: AuthenticatedRequest,
-  res: Response
-) => {
-  const { goalId } = req.body;
-  // try {
-  //   const goal = await prisma.goal.update({
-  //     where: { id: goalId },
-  //     data: { achieved: true },
-  //   });
-
-  //   const achievement = await prisma.achievement.create({
-  //     data: {
-  //       title: "Goal Achiever",
-  //       description: `Achieved goal: ${goal.description}`,
-  //       date: new Date(),
-  //       goalId: goalId,
-  //     },
-  //   });
-
-  //   successResponse(res, achievement, "Goal completed and achievement created");
-  // } catch (error) {
-  //   console.log(error);
-  //   serverErrorResponse(res, "Failed to complete goal");
-  // }
-};
-
-export const deleteGoal = async (req: AuthenticatedRequest, res: Response) => {
-  const { goalId } = req.params;
+export const updateGoal = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    await prisma.goal.delete({ where: { id: goalId } });
-    successResponse(res, null, "successfully deleted goal");
+    const { id } = req.params;
+
+    const { description, targetDate, targetCalories } = req.body;
+
+    const updateGoal = await prisma.goal.update({
+      where: { id },
+      data: {
+        description,
+        targetDate,
+        targetCalories,
+      },
+    });
+    successResponse(res, updateGoal, "Goal is successfully updated");
   } catch (error) {
     console.log(error);
-    serverErrorResponse(res, "Error occured while deleting goal");
+    serverErrorResponse(res, "Failed to update the goal");
   }
 };

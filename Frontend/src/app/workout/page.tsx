@@ -1,6 +1,6 @@
 "use client";
 
-import { addGoal, getGoal, completeGoal, deleteGoal } from "@/api/goal/goal";
+import { addGoal, getGoal, deleteGoal, updateGoal } from "@/api/goal/goal";
 import { deleteWorkout, getWorkouts } from "@/api/workout/workout";
 import AddWorkout from "@/components/workout/addWorkout";
 import Goal from "@/components/workout/goal";
@@ -47,7 +47,7 @@ const Page = () => {
       }
     };
     fetchGoal();
-  }, [addWorkout,workoutData]);
+  }, [addWorkout, workoutData]);
 
   const handleAddWorkout = () => {
     setAddWorkout((prev) => !prev);
@@ -58,7 +58,7 @@ const Page = () => {
   };
 
   const handleAddGoal = async (
-    newGoal: Omit<goalType, "id" | "achieved" | "userId">
+    newGoal: Omit<goalType, "id" | "achieved" | "userId">,
   ) => {
     try {
       const addedGoal = await addGoal(newGoal);
@@ -68,32 +68,19 @@ const Page = () => {
     }
   };
 
-  const handleCompleteGoal = async (goalId: string) => {
-    try {
-      await completeGoal(goalId);
-      setGoalData(null); // Clear the current goal data
-    } catch (error) {
-      console.error("Error completing goal:", error);
-    }
-  };
-
-  const handleDeleteGoal = async (goalId: string) => {
-    try {
-      await deleteGoal(goalId);
-      setGoalData(null); // Clear the current goal data
-    } catch (error) {
-      console.error("Error deleting goal:", error);
-    }
-  };
-
   const handleUpdateGoal = async (
-    updatedGoal: Omit<goalType, "id" | "achieved" | "userId">
+    goalId: string,
+    updatedGoal: Omit<goalType, "id" | "achieved" | "userId">,
   ) => {
     try {
-      setGoalData((prevGoalData) => ({
-        ...prevGoalData,
-        ...updatedGoal,
-      } as goalType));
+      await updateGoal(goalId, updatedGoal);
+      setGoalData(
+        (prevGoalData) =>
+          ({
+            ...prevGoalData,
+            ...updatedGoal,
+          }) as goalType,
+      );
     } catch (error) {
       console.error("Error updating goal:", error);
     }
@@ -126,8 +113,6 @@ const Page = () => {
             goalData={goalData}
             onAddGoal={handleAddGoal}
             onUpdateGoal={handleUpdateGoal}
-            onCompleteGoal={handleCompleteGoal}
-            onDeleteGoal={handleDeleteGoal}
           />
         </section>
       </div>

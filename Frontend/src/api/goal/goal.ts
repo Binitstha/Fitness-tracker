@@ -85,7 +85,7 @@ export const deleteGoal = async (id: string) => {
 
 export const updateGoal = async (id: string, data: Omit<goalType, "id" | "achieved" | "userId">) => {
   try {
-    const response = await fetch(`http://localhost:5000/goal/${id}`, {
+    const response = await fetch(`http://localhost:5000/goal/updateGoal/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -114,40 +114,6 @@ export const updateGoal = async (id: string, data: Omit<goalType, "id" | "achiev
     console.error(error);
     toast({
       title: "Failed to update goal",
-      description: "An unexpected error occurred. Please try again.",
-      variant: "destructive",
-    });
-    return null;
-  }
-};
-
-export const completeGoal = async (id: string) => {
-  try {
-    const response = await fetch(`http://localhost:5000/goal/complete/${id}`, {
-      method: "PUT",
-      credentials: "include",
-    });
-    const result = await response.json();
-
-    if (response.ok) {
-      toast({
-        title: "Goal completed",
-        description: "Congratulations! You have achieved your goal.",
-        variant: "default",
-      });
-      return result.data;
-    } else {
-      toast({
-        title: "Failed to complete goal",
-        description: result.message || "An unexpected error occurred. Please try again.",
-        variant: "destructive",
-      });
-      return null;
-    }
-  } catch (error) {
-    console.error(error);
-    toast({
-      title: "Failed to complete goal",
       description: "An unexpected error occurred. Please try again.",
       variant: "destructive",
     });
