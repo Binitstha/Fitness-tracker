@@ -1,5 +1,4 @@
-"use client";
-
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -9,8 +8,15 @@ import {
 } from "../ui/card";
 import { Button } from "../ui/button";
 import { Progress } from "../ui/progress";
-import { useState, useEffect } from "react";
-import { goalType } from "@/types/types";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 import {
   Form,
   FormControl,
@@ -24,26 +30,27 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
 import { formattedDate } from "@/lib/utils";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
+import { goalType } from "@/types/types";
 
-type PropsType = {
+type GoalProps = {
   goalData: goalType | null;
   onAddGoal: (goal: Omit<goalType, "id" | "achieved" | "userId">) => void;
   onUpdateGoal: (goal: Omit<goalType, "id" | "achieved" | "userId">) => void;
+  onCompleteGoal: (goalId: string) => void;
+  onDeleteGoal: (goalId: string) => void;
 };
 
-const Goal = ({ goalData, onAddGoal, onUpdateGoal }: PropsType) => {
+const Goal = ({
+  goalData,
+  onAddGoal,
+  onUpdateGoal,
+  onCompleteGoal,
+  onDeleteGoal,
+}: GoalProps) => {
   const [goal, setGoal] = useState<goalType | null>(goalData);
   const [currentCalories, setCurrentCalories] = useState<number>(0);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  // Initialize form with goal data when goalData changes
   const formSchema = z.object({
     description: z.string().min(1, { message: "Description cannot be empty" }),
     targetDate: z.string().min(1, { message: "Date cannot be empty" }),
@@ -80,7 +87,11 @@ const Goal = ({ goalData, onAddGoal, onUpdateGoal }: PropsType) => {
     }
   }, [goal]);
 
-  const progress = goal ? (currentCalories / goal.targetCalories) * 100 : 0;
+  const progress = goal
+    ? (currentCalories / goal.targetCalories) * 100 > 100
+      ? 100
+      : (currentCalories / goal.targetCalories) * 100
+    : 0;
 
   const calculateRemainingDays = () => {
     if (goal && goal.targetDate) {
@@ -102,6 +113,14 @@ const Goal = ({ goalData, onAddGoal, onUpdateGoal }: PropsType) => {
       onAddGoal(values);
     }
     form.reset();
+    setIsDialogOpen(false); // Close the dialog on successful form submission
+  };
+
+  const handleGoalCompletion = () => {
+    if (goal) {
+      onCompleteGoal(goal.id);
+      onDeleteGoal(goal.id); // Delete the current goal
+    }
   };
 
   return (
@@ -117,10 +136,16 @@ const Goal = ({ goalData, onAddGoal, onUpdateGoal }: PropsType) => {
       <CardContent className="text-center">
         {goal ? (
           <div>
-            <p className="text-lg font-semibold">{goal.description}</p>
+            <p
+              className={`text-lg font-semibold ${
+                progress >= 100 ? "text-neutral-300" : ""
+              }`}
+            >
+              {goal.description}
+            </p>
             <Progress
               value={progress}
-              className="w-full h-4 rounded-full bg-gradient-to-r from-green-400 to-yellow-400"
+              className="w-full h-4 rounded-full bg-blue-600"
             />
             <p className="mt-2 text-sm">
               {currentCalories} / {goal.targetCalories} calories burned
@@ -128,21 +153,16 @@ const Goal = ({ goalData, onAddGoal, onUpdateGoal }: PropsType) => {
             <p className="mt-2 text-sm">
               {remainingDays} {remainingDays === 1 ? "day" : "days"} remaining
             </p>
-            {goal.achievements?.length ? (
-              <div className="mt-6">
-                <p className="text-sm font-bold">Achievement Badges:</p>
-                <div className="flex justify-center gap-2 mt-2">
-                  {goal.achievements.map((achievement) => (
-                    <div
-                      key={achievement.id}
-                      className="bg-yellow-400 p-2 rounded-full flex items-center"
-                    >
-                      🏅 {achievement.title}
-                    </div>
-                  ))}
-                </div>
+            {progress >= 100 && (
+              <div className="mt-6 p-4 rounded-lg">
+                <p className="text-lg font-bold">🏅 Congratulations!</p>
+                <p>You have achieved your calorie-burning goal!</p>
+                <p>{goal.achieved}</p>
+                <Button onClick={handleGoalCompletion} className="mt-4">
+                  Set New Goal
+                </Button>
               </div>
-            ) : null}
+            )}
           </div>
         ) : (
           <p className="my-4 text-gray-500">
@@ -150,9 +170,11 @@ const Goal = ({ goalData, onAddGoal, onUpdateGoal }: PropsType) => {
           </p>
         )}
         <div className="mt-4 flex justify-end">
-          <Dialog>
-            <DialogTrigger>
-              <Button>{goal ? "Edit" : "Add"} Goal</Button>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button onClick={() => form.reset()}>
+                {goal ? "Edit" : "Add"} Goal
+              </Button>
             </DialogTrigger>
             <DialogContent className="w-96">
               <DialogHeader>
@@ -219,9 +241,11 @@ const Goal = ({ goalData, onAddGoal, onUpdateGoal }: PropsType) => {
                       </FormItem>
                     )}
                   />
-                  <div className="flex justify-between">
-                    <Button type="submit">Save Goal</Button>
-                  </div>
+                  <DialogFooter>
+                    <div className="flex justify-end">
+                      <Button type="submit">Save Goal</Button>
+                    </div>
+                  </DialogFooter>
                 </form>
               </Form>
             </DialogContent>

@@ -39,9 +39,14 @@ export const createWorkout = async (
 
       const newCurrentCalories = totalCaloriesBurned._sum.calories || 0;
 
+      const achieved = newCurrentCalories >= goal.targetCalories;
+
       await prisma.goal.update({
         where: { id: goal.id },
-        data: { currentCalories: newCurrentCalories },
+        data: { 
+          currentCalories: newCurrentCalories,
+          achieved: achieved,
+        },
       });
     }
 

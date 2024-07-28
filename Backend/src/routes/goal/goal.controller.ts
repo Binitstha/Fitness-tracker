@@ -52,3 +52,41 @@ export const goalData = async (req: AuthenticatedRequest, res: Response) => {
     serverErrorResponse(res, "An error occurred while fetching the goal.");
   }
 };
+
+export const onGoalComplete = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  const { goalId } = req.body;
+  // try {
+  //   const goal = await prisma.goal.update({
+  //     where: { id: goalId },
+  //     data: { achieved: true },
+  //   });
+
+  //   const achievement = await prisma.achievement.create({
+  //     data: {
+  //       title: "Goal Achiever",
+  //       description: `Achieved goal: ${goal.description}`,
+  //       date: new Date(),
+  //       goalId: goalId,
+  //     },
+  //   });
+
+  //   successResponse(res, achievement, "Goal completed and achievement created");
+  // } catch (error) {
+  //   console.log(error);
+  //   serverErrorResponse(res, "Failed to complete goal");
+  // }
+};
+
+export const deleteGoal = async (req: AuthenticatedRequest, res: Response) => {
+  const { goalId } = req.params;
+  try {
+    await prisma.goal.delete({ where: { id: goalId } });
+    successResponse(res, null, "successfully deleted goal");
+  } catch (error) {
+    console.log(error);
+    serverErrorResponse(res, "Error occured while deleting goal");
+  }
+};

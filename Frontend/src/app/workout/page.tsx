@@ -1,7 +1,7 @@
 "use client";
 
-import { addGoal, getGoal } from "@/api/goal/goal";
-import { getWorkouts } from "@/api/workout/workout";
+import { addGoal, getGoal, completeGoal, deleteGoal } from "@/api/goal/goal";
+import { deleteWorkout, getWorkouts } from "@/api/workout/workout";
 import AddWorkout from "@/components/workout/addWorkout";
 import Goal from "@/components/workout/goal";
 import WorkOutChart from "@/components/workout/workoutChart";
@@ -26,7 +26,7 @@ const Page = () => {
   }, [isAuthenticated, loading, router]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchWorkouts = async () => {
       try {
         const data = await getWorkouts();
         setWorkoutData(data);
@@ -34,19 +34,19 @@ const Page = () => {
         console.error("Error fetching workouts:", error);
       }
     };
-    fetchData();
+    fetchWorkouts();
   }, [addWorkout]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchGoal = async () => {
       try {
         const goal = await getGoal();
         setGoalData(goal);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching goal:", error);
       }
     };
-    fetchData();
+    fetchGoal();
   }, [addWorkout,workoutData]);
 
   const handleAddWorkout = () => {
@@ -54,11 +54,11 @@ const Page = () => {
   };
 
   const handleUpdateWorkout = () => {
-    setAddWorkout((prev) => !prev); // Toggle the state to trigger re-fetch
+    setAddWorkout((prev) => !prev);
   };
 
   const handleAddGoal = async (
-    newGoal: Omit<goalType, "id" | "achieved" | "userId">,
+    newGoal: Omit<goalType, "id" | "achieved" | "userId">
   ) => {
     try {
       const addedGoal = await addGoal(newGoal);
@@ -68,7 +68,36 @@ const Page = () => {
     }
   };
 
-  const handleUpdateGoal = () => {};
+  const handleCompleteGoal = async (goalId: string) => {
+    try {
+      await completeGoal(goalId);
+      setGoalData(null); // Clear the current goal data
+    } catch (error) {
+      console.error("Error completing goal:", error);
+    }
+  };
+
+  const handleDeleteGoal = async (goalId: string) => {
+    try {
+      await deleteGoal(goalId);
+      setGoalData(null); // Clear the current goal data
+    } catch (error) {
+      console.error("Error deleting goal:", error);
+    }
+  };
+
+  const handleUpdateGoal = async (
+    updatedGoal: Omit<goalType, "id" | "achieved" | "userId">
+  ) => {
+    try {
+      setGoalData((prevGoalData) => ({
+        ...prevGoalData,
+        ...updatedGoal,
+      } as goalType));
+    } catch (error) {
+      console.error("Error updating goal:", error);
+    }
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -97,6 +126,8 @@ const Page = () => {
             goalData={goalData}
             onAddGoal={handleAddGoal}
             onUpdateGoal={handleUpdateGoal}
+            onCompleteGoal={handleCompleteGoal}
+            onDeleteGoal={handleDeleteGoal}
           />
         </section>
       </div>
