@@ -100,21 +100,28 @@ const Goal = ({ goalData, onAddGoal, onUpdateGoal }: GoalProps) => {
   };
 
   const remainingDays = calculateRemainingDays();
-  const isGoalFailed = goal && remainingDays === 0 && progress < 100;
+  const isGoalFailed = goal && remainingDays < 0 && progress < 100;
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
+    const goalData = {
+      ...values,
+      currentCalories: 0, // Ensure currentCalories is set to 0
+    };
+
     if (goal) {
-      onUpdateGoal(goal.id, values);
+      onUpdateGoal(goal.id, goalData);
     } else {
-      onAddGoal(values);
+      onAddGoal(goalData);
     }
+
     form.reset();
     setIsDialogOpen(false);
   };
 
   const handleSetNewGoal = () => {
-    if (goal) {
-    }
+    setGoal(null);
+    form.reset();
+    setIsDialogOpen(true);
   };
 
   return (
