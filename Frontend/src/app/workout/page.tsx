@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { addGoal, getGoal, deleteGoal, updateGoal } from "@/api/goal/goal";
 import { deleteWorkout, getWorkouts } from "@/api/workout/workout";
@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 
 const Page = () => {
   const router = useRouter();
-  const { isAuthenticated, user, loading } = useSession();
+  const { isAuthenticated, loading } = useSession();
 
   const [workoutData, setWorkoutData] = useState<workoutType[]>([]);
   const [addWorkout, setAddWorkout] = useState<boolean>(false);
@@ -73,14 +73,8 @@ const Page = () => {
     updatedGoal: Omit<goalType, "id" | "achieved" | "userId">,
   ) => {
     try {
-      await updateGoal(goalId, updatedGoal);
-      setGoalData(
-        (prevGoalData) =>
-          ({
-            ...prevGoalData,
-            ...updatedGoal,
-          }) as goalType,
-      );
+      const updatedGoalData = await updateGoal(goalId, updatedGoal);
+      setGoalData(updatedGoalData);
     } catch (error) {
       console.error("Error updating goal:", error);
     }

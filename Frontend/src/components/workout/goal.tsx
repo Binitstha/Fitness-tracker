@@ -1,3 +1,4 @@
+'use client'
 import { useState, useEffect } from "react";
 import {
   Card,
@@ -74,7 +75,7 @@ const Goal = ({ goalData, onAddGoal, onUpdateGoal }: GoalProps) => {
         targetCalories: goalData.targetCalories,
       });
     }
-  }, [goalData]);
+  }, [goalData,form]);
 
   useEffect(() => {
     if (goal) {
@@ -105,7 +106,6 @@ const Goal = ({ goalData, onAddGoal, onUpdateGoal }: GoalProps) => {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const goalData = {
       ...values,
-      currentCalories: 0, // Ensure currentCalories is set to 0
     };
 
     if (goal) {
