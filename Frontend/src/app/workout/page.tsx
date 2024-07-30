@@ -85,7 +85,7 @@ const Page = () => {
   }
 
   return (
-    <main className="m-5 mx-28 flex gap-5 justify-center">
+    <main className="m-5 mx-auto flex gap-5 justify-center">
       <div className="flex flex-col w-[65rem] gap-5">
         <section className="flex gap-5">
           <WorkoutList
@@ -103,7 +103,7 @@ const Page = () => {
           <AddWorkout onAddWork={handleAddWorkout} />
         </section>
         <section>
-          <Goal
+          <Goal 
             goalData={goalData}
             onAddGoal={handleAddGoal}
             onUpdateGoal={handleUpdateGoal}

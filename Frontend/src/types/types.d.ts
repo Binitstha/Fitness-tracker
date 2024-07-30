@@ -18,3 +18,24 @@ export type goalType = {
   currentCalories?: number;
   achievements?: { id: string; title: string }[];
 };
+
+export type FoodItem = {
+  name: string;
+  category: "breakfast" | "lunch" | "snack" | "dinner" | "beverage";
+  protein: number; // grams
+  calories: number; // kcal
+  carbs: number; // grams
+  fats: number; // grams
+  servingSize: string; // e.g., "1 cup", "100g", "1 piece"
+};
+
+  
+export type CombinedFoodItem = {
+  name: string;
+  category: string;
+  totalProtein: number;
+  totalCalories: number;
+  totalCarbs: number;
+  totalFats: number;
+  servingSize: string;
+}
