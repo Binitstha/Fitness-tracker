@@ -35,7 +35,7 @@ model RefreshToken {
 }
 
 model Workout {
-  id       String   @id @default(uuid())
+  id       String @id @default(uuid())
   date     String
   type     String
   duration Int?
@@ -43,29 +43,34 @@ model Workout {
   userId   String
   speed    Int?
   effort   String
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Meal {
   id          String   @id @default(uuid())
+  userId      String
+  name        String
   date        DateTime
   type        String
-  calories    Int
   description String?
-  userId      String
+  calories    Int
+  category    String
+  protein     Int
+  totalCarbs  Int
+  totalFats   Int
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Goal {
-  id             String         @id @default(uuid())
-  description    String
-  targetDate     String
-  achieved       Boolean        @default(false)
-  targetCalories Int
+  id              String        @id @default(uuid())
+  description     String
+  targetDate      String
+  achieved        Boolean       @default(false)
+  targetCalories  Int
   currentCalories Int           @default(0)
-  userId         String
-  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  achievements   Achievement[]
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievements    Achievement[]
 }
 
 model Achievement {
