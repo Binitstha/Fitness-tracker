@@ -95,8 +95,4 @@ export const mealSchema = z.object({
   totalCalories: z.number().positive("Calories must be a positive number"),
   totalCarbs: z.number().positive("Carbs must be a positive number"),
   totalFats: z.number().positive("Fats must be a positive number"),
-  servingSize: z
-    .string()
-    .min(1, "Serving size is required")
-    .max(50, "Serving size must be less than 50 characters"),
 });

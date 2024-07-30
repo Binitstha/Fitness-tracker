@@ -1,15 +1,39 @@
 import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-} from "../ui/carousel";
+import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 import { Separator } from "../ui/separator";
 import Autoplay from "embla-carousel-autoplay";
-import { combinedFoodItems } from "@/lib/foodItems";
+import { combinedFoodItems, foodItems } from "@/lib/foodItems";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { TypeOf, z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
+import { FoodItem } from "@/types/types";
+
+const animatedComponents = makeAnimated();
 
 const getMessageForTime = (setFoodType: (foodType: string) => void): string => {
   const hour = new Date().getHours();
@@ -33,16 +57,110 @@ const getMessageForTime = (setFoodType: (foodType: string) => void): string => {
 };
 
 const NutritionDash = () => {
-  const [dailyRoutineMessage, setDailyRoutineMessage] = useState<string>("");
-  const [foodType, setFoodType] = useState<string>("");
+  const [dailyRoutineMessage, setDailyRoutineMessage] = useState("");
+  const [foodType, setFoodType] = useState("");
+  const { theme } = useTheme();
 
   useEffect(() => {
     setDailyRoutineMessage(getMessageForTime(setFoodType));
   }, []);
 
   const recommendedFoods = combinedFoodItems.filter(
-    (item) => item.category === foodType,
+    (item) => item.category === foodType
   );
+
+  const formSchema = z.object({
+    title: z
+      .string()
+      .min(1, "Name is required")
+      .max(100, "Name must be less than 100 characters"),
+    meals: z.array(z.object({
+      value: z.string(),
+      label: z.string(),
+    })).min(1, "At least one meal is required"),
+  });
+
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: "",
+      meals: [],
+    },
+  });
+
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    const selectedMeals = data.meals.map(meal => meal.value);
+    const selectedFoodItems = foodItems.filter(item => selectedMeals.includes(item.name));
+
+    const totalProtein = selectedFoodItems.reduce((sum, item) => sum + item.protein, 0);
+    const totalCalories = selectedFoodItems.reduce((sum, item) => sum + item.calories, 0);
+    const totalCarbs = selectedFoodItems.reduce((sum, item) => sum + item.carbs, 0);
+    const totalFats = selectedFoodItems.reduce((sum, item) => sum + item.fats, 0);
+
+    const mealData = {
+      name: data.title,
+      category: foodType,
+      totalProtein,
+      totalCalories,
+      totalCarbs,
+      totalFats,
+    };
+
+    console.log(mealData);
+  };
+
+  const options = foodItems.map((item: FoodItem) => ({
+    value: item.name,
+    label: item.name,
+  }));
+
+  const customStyles = {
+    control: (base: any) => ({
+      ...base,
+      backgroundColor: theme === "dark" ? "#0c0a09" : "#fff",
+      color: theme === "dark" ? "#0c0a09" : "#000",
+    }),
+    menu: (base: any) => ({
+      ...base,
+      backgroundColor: theme === "dark" ? "#0c0a09" : "#fff",
+      borderRadius: '8px',
+    }),
+    input: (base: any) => ({
+      ...base,
+      color: theme === "dark" ? "#fff" : "#000", // Set the input text color
+    }),
+    option: (base: any, state: any) => ({
+      ...base,
+      backgroundColor: state.isFocused
+        ? theme === "dark"
+          ? "#333"
+          : "#eee"
+        : theme === "dark"
+        ? "#0c0a09"
+        : "#fff",
+      color: state.isFocused
+        ? theme === "dark"
+          ? "#fff"
+          : "#000"
+        : theme === "dark"
+        ? "#fff"
+        : "#000",
+      borderRadius: '4px',
+    }),
+    singleValue: (base: any) => ({
+      ...base,
+      color: theme === "dark" ? "#fff" : "#000",
+    }),
+    multiValue: (base: any) => ({
+      ...base,
+      backgroundColor: theme === "dark" ? "#555" : "#e0e0e0",
+      borderRadius: '4px', // Add border radius for multi value
+    }),
+    multiValueLabel: (base: any) => ({
+      ...base,
+      color: theme === "dark" ? "#fff" : "#000",
+    }),
+  };
 
   return (
     <>
@@ -89,10 +207,73 @@ const NutritionDash = () => {
               </CarouselContent>
             </Carousel>
             <div className="mt-4">
-              <Button>
-                Add Your Own{" "}
-                {foodType.charAt(0).toUpperCase() + foodType.slice(1)}
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button>
+                    Add Your Own{" "}
+                    {foodType.charAt(0).toUpperCase() + foodType.slice(1)}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <Form {...form}>
+                    <form
+                      onSubmit={form.handleSubmit(onSubmit)}
+                      className="space-y-4"
+                    >
+                      <DialogHeader>
+                        <DialogTitle>Edit profile</DialogTitle>
+                        <DialogDescription>
+                          Make changes to your profile here. Click save when you
+                          done.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <FormField
+                        control={form.control}
+                        name="title"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel htmlFor="title">Meal Title</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="text"
+                                id="title"
+                                placeholder="Enter meal title"
+                                className="dark:text-white" // Add this line
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="meals"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel htmlFor="meals">Meals</FormLabel>
+                            <FormControl>
+                              <Select
+                                {...field}
+                                className="dark:bg-neutral-800"
+                                closeMenuOnSelect={false}
+                                components={animatedComponents}
+                                isMulti
+                                options={options}
+                                styles={customStyles} // Apply custom styles here
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <DialogFooter>
+                        <Button type="submit">Save changes</Button>
+                      </DialogFooter>
+                    </form>
+                  </Form>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
         </section>
