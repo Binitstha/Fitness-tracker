@@ -66,7 +66,7 @@ const NutritionDash = () => {
   }, []);
 
   const recommendedFoods = combinedFoodItems.filter(
-    (item) => item.category === foodType
+    (item) => item.category === foodType,
   );
 
   const formSchema = z.object({
@@ -74,10 +74,14 @@ const NutritionDash = () => {
       .string()
       .min(1, "Name is required")
       .max(100, "Name must be less than 100 characters"),
-    meals: z.array(z.object({
-      value: z.string(),
-      label: z.string(),
-    })).min(1, "At least one meal is required"),
+    meals: z
+      .array(
+        z.object({
+          value: z.string(),
+          label: z.string(),
+        }),
+      )
+      .min(1, "At least one meal is required"),
   });
 
   const form = useForm({
@@ -89,13 +93,27 @@ const NutritionDash = () => {
   });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    const selectedMeals = data.meals.map(meal => meal.value);
-    const selectedFoodItems = foodItems.filter(item => selectedMeals.includes(item.name));
+    const selectedMeals = data.meals.map((meal) => meal.value);
+    const selectedFoodItems = foodItems.filter((item) =>
+      selectedMeals.includes(item.name),
+    );
 
-    const totalProtein = selectedFoodItems.reduce((sum, item) => sum + item.protein, 0);
-    const totalCalories = selectedFoodItems.reduce((sum, item) => sum + item.calories, 0);
-    const totalCarbs = selectedFoodItems.reduce((sum, item) => sum + item.carbs, 0);
-    const totalFats = selectedFoodItems.reduce((sum, item) => sum + item.fats, 0);
+    const totalProtein = selectedFoodItems.reduce(
+      (sum, item) => sum + item.protein,
+      0,
+    );
+    const totalCalories = selectedFoodItems.reduce(
+      (sum, item) => sum + item.calories,
+      0,
+    );
+    const totalCarbs = selectedFoodItems.reduce(
+      (sum, item) => sum + item.carbs,
+      0,
+    );
+    const totalFats = selectedFoodItems.reduce(
+      (sum, item) => sum + item.fats,
+      0,
+    );
 
     const mealData = {
       name: data.title,
@@ -123,7 +141,7 @@ const NutritionDash = () => {
     menu: (base: any) => ({
       ...base,
       backgroundColor: theme === "dark" ? "#0c0a09" : "#fff",
-      borderRadius: '8px',
+      borderRadius: "8px",
     }),
     input: (base: any) => ({
       ...base,
@@ -136,16 +154,16 @@ const NutritionDash = () => {
           ? "#333"
           : "#eee"
         : theme === "dark"
-        ? "#0c0a09"
-        : "#fff",
+          ? "#0c0a09"
+          : "#fff",
       color: state.isFocused
         ? theme === "dark"
           ? "#fff"
           : "#000"
         : theme === "dark"
-        ? "#fff"
-        : "#000",
-      borderRadius: '4px',
+          ? "#fff"
+          : "#000",
+      borderRadius: "4px",
     }),
     singleValue: (base: any) => ({
       ...base,
@@ -154,7 +172,7 @@ const NutritionDash = () => {
     multiValue: (base: any) => ({
       ...base,
       backgroundColor: theme === "dark" ? "#555" : "#e0e0e0",
-      borderRadius: '4px', // Add border radius for multi value
+      borderRadius: "4px", // Add border radius for multi value
     }),
     multiValueLabel: (base: any) => ({
       ...base,
@@ -209,22 +227,22 @@ const NutritionDash = () => {
             <div className="mt-4">
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button>
+                  <Button onClick={() => form.reset()}>
                     Add Your Own{" "}
                     {foodType.charAt(0).toUpperCase() + foodType.slice(1)}
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
+                <DialogContent className="w-96">
                   <Form {...form}>
                     <form
                       onSubmit={form.handleSubmit(onSubmit)}
-                      className="space-y-4"
+                      className="space-y-6 p-4"
                     >
                       <DialogHeader>
-                        <DialogTitle>Edit profile</DialogTitle>
+                        <DialogTitle>Add a New Meal</DialogTitle>
                         <DialogDescription>
-                          Make changes to your profile here. Click save when you
-                          done.
+                          Fill out the details below to add a new meal to your
+                          list. Click &quot;Save&quot; to submit.
                         </DialogDescription>
                       </DialogHeader>
                       <FormField
@@ -238,7 +256,6 @@ const NutritionDash = () => {
                                 type="text"
                                 id="title"
                                 placeholder="Enter meal title"
-                                className="dark:text-white" // Add this line
                                 {...field}
                               />
                             </FormControl>
@@ -251,16 +268,16 @@ const NutritionDash = () => {
                         name="meals"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel htmlFor="meals">Meals</FormLabel>
+                            <FormLabel htmlFor="meals">Select Foods</FormLabel>
                             <FormControl>
                               <Select
                                 {...field}
-                                className="dark:bg-neutral-800"
+                                className="bg-gray-100 dark:bg-gray-800"
                                 closeMenuOnSelect={false}
                                 components={animatedComponents}
                                 isMulti
                                 options={options}
-                                styles={customStyles} // Apply custom styles here
+                                styles={customStyles}
                               />
                             </FormControl>
                             <FormMessage />
@@ -268,7 +285,7 @@ const NutritionDash = () => {
                         )}
                       />
                       <DialogFooter>
-                        <Button type="submit">Save changes</Button>
+                        <Button type="submit">Save Changes</Button>
                       </DialogFooter>
                     </form>
                   </Form>
@@ -278,12 +295,20 @@ const NutritionDash = () => {
           </div>
         </section>
         <Separator orientation="vertical" className="mx-4" />
-        <section className="flex flex-col items-center justify-center w-96">
-          <h2 className="text-lg font-bold mb-2">Meal List</h2>
-          <ul className="list-disc list-inside">
-            {recommendedFoods.map((food, index) => (
-              <li key={index}>{food.name}</li>
-            ))}
+        <section className="flex flex-col items-center justify-center w-96 p-4rounded-lg shadow-md">
+          <h2 className="text-lg font-bold mb-4">Delicious Meals Await You!</h2>
+          <ul className="list-disc list-inside pl-4">
+            {recommendedFoods.length ? (
+              recommendedFoods.map((food, index) => (
+                <li key={index} className=" text-lg">
+                  {food.name}
+                </li>
+              ))
+            ) : (
+              <li className="text-gray-500">
+                No meals available for this time of day.
+              </li>
+            )}
           </ul>
         </section>
       </main>
