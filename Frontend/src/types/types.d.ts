@@ -29,7 +29,6 @@ export type FoodItem = {
   servingSize: string; // e.g., "1 cup", "100g", "1 piece"
 };
 
-  
 export type CombinedFoodItem = {
   name: string;
   category: string;

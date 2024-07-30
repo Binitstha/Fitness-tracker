@@ -84,3 +84,19 @@ export const goalSchema = z.object({
     .min(0, { message: "Current calories cannot be negative" })
     .default(0),
 });
+
+export const mealSchema = z.object({
+  name: z
+    .string()
+    .min(1, "Name is required")
+    .max(100, "Name must be less than 100 characters"),
+  category: z.string().min(1, "Category is required"),
+  totalProtein: z.number().positive("Protein must be a positive number"),
+  totalCalories: z.number().positive("Calories must be a positive number"),
+  totalCarbs: z.number().positive("Carbs must be a positive number"),
+  totalFats: z.number().positive("Fats must be a positive number"),
+  servingSize: z
+    .string()
+    .min(1, "Serving size is required")
+    .max(50, "Serving size must be less than 50 characters"),
+});
