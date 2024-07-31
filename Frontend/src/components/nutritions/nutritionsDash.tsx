@@ -198,6 +198,15 @@ const NutritionDash = () => {
     }),
   };
 
+  const onAddCombinedFood = async (food: CombinedFoodItem) => {
+    const { servingSize, ...excludingServingSize } = food;
+    try {
+      await addMeal(excludingServingSize);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <main className="border flex justify-evenly w-full p-3 rounded-md">
@@ -241,7 +250,9 @@ const NutritionDash = () => {
                           </div>
                         </CardContent>
                         <CardFooter className="flex justify-end">
-                          <Button>Add {foodType}</Button>
+                          <Button onClick={() => onAddCombinedFood(food)}>
+                            Add {foodType}
+                          </Button>
                         </CardFooter>
                       </Card>
                     </div>

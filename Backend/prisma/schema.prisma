@@ -56,7 +56,7 @@ model Meal {
   totalProtein  Int
   totalCarbs   Int
   totalFats    Int
-  foods       String
+  foods       String?
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
