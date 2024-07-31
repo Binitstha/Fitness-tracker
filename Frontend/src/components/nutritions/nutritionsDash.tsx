@@ -36,9 +36,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { CombinedFoodItem, FoodItem } from "@/types/types";
-import { addMeal } from "@/api/meal/meal";
+import { addMeal, getMeal } from "@/api/meal/meal";
 import { z } from "zod";
-import { formattedDate } from "@/lib/utils";
 
 const animatedComponents = makeAnimated();
 
@@ -68,10 +67,17 @@ const NutritionDash = () => {
   const [foodType, setFoodType] = useState("");
   const { theme } = useTheme();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [mealData, setMealData] = useState<CombinedFoodItem>()
 
   useEffect(() => {
     setDailyRoutineMessage(getMessageForTime(setFoodType));
+    const fetchMealData = async () => {
+      const data = await getMeal()
+      setMealData(data)
+    }
+    fetchMealData()
   }, []);
+  console.log(mealData)
 
   const recommendedFoods = combinedFoodItems.filter(
     (item) => item.category === foodType,
@@ -334,7 +340,7 @@ const NutritionDash = () => {
         <section className="flex flex-col items-center justify-center w-96 p-4rounded-lg shadow-md">
           <h2 className="text-lg font-bold mb-4">Delicious Meals Await You!</h2>
           <ul className="list-disc list-inside pl-4">
-            {recommendedFoods.length ? (
+            {/* {mealdata && mealData.length ? (
               recommendedFoods.map((food, index) => (
                 <li key={index} className=" text-lg">
                   {food.name}
@@ -344,7 +350,7 @@ const NutritionDash = () => {
               <li className="text-gray-500">
                 No meals available for this time of day.
               </li>
-            )}
+            )} */}
           </ul>
         </section>
       </main>
