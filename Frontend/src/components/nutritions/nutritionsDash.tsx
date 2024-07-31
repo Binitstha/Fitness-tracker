@@ -1,7 +1,13 @@
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { Button } from "../ui/button";
-import { Card, CardContent } from "../ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 import { Separator } from "../ui/separator";
 import Autoplay from "embla-carousel-autoplay";
@@ -99,7 +105,7 @@ const NutritionDash = () => {
     const selectedFoodItems = foodItems.filter((item) =>
       selectedMeals.includes(item.name),
     );
-  
+
     const totalProtein = selectedFoodItems.reduce(
       (sum, item) => sum + item.protein,
       0,
@@ -116,9 +122,9 @@ const NutritionDash = () => {
       (sum, item) => sum + item.fats,
       0,
     );
-  
+
     const foods = data.meals.map((item) => item.value);
-  
+
     const mealData = {
       name: data.title,
       category: foodType,
@@ -126,19 +132,18 @@ const NutritionDash = () => {
       totalCalories,
       totalCarbs,
       totalFats,
-      foods, // send array of food names
+      foods,
     };
-  
+
     try {
       await addMeal(mealData);
     } catch (error) {
       console.log(error);
     }
-  
+
     console.log(mealData);
     setIsDialogOpen(false);
   };
-  
 
   const options = foodItems.map((item: FoodItem) => ({
     value: item.name,
@@ -158,7 +163,7 @@ const NutritionDash = () => {
     }),
     input: (base: any) => ({
       ...base,
-      color: theme === "dark" ? "#fff" : "#000", // Set the input text color
+      color: theme === "dark" ? "#fff" : "#000",
     }),
     option: (base: any, state: any) => ({
       ...base,
@@ -185,7 +190,7 @@ const NutritionDash = () => {
     multiValue: (base: any) => ({
       ...base,
       backgroundColor: theme === "dark" ? "#555" : "#e0e0e0",
-      borderRadius: "4px", // Add border radius for multi value
+      borderRadius: "4px",
     }),
     multiValueLabel: (base: any) => ({
       ...base,
@@ -218,10 +223,14 @@ const NutritionDash = () => {
                     className="md:basis-1/2 lg:basis-1/3"
                   >
                     <div className="p-1">
-                      <Card>
-                        <CardContent className="flex aspect-square items-center justify-center p-6">
-                          <div className="text-xs flex flex-col gap-3">
-                            <h3 className="text-xl font-bold">{food.name}</h3>
+                      <Card className=" h-[15.5rem] flex flex-col justify-between">
+                        <CardHeader className="w-40">
+                          <CardTitle className=" text-ellipsis overflow-hidden whitespace-nowrap w-[10rem]">
+                            {food.name}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="grid text-xs w-full items-center gap-4">
                             <div className="flex flex-wrap justify-between">
                               <p>Protein: {food.totalProtein}g</p>
                               <p>Calories: {food.totalCalories}</p>
@@ -231,6 +240,9 @@ const NutritionDash = () => {
                             <p>Serving Size: {food.servingSize}</p>
                           </div>
                         </CardContent>
+                        <CardFooter className="flex justify-end">
+                          <Button>Add {foodType}</Button>
+                        </CardFooter>
                       </Card>
                     </div>
                   </CarouselItem>
