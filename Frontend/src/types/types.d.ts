@@ -36,5 +36,6 @@ export type CombinedFoodItem = {
   totalCalories: number;
   totalCarbs: number;
   totalFats: number;
-  servingSize: string;
-}
+  servingSize?: string;
+  foods: string[]?;
+};

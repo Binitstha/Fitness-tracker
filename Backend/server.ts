@@ -5,7 +5,7 @@ import authRoutes from "./src/routes/auth/auth.routes";
 import personalizationRoutes from "./src/routes/account/personalization.routes";
 import workout from "./src/routes/workout/workout.routes";
 import goal from "./src/routes/goal/goal.routes";
-import meal from "./src/routes/meal/meal.routes";
+import meal from './src/routes/meal/meal.routes'
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import path from "path";
@@ -30,7 +30,7 @@ app.use("/auth", authRoutes);
 app.use("/account", personalizationRoutes);
 app.use("/workout", workout);
 app.use("/goal", goal);
-app.use("/meal", meal);
+app.use('/meal',meal)
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to the fitness tracker API!");

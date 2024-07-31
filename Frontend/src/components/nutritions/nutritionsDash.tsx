@@ -15,9 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { TypeOf, z } from "zod";
 import {
   Form,
   FormControl,
@@ -31,7 +29,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-import { FoodItem } from "@/types/types";
+import { CombinedFoodItem, FoodItem } from "@/types/types";
+import { addMeal } from "@/api/meal/meal";
+import { z } from "zod";
+import { formattedDate } from "@/lib/utils";
 
 const animatedComponents = makeAnimated();
 
@@ -60,6 +61,7 @@ const NutritionDash = () => {
   const [dailyRoutineMessage, setDailyRoutineMessage] = useState("");
   const [foodType, setFoodType] = useState("");
   const { theme } = useTheme();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     setDailyRoutineMessage(getMessageForTime(setFoodType));
@@ -92,12 +94,12 @@ const NutritionDash = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const selectedMeals = data.meals.map((meal) => meal.value);
     const selectedFoodItems = foodItems.filter((item) =>
       selectedMeals.includes(item.name),
     );
-
+  
     const totalProtein = selectedFoodItems.reduce(
       (sum, item) => sum + item.protein,
       0,
@@ -114,7 +116,9 @@ const NutritionDash = () => {
       (sum, item) => sum + item.fats,
       0,
     );
-
+  
+    const foods = data.meals.map((item) => item.value);
+  
     const mealData = {
       name: data.title,
       category: foodType,
@@ -122,10 +126,19 @@ const NutritionDash = () => {
       totalCalories,
       totalCarbs,
       totalFats,
+      foods, // send array of food names
     };
-
+  
+    try {
+      await addMeal(mealData);
+    } catch (error) {
+      console.log(error);
+    }
+  
     console.log(mealData);
+    setIsDialogOpen(false);
   };
+  
 
   const options = foodItems.map((item: FoodItem) => ({
     value: item.name,
@@ -225,7 +238,7 @@ const NutritionDash = () => {
               </CarouselContent>
             </Carousel>
             <div className="mt-4">
-              <Dialog>
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
                   <Button onClick={() => form.reset()}>
                     Add Your Own{" "}

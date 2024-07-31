@@ -6,6 +6,11 @@ import { mealSchema } from "../../schemas/schemas";
 
 const router = Router();
 
-router.post("/addMeal", authenticationMiddleware, validateSchema(mealSchema), addMeal);
+router.post(
+  "/addMeal",
+  authenticationMiddleware,
+  validateSchema(mealSchema),
+  addMeal
+);
 
 export default router;

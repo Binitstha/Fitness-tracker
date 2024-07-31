@@ -50,14 +50,13 @@ model Meal {
   id          String   @id @default(uuid())
   userId      String
   name        String
-  date        DateTime
-  type        String
-  description String?
-  calories    Int
+  date        String
   category    String
-  protein     Int
-  totalCarbs  Int
-  totalFats   Int
+  totalCalories Int
+  totalProtein  Int
+  totalCarbs   Int
+  totalFats    Int
+  foods       String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
