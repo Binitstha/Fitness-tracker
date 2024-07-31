@@ -13,13 +13,29 @@ export const addMeal = async (req: AuthenticatedRequest, res: Response) => {
   const userId = req.userId;
   const date = new Date().toLocaleString();
 
-  const {foods} = data
-  
+  const { foods } = data;
+
   try {
-    const meal = await prisma.meal.create({ data: { ...data, foods: JSON.stringify(foods), date, userId } });
+    const meal = await prisma.meal.create({
+      data: { ...data, foods: JSON.stringify(foods), date, userId },
+    });
     successResponse(res, meal, "Meal added successfully!");
   } catch (error) {
     console.log(error);
     serverErrorResponse(res, "Failed to add meal. Please try again later.");
+  }
+};
+
+export const getMeal = async (req: AuthenticatedRequest, res: Response) => {
+  const userId = req.userId;
+
+  try {
+    const meal = await prisma.meal.findMany({
+      where: { userId },
+    });
+    successResponse(res, meal, "Successfull fetched meal data.");
+  } catch (error) {
+    console.log(error);
+    serverErrorResponse(res, "Failed to fetch Meal data from server");
   }
 };
