@@ -36,7 +36,10 @@ export const getMeal = async (req: AuthenticatedRequest, res: Response) => {
         name: true,
         date: true,
         totalCalories: true,
-        category: true
+        category: true,
+        totalCarbs: true,
+        totalFats: true,
+        totalProtein: true,
       }
     });
 

@@ -36,7 +36,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-import { CombinedFoodItem, FoodItem } from "@/types/types";
+import { CombinedFoodItem, FoodItem, mealDataType } from "@/types/types";
 import { addMeal, getMeal } from "@/api/meal/meal";
 import { z } from "zod";
 import { formatDate } from "@/lib/utils";
@@ -64,19 +64,16 @@ const getMessageForTime = (setFoodType: (foodType: string) => void): string => {
   }
 };
 
-type mealDataType = {
-  name: string;
-  date: string;
-  totalCalories: number;
-  category: string;
+type propType = {
+  mealData: mealDataType[];
+  setMealData: React.Dispatch<React.SetStateAction<mealDataType[]>>;
 };
 
-const NutritionDash = () => {
+const NutritionDash = ({ mealData, setMealData }: propType) => {
   const [dailyRoutineMessage, setDailyRoutineMessage] = useState("");
   const [foodType, setFoodType] = useState("");
   const { theme } = useTheme();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [mealData, setMealData] = useState<mealDataType[]>([]);
 
   useEffect(() => {
     setDailyRoutineMessage(getMessageForTime(setFoodType));
@@ -85,7 +82,7 @@ const NutritionDash = () => {
       setMealData(data);
     };
     fetchMealData();
-  }, []);
+  }, [setMealData]);
   console.log(mealData);
 
   const recommendedFoods = combinedFoodItems.filter(
@@ -152,20 +149,22 @@ const NutritionDash = () => {
 
     try {
       await addMeal(mealData);
-      setMealData((prevMealData) => [
+      setMealData((prevMealData: mealDataType[]) => [
         ...prevMealData,
         {
           name: mealData.name,
           category: foodType,
-          totalCalories: mealData.totalCalories,
           date: new Date().toISOString(),
+          totalCalories: mealData.totalCalories,
+          totalCarbs: mealData.totalCarbs,
+          totalFats: mealData.totalFats,
+          totalProtein: mealData.totalProtein,
         },
       ]);
     } catch (error) {
       console.log(error);
     }
 
-    console.log(mealData);
     setIsDialogOpen(false);
   };
 
@@ -226,13 +225,16 @@ const NutritionDash = () => {
     const { servingSize, ...excludingServingSize } = food;
     try {
       await addMeal(excludingServingSize);
-      setMealData((prevMealData) => [
+      setMealData((prevMealData: mealDataType[]) => [
         ...prevMealData,
         {
           name: excludingServingSize.name,
           category: foodType,
-          totalCalories: excludingServingSize.totalCalories,
           date: new Date().toISOString(),
+          totalCalories: excludingServingSize.totalCalories,
+          totalCarbs: excludingServingSize.totalCarbs,
+          totalFats: excludingServingSize.totalFats,
+          totalProtein: excludingServingSize.totalProtein,
         },
       ]);
     } catch (error) {
@@ -244,7 +246,10 @@ const NutritionDash = () => {
     <>
       <main className="border flex justify-evenly w-full p-4 rounded-xl">
         <section className="">
-          <h1 className="text-xl font-bold mb-4">{dailyRoutineMessage}</h1>
+          <h1 className="text-xl font-bold mb-4 text-center">
+            {dailyRoutineMessage}
+          </h1>
+          <h2 className=" text-lg text-center">Recommended {foodType}</h2>
           <div>
             <Carousel
               opts={{
@@ -310,7 +315,8 @@ const NutritionDash = () => {
                       <DialogHeader>
                         <DialogTitle>Add Meal</DialogTitle>
                         <DialogDescription>
-                        Add a new meal to your meal list. Click save when you&apos;re done.
+                          Add a new meal to your meal list. Click save when
+                          you&apos;re done.
                         </DialogDescription>
                       </DialogHeader>
                       <FormField
@@ -365,10 +371,11 @@ const NutritionDash = () => {
         <Separator orientation="vertical" className="mx-4" />
         <section className="flex items-start justify-center w-96">
           {mealData.length > 0 ? (
-            
             <MealHistory mealData={mealData} />
           ) : (
-              <div className=" w-52 h-full flex justify-center items-center">No meal added</div>
+            <div className=" w-52 h-full flex justify-center items-center">
+              No meal added
+            </div>
           )}
         </section>
       </main>
@@ -384,27 +391,32 @@ const MealHistory = ({ mealData }: { mealData: mealDataType[] }) => {
       </CardHeader>
       <CardContent className="grid gap-4">
         <div>
-          {mealData.slice(0, 3).map((meal: mealDataType, index: number) => (
-            <>
-              <div
-                key={index}
-                className=" flex flex-col gap-2 pb-1 first:mt-0 mt-2 2 border-b last:border-b-transparent"
-              >
-                <div className="space-y-1">
-                  <p className="text-sm font-medium flex justify-between items-center leading-none">
-                    <span className=" text-ellipsis overflow-hidden whitespace-nowrap w-24 capitalize">
-                      {meal.category}
-                    </span>
-                    <span>{meal.totalCalories}kcal</span>
-                  </p>
-                  <p className=" text-sm">{meal.name}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {formatDate(meal.date)}
-                  </p>
+          {mealData
+            .sort(
+              (b, a) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+            )
+            .slice(0, 3)
+            .map((meal: mealDataType, index: number) => (
+              <>
+                <div
+                  key={index}
+                  className=" flex flex-col gap-2 pb-1 first:mt-0 mt-2 2 border-b last:border-b-transparent"
+                >
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium flex justify-between items-center leading-none">
+                      <span className=" text-ellipsis overflow-hidden whitespace-nowrap w-24 capitalize">
+                        {meal.category}
+                      </span>
+                      <span>{meal.totalCalories}kcal</span>
+                    </p>
+                    <p className=" text-sm">{meal.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {formatDate(meal.date)}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </>
-          ))}
+              </>
+            ))}
         </div>
       </CardContent>
     </Card>

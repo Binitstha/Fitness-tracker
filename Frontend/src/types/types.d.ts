@@ -39,3 +39,13 @@ export type CombinedFoodItem = {
   servingSize?: string;
   foods?: string[];
 };
+
+export type mealDataType = {
+  name: string;
+  date: string;
+  category: string;
+  totalCalories: number;
+  totalProtein: number;
+  totalCarbs: number;
+  totalFats: number;
+};
