@@ -98,11 +98,11 @@ const NutritionChart = ({ mealData }: { mealData: mealDataType[] }) => {
         );
     };
 
-    setChartData(aggregateMealData(mealData));
+    setChartData(aggregateMealData(mealData.slice(-15)));
   }, [mealData]);
 
   return (
-    <Card>
+    <Card className="w-[60rem]">
       <CardHeader>
         <CardTitle>Nutrient Breakdown</CardTitle>
         <CardDescription>
@@ -111,7 +111,7 @@ const NutritionChart = ({ mealData }: { mealData: mealDataType[] }) => {
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart width={600} height={300} data={chartData}>
+          <BarChart width={600} height={200} data={chartData}>
             <CartesianGrid vertical={false} strokeDasharray="3 3" />
             <XAxis
               dataKey="date"

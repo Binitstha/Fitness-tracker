@@ -19,17 +19,19 @@ const Page = () => {
   }, [isAuthenticated, loading, router]);
 
   return (
-    <main className="m-5 mx-auto flex gap-5 justify-center">
-      <div className="flex flex-col w-[67rem] gap-5">
+    <main className="m-5 mx-auto flex gap-5 flex-col items-center justify-center">
+      <div className="flex w-[88rem] gap-5">
         <section className="flex gap-5">
           <NutritionDash mealData={mealData} setMealData={setMealData} />
         </section>
-        <section className="border rounded-md w-full flex justify-center items-center">
-          <NutritionChart mealData={mealData} />
+        <section className="w-full flex justify-center items-center">
+          <section className=" w-full rounded-xl h-full border">
+            nutritionStat
+          </section>
         </section>
       </div>
-      <div className="sticky top-4 w-80 border rounded-sm flex flex-col gap-5">
-        <section>nutritionStat</section>
+      <div className="sticky w-[88rem] top-4 rounded-sm flex gap-5">
+        <NutritionChart mealData={mealData} />
         <section>water</section>
       </div>
     </main>
