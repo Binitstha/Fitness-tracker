@@ -2,6 +2,7 @@
 
 import NutritionChart from "@/components/nutritions/nutritionChart";
 import NutritionDash from "@/components/nutritions/nutritionsDash";
+import NutritionStat from "@/components/nutritions/nutritionStat";
 import { useSession } from "@/context/authContext";
 import { mealDataType } from "@/types/types";
 import { useRouter } from "next/navigation";
@@ -25,8 +26,8 @@ const Page = () => {
           <NutritionDash mealData={mealData} setMealData={setMealData} />
         </section>
         <section className="w-full flex justify-center items-center">
-          <section className=" w-full rounded-xl h-full border">
-            nutritionStat
+          <section className=" w-full h-full">
+            <NutritionStat mealData={mealData}/>
           </section>
         </section>
       </div>
