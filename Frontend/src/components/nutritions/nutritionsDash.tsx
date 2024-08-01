@@ -265,15 +265,15 @@ const NutritionDash = () => {
                     className="md:basis-1/2 lg:basis-1/3"
                   >
                     <div className="p-1">
-                      <Card className=" h-[15.5rem] flex flex-col justify-between">
-                        <CardHeader className="w-40">
+                      <Card className=" h-[14rem] flex flex-col justify-between">
+                        <CardHeader className="w-36">
                           <CardTitle className=" text-ellipsis overflow-hidden whitespace-nowrap w-[10rem]">
                             {food.name}
                           </CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <div className="grid text-xs w-full items-center gap-4">
-                            <div className="flex flex-wrap justify-between">
+                          <div className="grid text-xs w-full items-center gap-2">
+                            <div className="grid grid-cols-2 flex-wrap justify-between">
                               <p>Protein: {food.totalProtein}g</p>
                               <p>Calories: {food.totalCalories}</p>
                               <p>Carbs: {food.totalCarbs}g</p>
@@ -308,10 +308,9 @@ const NutritionDash = () => {
                       className="space-y-6 p-4"
                     >
                       <DialogHeader>
-                        <DialogTitle>Add a New Meal</DialogTitle>
+                        <DialogTitle>Add Meal</DialogTitle>
                         <DialogDescription>
-                          Fill out the details below to add a new meal to your
-                          list. Click &quot;Save&quot; to submit.
+                        Add a new meal to your meal list. Click save when you&apos;re done.
                         </DialogDescription>
                       </DialogHeader>
                       <FormField
@@ -364,8 +363,13 @@ const NutritionDash = () => {
           </div>
         </section>
         <Separator orientation="vertical" className="mx-4" />
-        <section className="flex items-start justify-center w-96 p-4rounded-lg shadow-md">
-          {mealData && <MealHistory mealData={mealData} />}
+        <section className="flex items-start justify-center w-96">
+          {mealData.length > 0 ? (
+            
+            <MealHistory mealData={mealData} />
+          ) : (
+              <div className=" w-52 h-full flex justify-center items-center">No meal added</div>
+          )}
         </section>
       </main>
     </>
@@ -380,11 +384,11 @@ const MealHistory = ({ mealData }: { mealData: mealDataType[] }) => {
       </CardHeader>
       <CardContent className="grid gap-4">
         <div>
-          {mealData.slice(0,3).map((meal: mealDataType, index: number) => (
+          {mealData.slice(0, 3).map((meal: mealDataType, index: number) => (
             <>
               <div
                 key={index}
-                className="mb-4 grid items-start pb-4 last:mb-0 last:pb-0"
+                className=" flex flex-col gap-2 pb-1 first:mt-0 mt-2 2 border-b last:border-b-transparent"
               >
                 <div className="space-y-1">
                   <p className="text-sm font-medium flex justify-between items-center leading-none">
