@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -38,6 +39,7 @@ import makeAnimated from "react-select/animated";
 import { CombinedFoodItem, FoodItem } from "@/types/types";
 import { addMeal, getMeal } from "@/api/meal/meal";
 import { z } from "zod";
+import { formatDate } from "@/lib/utils";
 
 const animatedComponents = makeAnimated();
 
@@ -62,22 +64,29 @@ const getMessageForTime = (setFoodType: (foodType: string) => void): string => {
   }
 };
 
+type mealDataType = {
+  name: string;
+  date: string;
+  totalCalories: number;
+  category: string;
+};
+
 const NutritionDash = () => {
   const [dailyRoutineMessage, setDailyRoutineMessage] = useState("");
   const [foodType, setFoodType] = useState("");
   const { theme } = useTheme();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [mealData, setMealData] = useState<CombinedFoodItem>()
+  const [mealData, setMealData] = useState<mealDataType[]>([]);
 
   useEffect(() => {
     setDailyRoutineMessage(getMessageForTime(setFoodType));
     const fetchMealData = async () => {
-      const data = await getMeal()
-      setMealData(data)
-    }
-    fetchMealData()
+      const data = await getMeal();
+      setMealData(data);
+    };
+    fetchMealData();
   }, []);
-  console.log(mealData)
+  console.log(mealData);
 
   const recommendedFoods = combinedFoodItems.filter(
     (item) => item.category === foodType,
@@ -143,6 +152,15 @@ const NutritionDash = () => {
 
     try {
       await addMeal(mealData);
+      setMealData((prevMealData) => [
+        ...prevMealData,
+        {
+          name: mealData.name,
+          category: foodType,
+          totalCalories: mealData.totalCalories,
+          date: new Date().toISOString(),
+        },
+      ]);
     } catch (error) {
       console.log(error);
     }
@@ -208,6 +226,15 @@ const NutritionDash = () => {
     const { servingSize, ...excludingServingSize } = food;
     try {
       await addMeal(excludingServingSize);
+      setMealData((prevMealData) => [
+        ...prevMealData,
+        {
+          name: excludingServingSize.name,
+          category: foodType,
+          totalCalories: excludingServingSize.totalCalories,
+          date: new Date().toISOString(),
+        },
+      ]);
     } catch (error) {
       console.log(error);
     }
@@ -215,7 +242,7 @@ const NutritionDash = () => {
 
   return (
     <>
-      <main className="border flex justify-evenly w-full p-3 rounded-md">
+      <main className="border flex justify-evenly w-full p-4 rounded-xl">
         <section className="">
           <h1 className="text-xl font-bold mb-4">{dailyRoutineMessage}</h1>
           <div>
@@ -337,24 +364,46 @@ const NutritionDash = () => {
           </div>
         </section>
         <Separator orientation="vertical" className="mx-4" />
-        <section className="flex flex-col items-center justify-center w-96 p-4rounded-lg shadow-md">
-          <h2 className="text-lg font-bold mb-4">Delicious Meals Await You!</h2>
-          <ul className="list-disc list-inside pl-4">
-            {/* {mealdata && mealData.length ? (
-              recommendedFoods.map((food, index) => (
-                <li key={index} className=" text-lg">
-                  {food.name}
-                </li>
-              ))
-            ) : (
-              <li className="text-gray-500">
-                No meals available for this time of day.
-              </li>
-            )} */}
-          </ul>
+        <section className="flex items-start justify-center w-96 p-4rounded-lg shadow-md">
+          {mealData && <MealHistory mealData={mealData} />}
         </section>
       </main>
     </>
+  );
+};
+
+const MealHistory = ({ mealData }: { mealData: mealDataType[] }) => {
+  return (
+    <Card className="w-52">
+      <CardHeader>
+        <CardTitle>Meal History</CardTitle>
+      </CardHeader>
+      <CardContent className="grid gap-4">
+        <div>
+          {mealData.slice(0,3).map((meal: mealDataType, index: number) => (
+            <>
+              <div
+                key={index}
+                className="mb-4 grid items-start pb-4 last:mb-0 last:pb-0"
+              >
+                <div className="space-y-1">
+                  <p className="text-sm font-medium flex justify-between items-center leading-none">
+                    <span className=" text-ellipsis overflow-hidden whitespace-nowrap w-24 capitalize">
+                      {meal.category}
+                    </span>
+                    <span>{meal.totalCalories}kcal</span>
+                  </p>
+                  <p className=" text-sm">{meal.name}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {formatDate(meal.date)}
+                  </p>
+                </div>
+              </div>
+            </>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

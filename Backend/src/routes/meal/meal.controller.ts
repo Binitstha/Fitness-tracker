@@ -32,7 +32,14 @@ export const getMeal = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const meal = await prisma.meal.findMany({
       where: { userId },
+      select: {
+        name: true,
+        date: true,
+        totalCalories: true,
+        category: true
+      }
     });
+
     successResponse(res, meal, "Successfull fetched meal data.");
   } catch (error) {
     console.log(error);

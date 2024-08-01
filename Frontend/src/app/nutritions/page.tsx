@@ -17,7 +17,7 @@ const Page = () => {
 
   return (
     <main className="m-5 mx-auto flex gap-5 justify-center">
-      <div className="flex flex-col w-[58rem] gap-5">
+      <div className="flex flex-col w-[67rem] gap-5">
         <section className="flex gap-5">
           <NutritionDash />
         </section>
@@ -25,7 +25,7 @@ const Page = () => {
           chart
         </section>
       </div>
-      <div className="sticky top-4 flex flex-col gap-5">
+      <div className="sticky top-4 w-80 border rounded-sm flex flex-col gap-5">
         <section>nutritionStat</section>
         <section>water</section>
       </div>

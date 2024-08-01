@@ -1,3 +1,4 @@
+import { formatDistanceToNow, isToday, isYesterday } from 'date-fns';
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -25,3 +26,16 @@ export const workouts: Workout[] = [
 
 const date = new Date();
 export const formattedDate = date.toISOString().split("T")[0];
+
+
+export const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+
+  if (isToday(date)) {
+    return formatDistanceToNow(date, { addSuffix: true });
+  } else if (isYesterday(date)) {
+    return 'yesterday';
+  } else {
+    return formatDistanceToNow(date, { addSuffix: true });
+  }
+};
