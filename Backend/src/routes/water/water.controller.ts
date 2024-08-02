@@ -24,4 +24,18 @@ export const addWater = async (req: AuthenticatedRequest, res: Response) => {
   }
 };
 
-export const getWater = () => {};
+export const getWater = async (req: AuthenticatedRequest, res: Response) => {
+  const userId = req.userId;
+
+  try {
+    const waterData = prisma.water.findMany({ where: { userId } });
+    successResponse(
+      res,
+      waterData,
+      "Successfully retrieved water data of user."
+    );
+  } catch (error) {
+    console.log(error);
+    serverErrorResponse(res, "Failed to retrive data of water.");
+  }
+};
