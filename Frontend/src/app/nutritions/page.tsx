@@ -3,6 +3,7 @@
 import NutritionChart from "@/components/nutritions/nutritionChart";
 import NutritionDash from "@/components/nutritions/nutritionsDash";
 import NutritionStat from "@/components/nutritions/nutritionStat";
+import Water from "@/components/nutritions/water";
 import { useSession } from "@/context/authContext";
 import { mealDataType } from "@/types/types";
 import { useRouter } from "next/navigation";
@@ -33,7 +34,7 @@ const Page = () => {
       </div>
       <div className="sticky w-[88rem] top-4 rounded-sm flex gap-5">
         <NutritionChart mealData={mealData} />
-        <section>water</section>
+        <section><Water/></section>
       </div>
     </main>
   );

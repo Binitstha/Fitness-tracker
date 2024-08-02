@@ -144,18 +144,24 @@ const NutritionStat = ({ mealData }: { mealData: mealDataType[] }) => {
         <CardDescription>{currentDate}</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
-        <ChartContainer
-          config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
-        >
-          <PieChart>
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Pie data={chartData} dataKey="value" nameKey="name" stroke="0" />
-          </PieChart>
-        </ChartContainer>
+        {mealData.length > 0 ? (
+          <ChartContainer
+            config={chartConfig}
+            className="mx-auto aspect-square max-h-[250px]"
+          >
+            <PieChart>
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Pie data={chartData} dataKey="value" nameKey="name" stroke="0" />
+            </PieChart>
+          </ChartContainer>
+        ) : (
+          <div className="text-center text-gray-500 h-full flex justify-center items-center">
+            No meal data available for today. Please log your meals.
+          </div>
+        )}
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="font-medium leading-none">
