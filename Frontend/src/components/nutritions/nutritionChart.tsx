@@ -110,48 +110,48 @@ const NutritionChart = ({ mealData }: { mealData: mealDataType[] }) => {
       </CardHeader>
       <CardContent>
         {mealData.length > 0 ? (
-          <ChartContainer config={chartConfig}>
-            <BarChart width={600} height={200} data={chartData}>
-              <CartesianGrid vertical={false} strokeDasharray="3 3" />
-              <XAxis
-                dataKey="date"
-                tickLine={false}
-                tickMargin={10}
-                axisLine={false}
-                tickFormatter={(value) => new Date(value).toLocaleDateString()}
-              />
-              <YAxis />
-              <Tooltip content={<ChartTooltipContent />} />
-              <Legend content={<ChartLegendContent />} />
-              <Bar
-                dataKey="calories"
-                stackId="a"
-                fill={chartConfig.calories.color}
-                barSize={30}
-                radius={[0, 0, 4, 4]}
-              />
-              <Bar
-                dataKey="carbs"
-                barSize={30}
-                stackId="a"
-                fill={chartConfig.carbs.color}
-              />
-              <Bar
-                dataKey="fats"
-                barSize={30}
-                stackId="a"
-                fill={chartConfig.fats.color}
-              />
-              <Bar
-                dataKey="protein"
-                barSize={30}
-                stackId="a"
-                fill={chartConfig.protein.color}
-                radius={[4, 4, 0, 0]}
-              />
-            </BarChart>
-          </ChartContainer>
-        ) : (
+        <ChartContainer config={chartConfig}>
+          <BarChart data={chartData}>
+            <CartesianGrid vertical={false} strokeDasharray="3 3" />
+            <XAxis
+              dataKey="date"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+              tickFormatter={(value) => new Date(value).toLocaleDateString()}
+            />
+            <YAxis />
+            <Tooltip content={<ChartTooltipContent />} />
+            <Legend content={<ChartLegendContent />} />
+            <Bar
+              dataKey="calories"
+              stackId="a"
+              fill={chartConfig.calories.color}
+              barSize={30}
+              radius={[0, 0, 4, 4]}
+            />
+            <Bar
+              dataKey="carbs"
+              barSize={30}
+              stackId="a"
+              fill={chartConfig.carbs.color}
+            />
+            <Bar
+              dataKey="fats"
+              barSize={30}
+              stackId="a"
+              fill={chartConfig.fats.color}
+            />
+            <Bar
+              dataKey="protein"
+              barSize={30}
+              stackId="a"
+              fill={chartConfig.protein.color}
+              radius={[4, 4, 0, 0]}
+            />
+          </BarChart>
+        </ChartContainer>
+         ) : (
           <div className="text-center text-gray-500 h-full flex justify-center items-center">
             No meal data available for today. Please log your meals.
           </div>

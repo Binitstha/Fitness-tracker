@@ -32,9 +32,9 @@ const Page = () => {
           </section>
         </section>
       </div>
-      <div className="sticky w-[88rem] top-4 rounded-sm flex gap-5">
+      <div className=" w-[88rem] flex gap-5">
         <NutritionChart mealData={mealData} />
-        <section><Water/></section>
+        <section className="w-[27rem]"><Water/></section>
       </div>
     </main>
   );

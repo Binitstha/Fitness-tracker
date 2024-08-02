@@ -289,7 +289,7 @@ const NutritionDash = ({ mealData, setMealData }: propType) => {
                         </CardContent>
                         <CardFooter className="flex justify-end">
                           <Button onClick={() => onAddCombinedFood(food)}>
-                            Add {foodType}
+                            Add to {foodType}
                           </Button>
                         </CardFooter>
                       </Card>
@@ -302,7 +302,7 @@ const NutritionDash = ({ mealData, setMealData }: propType) => {
               <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
                   <Button onClick={() => form.reset()}>
-                    Add Your Own{" "}
+                    Add Your {" "}
                     {foodType.charAt(0).toUpperCase() + foodType.slice(1)}
                   </Button>
                 </DialogTrigger>
