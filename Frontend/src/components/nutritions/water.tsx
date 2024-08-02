@@ -33,6 +33,10 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "../ui/drawer";
+import { waterType } from "@/types/types";
+import { useState } from "react";
+import { addWater } from "@/api/water/water";
+
 const notifications = [
   {
     title: "Your call has been confirmed.",
@@ -106,8 +110,32 @@ const data = [
   },
 ];
 
+const waterValues = [
+  { value: 10, label: "10ml" },
+  { value: 25, label: "25ml" },
+  { value: 50, label: "50ml" },
+  { value: 100, label: "100ml" },
+  { value: 500, label: "500ml" },
+];
+
 const Water = () => {
+  const [waterDate, setWaterData] = useState<waterType[]>([]);
   const onClick = () => {};
+  const onAddWater = async (value: number) => {
+    const date = new Date().toLocaleString();
+    const data: waterType = {
+      date: date,
+      amount: value,
+    };
+
+    try {
+      const newData = await addWater(data);
+      setWaterData(newData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
   return (
     <>
       <Card className="w-full h-full">
@@ -159,36 +187,17 @@ const Water = () => {
               <span>33/100</span>
             </div>
             <div className="w-full p-2 flex justify-around items-center ">
-              <div className=" flex flex-col ">
-                <Button className=" rounded-full h-fit w-fit p-2">
-                  <Droplets />
-                </Button>
-                <span>25ml</span>
-              </div>
-              <div className=" flex flex-col ">
-                <Button className=" rounded-full h-fit w-fit p-2">
-                  <Droplets />
-                </Button>
-                <span>25ml</span>
-              </div>
-              <div className=" flex flex-col ">
-                <Button className=" rounded-full h-fit w-fit p-2">
-                  <Droplets />
-                </Button>
-                <span>25ml</span>
-              </div>
-              <div className=" flex flex-col ">
-                <Button className=" rounded-full h-fit w-fit p-2">
-                  <Droplets />
-                </Button>
-                <span>25ml</span>
-              </div>
-              <div className=" flex flex-col ">
-                <Button className=" rounded-full h-fit w-fit p-2">
-                  <Droplets />
-                </Button>
-                <span>25ml</span>
-              </div>
+              {waterValues.map((water, index) => (
+                <div className=" flex flex-col " key={index}>
+                  <Button
+                    className="rounded-full h-fit w-fit p-2"
+                    onClick={() => onAddWater(water.value)}
+                  >
+                    <Droplets />
+                  </Button>
+                  <span>{water.value}ml</span>
+                </div>
+              ))}
             </div>
             <div>
               <Card>
@@ -245,8 +254,7 @@ const Water = () => {
                       <span className="sr-only">Decrease</span>
                     </Button>
                     <div className="flex-1 text-center">
-                      <div className="text-7xl font-bold tracking-tighter">
-                      </div>
+                      <div className="text-7xl font-bold tracking-tighter"></div>
                       <div className="text-[0.70rem] uppercase text-muted-foreground">
                         Calories/day
                       </div>

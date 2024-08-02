@@ -100,8 +100,6 @@ export const mealSchema = z.object({
 });
 
 export const waterSchema = z.object({
-  id: z.string().min(0, "ID cannot be empty"),
-  amount: z.string().min(0, "Amount cannot be empty"),
   date: z.string().min(0, "Date cannot be empty"),
-  userId: z.string().min(0, "User ID cannot be empty"),
+  amount: z.number().min(0, "Amount cannot be empty"),
 });

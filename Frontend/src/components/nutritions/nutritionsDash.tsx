@@ -83,7 +83,6 @@ const NutritionDash = ({ mealData, setMealData }: propType) => {
     };
     fetchMealData();
   }, [setMealData]);
-  console.log(mealData);
 
   const recommendedFoods = combinedFoodItems.filter(
     (item) => item.category === foodType,
@@ -302,7 +301,7 @@ const NutritionDash = ({ mealData, setMealData }: propType) => {
               <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
                   <Button onClick={() => form.reset()}>
-                    Add Your {" "}
+                    Add Your{" "}
                     {foodType.charAt(0).toUpperCase() + foodType.slice(1)}
                   </Button>
                 </DialogTrigger>
@@ -397,25 +396,23 @@ const MealHistory = ({ mealData }: { mealData: mealDataType[] }) => {
             )
             .slice(0, 3)
             .map((meal: mealDataType, index: number) => (
-              <>
-                <div
-                  key={index}
-                  className=" flex flex-col gap-2 pb-1 first:mt-0 mt-2 2 border-b last:border-b-transparent"
-                >
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium flex justify-between items-center leading-none">
-                      <span className=" text-ellipsis overflow-hidden whitespace-nowrap w-24 capitalize">
-                        {meal.category}
-                      </span>
-                      <span>{meal.totalCalories}kcal</span>
-                    </p>
-                    <p className=" text-sm">{meal.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {formatDate(meal.date)}
-                    </p>
-                  </div>
+              <div
+                key={index}
+                className=" flex flex-col gap-2 pb-1 first:mt-0 mt-2 2 border-b last:border-b-transparent"
+              >
+                <div className="space-y-1">
+                  <p className="text-sm font-medium flex justify-between items-center leading-none">
+                    <span className=" text-ellipsis overflow-hidden whitespace-nowrap w-24 capitalize">
+                      {meal.category}
+                    </span>
+                    <span>{meal.totalCalories}kcal</span>
+                  </p>
+                  <p className=" text-sm">{meal.name}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {formatDate(meal.date)}
+                  </p>
                 </div>
-              </>
+              </div>
             ))}
         </div>
       </CardContent>

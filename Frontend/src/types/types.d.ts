@@ -49,3 +49,8 @@ export type mealDataType = {
   totalCarbs: number;
   totalFats: number;
 };
+
+export type waterType = {
+  date: string;
+  amount: number;
+};

@@ -95,7 +95,7 @@ model Progress {
 
 model Water {
   id     String @id @default(uuid())
-  amount String
+  amount Int
   date   String
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
