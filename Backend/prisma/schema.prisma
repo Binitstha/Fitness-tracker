@@ -25,6 +25,8 @@ model User {
   meals         Meal[]
   goals         Goal[]
   progress      Progress[]
+  Water         Water[]
+  WaterGoal     WaterGoal[]
 }
 
 model RefreshToken {
@@ -47,17 +49,17 @@ model Workout {
 }
 
 model Meal {
-  id          String   @id @default(uuid())
-  userId      String
-  name        String
-  date        String
-  category    String
+  id            String  @id @default(uuid())
+  userId        String
+  name          String
+  date          String
+  category      String
   totalCalories Int
   totalProtein  Int
-  totalCarbs   Int
-  totalFats    Int
-  foods       String?
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  totalCarbs    Int
+  totalFats     Int
+  foods         String?
+  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Goal {
@@ -89,4 +91,22 @@ model Progress {
   muscleMass Float?
   userId     String
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Water {
+  id     String @id @default(uuid())
+  amount String
+  date   String
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model WaterGoal {
+  id                String  @id @default(uuid())
+  target            String
+  targetDate        String
+  achieved          Boolean @default(false)
+  currentWaterAmout Int     @default(0)
+  userId            String
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
