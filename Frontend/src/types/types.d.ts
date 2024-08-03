@@ -54,3 +54,7 @@ export type waterType = {
   date: string;
   amount: number;
 };
+
+export type waterGOalType = {
+  target: number,
+}

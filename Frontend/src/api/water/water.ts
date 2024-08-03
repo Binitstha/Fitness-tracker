@@ -1,5 +1,5 @@
 import { toast } from "@/components/ui/use-toast";
-import { waterType } from "@/types/types";
+import { waterGOalType, waterType } from "@/types/types";
 
 export const addWater = async (data: waterType) => {
   try {
@@ -38,6 +38,54 @@ export const getWater = async () => {
       method: "GET",
       credentials: "include",
     });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      return result.data;
+    } else {
+      console.log(result);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getWaterGoal = async () => {
+  try {
+    const response = await fetch("http://localhost:5000/water/getGoal", {
+      method: "GET",
+      credentials: "include",
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      return result.data;
+    } else {
+      console.log(result);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateWaterGoal = async ({
+  id,
+  data,
+}: {
+  id: string;
+  data: waterGOalType;
+}) => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/water/updateGoal:${id}`,
+      {
+        method: "PUT",
+        credentials: "include",
+        body: JSON.stringify({ id, ...data }),
+      },
+    );
 
     const result = await response.json();
 
