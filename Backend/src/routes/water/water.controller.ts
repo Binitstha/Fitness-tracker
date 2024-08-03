@@ -46,3 +46,21 @@ export const getWater = async (req: AuthenticatedRequest, res: Response) => {
     serverErrorResponse(res, "Failed to retrive data of water.");
   }
 };
+
+export const setGoal = async (req: AuthenticatedRequest, res: Response) => {
+  const userId = req.userId;
+  const data = req.body;
+
+  try {
+    const newData = await prisma.waterGoal.create({
+      data: {
+        ...data,
+        userId,
+      },
+    });
+    successResponse(res, newData, "Successfully goal set.");
+  } catch (error) {
+    console.log(error);
+    serverErrorResponse(res, "Failed to set the goal.");
+  }
+};

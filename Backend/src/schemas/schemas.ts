@@ -103,3 +103,8 @@ export const waterSchema = z.object({
   date: z.string().min(0, "Date cannot be empty"),
   amount: z.number().min(0, "Amount cannot be empty"),
 });
+
+export const waterGoalSchema = z.object({
+  target: z.number().min(0, "Target cannot be null"),
+  achieved: z.boolean(),
+});
