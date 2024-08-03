@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addWater, getWater, setGoal } from "./water.controller";
+import { addWater, getGoal, getWater, setGoal } from "./water.controller";
 import { authenticationMiddleware } from "../../middleware/authentication";
 import { validateSchema } from "../../middleware/validateSchema";
 import { waterGoalSchema, waterSchema } from "../../schemas/schemas";
@@ -21,5 +21,6 @@ router.post(
   validateSchema(waterGoalSchema),
   setGoal
 );
+router.get('/getGoal', authenticationMiddleware, getGoal)
 
 export default router;

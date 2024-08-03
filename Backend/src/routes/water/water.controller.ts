@@ -80,3 +80,15 @@ export const updateGoal = async (req: AuthenticatedRequest, res: Response) => {
     serverErrorResponse(res, "Failed to update the goal.");
   }
 };
+
+export const getGoal = async (req: AuthenticatedRequest, res: Response) => {
+  const userId = req.userId;
+
+  try {
+    const goalData = await prisma.waterGoal.findMany({ where: { userId } });
+    successResponse(res, goalData, "Successfully goal data retrieved.");
+  } catch (error) {
+    console.log(error);
+    serverErrorResponse(res, "Failed to fetch the data.");
+  }
+};
