@@ -53,31 +53,23 @@ export const setGoal = async (req: AuthenticatedRequest, res: Response) => {
   const data = req.body;
 
   try {
-    const newData = await prisma.waterGoal.create({
-      data: {
-        ...data,
-        userId,
-      },
-    });
-    successResponse(res, newData, "Successfully goal set.");
+    const existingGoal = await prisma.waterGoal.findUnique({ where: { userId } });
+
+    if (existingGoal) {
+      const updatedGoal = await prisma.waterGoal.update({
+        where: { userId },
+        data: { target: data.target, achieved: data.achieved },
+      });
+      return successResponse(res, updatedGoal, "Successfully updated the goal.");
+    } else {
+      const newData = await prisma.waterGoal.create({
+        data: { ...data, userId },
+      });
+      return successResponse(res, newData, "Successfully set the goal.");
+    }
   } catch (error) {
     console.log(error);
-    serverErrorResponse(res, "Failed to set the goal.");
-  }
-};
-
-export const updateGoal = async (req: AuthenticatedRequest, res: Response) => {
-  const { target, achieved } = req.body;
-  const { id } = req.params;
-
-  try {
-    await prisma.waterGoal.update({
-      where: { id: id },
-      data: { target: target, achieved: achieved },
-    });
-  } catch (error) {
-    console.log(error);
-    serverErrorResponse(res, "Failed to update the goal.");
+    return serverErrorResponse(res, "Failed to set the goal.");
   }
 };
 
@@ -86,9 +78,9 @@ export const getGoal = async (req: AuthenticatedRequest, res: Response) => {
 
   try {
     const goalData = await prisma.waterGoal.findMany({ where: { userId } });
-    successResponse(res, goalData, "Successfully goal data retrieved.");
+    return successResponse(res, goalData, "Successfully retrieved goal data.");
   } catch (error) {
     console.log(error);
-    serverErrorResponse(res, "Failed to fetch the data.");
+    return serverErrorResponse(res, "Failed to fetch the data.");
   }
 };

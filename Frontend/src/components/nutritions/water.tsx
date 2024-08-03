@@ -33,9 +33,15 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "../ui/drawer";
-import { waterType } from "@/types/types";
+import { waterGoalType, waterType } from "@/types/types";
 import { useEffect, useState } from "react";
-import { addWater, getWater } from "@/api/water/water";
+import {
+  addWater,
+  getWater,
+  getWaterGoal,
+  setWaterGoal,
+} from "@/api/water/water";
+import { toast } from "../ui/use-toast";
 
 const notifications = [
   {
@@ -59,48 +65,6 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const data = [
-  {
-    goal: 400,
-  },
-  {
-    goal: 300,
-  },
-  {
-    goal: 200,
-  },
-  {
-    goal: 300,
-  },
-  {
-    goal: 200,
-  },
-  {
-    goal: 278,
-  },
-  {
-    goal: 189,
-  },
-  {
-    goal: 239,
-  },
-  {
-    goal: 300,
-  },
-  {
-    goal: 200,
-  },
-  {
-    goal: 278,
-  },
-  {
-    goal: 189,
-  },
-  {
-    goal: 349,
-  },
-];
-
 const waterValues = [
   { value: 10, label: "10ml" },
   { value: 25, label: "25ml" },
@@ -111,6 +75,9 @@ const waterValues = [
 
 const Water = () => {
   const [waterData, setWaterData] = useState<waterType[]>([]);
+  const [waterGoalData, setWaterGoalData] = useState<waterGoalType>();
+  const [newGoal, setNewGoal] = useState<number>(waterGoalData?.target || 1000);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const aggregateWaterData = (data: waterType[]): waterType[] => {
     const waterMap: {
@@ -135,11 +102,25 @@ const Water = () => {
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   };
 
+  const checkAndResetWaterData = (data: waterType[]): waterType[] => {
+    const today = new Date().toLocaleDateString();
+    if (data.length > 0) {
+      const lastEntryDate = new Date(
+        data[data.length - 1].date,
+      ).toLocaleDateString();
+      if (today !== lastEntryDate) {
+        return [];
+      }
+    }
+    return data;
+  };
+
   useEffect(() => {
     const fetch = async () => {
       const data = await getWater();
-
-      setWaterData(aggregateWaterData(data.slice(-15)));
+      const waterGoal = await setWaterGoal({ target: 1000, achieved: false });
+      setWaterGoalData(waterGoal);
+      setWaterData(aggregateWaterData(checkAndResetWaterData(data.slice(-15))));
     };
     fetch();
   }, []);
@@ -209,8 +190,24 @@ const Water = () => {
           <div className=" mt-4 flex-col flex gap-4">
             <div className=" flex flex-col justify-center items-center gap-2">
               <p>Today&apos;s Goal</p>
-              <Progress value={33} />
-              <span>33/100</span>
+              <Progress
+                value={
+                  waterGoalData
+                    ? (waterData.reduce((sum, item) => sum + item.amount, 0) /
+                        waterGoalData.target) *
+                        100 >
+                      100
+                      ? 100
+                      : (waterData.reduce((sum, item) => sum + item.amount, 0) /
+                          waterGoalData.target) *
+                        100
+                    : 0
+                }
+              />
+              <span>
+                {waterData.reduce((sum, item) => sum + item.amount, 0)}/
+                {waterGoalData?.target} ml
+              </span>
             </div>
             <div className="w-full p-2 flex justify-around items-center ">
               {waterValues.map((water, index) => (
@@ -257,16 +254,16 @@ const Water = () => {
           </div>
         </CardContent>
         <CardFooter className="flex justify-end">
-          <Drawer>
+          <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
             <DrawerTrigger asChild>
-              <Button>Set Goal</Button>
+              <Button variant="outline">Set goal</Button>
             </DrawerTrigger>
             <DrawerContent>
               <div className="mx-auto w-full max-w-sm">
                 <DrawerHeader>
-                  <DrawerTitle>Move Goal</DrawerTitle>
+                  <DrawerTitle>Set Goal</DrawerTitle>
                   <DrawerDescription>
-                    Set your daily activity goal.
+                    Set your daily water intake goal.
                   </DrawerDescription>
                 </DrawerHeader>
                 <div className="p-4 pb-0">
@@ -275,12 +272,15 @@ const Water = () => {
                       variant="outline"
                       size="icon"
                       className="h-8 w-8 shrink-0 rounded-full"
+                      onClick={() => setNewGoal((prev) => prev - 100)}
                     >
                       <MinusIcon className="h-4 w-4" />
                       <span className="sr-only">Decrease</span>
                     </Button>
                     <div className="flex-1 text-center">
-                      <div className="text-7xl font-bold tracking-tighter"></div>
+                      <div className="text-7xl font-bold tracking-tighter">
+                        {newGoal ? newGoal : waterGoalData?.target}
+                      </div>
                       <div className="text-[0.70rem] uppercase text-muted-foreground">
                         Calories/day
                       </div>
@@ -289,6 +289,7 @@ const Water = () => {
                       variant="outline"
                       size="icon"
                       className="h-8 w-8 shrink-0 rounded-full"
+                      onClick={() => setNewGoal((prev) => prev + 100)}
                     >
                       <PlusIcon className="h-4 w-4" />
                       <span className="sr-only">Increase</span>
@@ -296,9 +297,10 @@ const Water = () => {
                   </div>
                   <div className="mt-3 h-[120px]">
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={data}>
+                      <BarChart data={waterData}>
                         <Bar
-                          dataKey="goal"
+                          dataKey="amount"
+                          barSize={10}
                           style={
                             {
                               fill: "hsl(var(--foreground))",
@@ -311,7 +313,24 @@ const Water = () => {
                   </div>
                 </div>
                 <DrawerFooter>
-                  <Button>Submit</Button>
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    onClick={() => {
+                      if (waterGoalData) {
+                        setWaterGoalData({ ...waterGoalData, target: newGoal });
+                      } else {
+                        setWaterGoalData({ target: newGoal, achieved: false });
+                      }
+                      toast({
+                        title: "Goal set",
+                        description: `Your daily goal set to ${newGoal}ml`,
+                      });
+                      setIsDrawerOpen(false);
+                    }}
+                  >
+                    Save
+                  </Button>
                   <DrawerClose asChild>
                     <Button variant="outline">Cancel</Button>
                   </DrawerClose>

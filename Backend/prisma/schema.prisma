@@ -105,7 +105,7 @@ model WaterGoal {
   id                String  @id @default(uuid())
   target            Int
   achieved          Boolean @default(false)
-  currentWaterAmout Int?     @default(0)
-  userId            String
+  currentWaterAmout Int?    @default(0)
+  userId            String  @unique
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

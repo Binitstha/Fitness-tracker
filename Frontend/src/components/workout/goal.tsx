@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useState, useEffect } from "react";
 import {
   Card,
@@ -75,7 +75,7 @@ const Goal = ({ goalData, onAddGoal, onUpdateGoal }: GoalProps) => {
         targetCalories: goalData.targetCalories,
       });
     }
-  }, [goalData,form]);
+  }, [goalData, form]);
 
   useEffect(() => {
     if (goal) {

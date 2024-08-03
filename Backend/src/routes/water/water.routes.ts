@@ -4,7 +4,6 @@ import {
   getGoal,
   getWater,
   setGoal,
-  updateGoal,
 } from "./water.controller";
 import { authenticationMiddleware } from "../../middleware/authentication";
 import { validateSchema } from "../../middleware/validateSchema";
@@ -26,12 +25,6 @@ router.post(
   authenticationMiddleware,
   validateSchema(waterGoalSchema),
   setGoal
-);
-router.put(
-  "/updateGoal:id",
-  authenticationMiddleware,
-  validateSchema(waterGoalSchema),
-  updateGoal
 );
 router.get("/getGoal", authenticationMiddleware, getGoal);
 

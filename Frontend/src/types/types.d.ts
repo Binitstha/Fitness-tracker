@@ -55,6 +55,7 @@ export type waterType = {
   amount: number;
 };
 
-export type waterGOalType = {
-  target: number,
-}
+export type waterGoalType = {
+  target: number;
+  achieved: boolean;
+};
