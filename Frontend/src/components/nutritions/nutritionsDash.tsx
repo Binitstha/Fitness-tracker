@@ -243,13 +243,14 @@ const NutritionDash = ({ mealData, setMealData }: propType) => {
 
   return (
     <>
-      <main className="border flex justify-evenly w-full p-4 rounded-xl">
-        <section className="">
+    <Card >
+      <CardContent className="h-full flex justify-evenly w-[66.65rem] p-4 rounded-xl">
+        <main className="">
           <h1 className="text-xl font-bold mb-4 text-center">
             {dailyRoutineMessage}
           </h1>
           <h2 className=" text-lg text-center">Recommended {foodType}</h2>
-          <div>
+          <div className=" w-[50rem]">
             <Carousel
               opts={{
                 align: "start",
@@ -275,9 +276,9 @@ const NutritionDash = ({ mealData, setMealData }: propType) => {
                             {food.name}
                           </CardTitle>
                         </CardHeader>
-                        <CardContent>
-                          <div className="grid text-xs w-full items-center gap-2">
-                            <div className="grid grid-cols-2 flex-wrap justify-between">
+                        <CardContent className="">
+                          <div className="grid text-xs items-center gap-2">
+                            <div className="grid grid-cols-2 justify-between">
                               <p>Protein: {food.totalProtein}g</p>
                               <p>Calories: {food.totalCalories}</p>
                               <p>Carbs: {food.totalCarbs}g</p>
@@ -286,7 +287,7 @@ const NutritionDash = ({ mealData, setMealData }: propType) => {
                             <p>Serving Size: {food.servingSize}</p>
                           </div>
                         </CardContent>
-                        <CardFooter className="flex justify-end">
+                        <CardFooter className=" w-fit ">
                           <Button onClick={() => onAddCombinedFood(food)}>
                             Add to {foodType}
                           </Button>
@@ -366,18 +367,21 @@ const NutritionDash = ({ mealData, setMealData }: propType) => {
               </Dialog>
             </div>
           </div>
-        </section>
+        </main>
         <Separator orientation="vertical" className="mx-4" />
         <section className="flex items-start justify-center w-96">
           {mealData.length > 0 ? (
+            <div className="mt-10">
             <MealHistory mealData={mealData} />
+            </div>
           ) : (
             <div className=" w-52 h-full flex justify-center items-center">
               No meal added
             </div>
           )}
         </section>
-      </main>
+    </CardContent>
+    </Card>
     </>
   );
 };

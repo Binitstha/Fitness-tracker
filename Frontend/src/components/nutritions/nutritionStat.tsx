@@ -136,7 +136,7 @@ const NutritionStat = ({ mealData }: { mealData: mealDataType[] }) => {
     (chartData.find((data) => data.name === "Calories")?.value ?? 0);
 
   return (
-    <Card className="flex flex-col h-full">
+    <Card className="flex flex-col h-full w-80">
       <CardHeader className="items-center pb-0">
         <CardTitle className="text-center">
           Today&apos;s Nutrition Breakdown
@@ -176,7 +176,7 @@ const NutritionStat = ({ mealData }: { mealData: mealDataType[] }) => {
             <span>
               Protein:{" "}
               {remainingProtein > 0
-                ? `${remainingProtein}g left`
+                ? `${Math.floor(remainingProtein)}g left`
                 : "Goal reached!"}
             </span>
           </div>
@@ -187,7 +187,7 @@ const NutritionStat = ({ mealData }: { mealData: mealDataType[] }) => {
             ></div>
             <span>
               Carbs:{" "}
-              {remainingCarbs > 0 ? `${remainingCarbs}g left` : "Goal reached!"}
+              {remainingCarbs > 0 ? `${Math.floor(remainingCarbs)}g left` : "Goal reached!"}
             </span>
           </div>
           <div className="flex items-center gap-2 leading-none">
@@ -197,7 +197,7 @@ const NutritionStat = ({ mealData }: { mealData: mealDataType[] }) => {
             ></div>
             <span>
               Fats:{" "}
-              {remainingFats > 0 ? `${remainingFats}g left` : "Goal reached!"}
+              {remainingFats > 0 ? `${Math.floor(remainingFats)}g left` : "Goal reached!"}
             </span>
           </div>
           <div className="flex items-center gap-2 leading-none">
@@ -208,7 +208,7 @@ const NutritionStat = ({ mealData }: { mealData: mealDataType[] }) => {
             <span>
               Calories:{" "}
               {remainingCalories > 0
-                ? `${remainingCalories} kcal left`
+                ? `${Math.floor(remainingCalories)} kcal left`
                 : "Goal reached!"}
             </span>
           </div>

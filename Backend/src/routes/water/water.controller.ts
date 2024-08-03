@@ -28,7 +28,14 @@ export const getWater = async (req: AuthenticatedRequest, res: Response) => {
   const userId = req.userId;
 
   try {
-    const waterData = prisma.water.findMany({ where: { userId } });
+    const waterData = await prisma.water.findMany({
+      where: { userId },
+      select: {
+        amount: true,
+        date: true,
+      },
+    });
+
     successResponse(
       res,
       waterData,

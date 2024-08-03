@@ -22,7 +22,7 @@ const Page = () => {
 
   return (
     <main className="m-5 mx-auto flex gap-5 flex-col items-center justify-center">
-      <div className="flex w-[88rem] gap-5">
+      <div className="flex w-[88rem] gap-5 h-[26rem]">
         <section className="flex gap-5">
           <NutritionDash mealData={mealData} setMealData={setMealData} />
         </section>

@@ -34,8 +34,8 @@ import {
   DrawerTrigger,
 } from "../ui/drawer";
 import { waterType } from "@/types/types";
-import { useState } from "react";
-import { addWater } from "@/api/water/water";
+import { useEffect, useState } from "react";
+import { addWater, getWater } from "@/api/water/water";
 
 const notifications = [
   {
@@ -46,15 +46,6 @@ const notifications = [
     title: "You have a new message!",
     description: "1 hour ago",
   },
-];
-
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
 ];
 
 const chartConfig = {
@@ -119,8 +110,40 @@ const waterValues = [
 ];
 
 const Water = () => {
-  const [waterDate, setWaterData] = useState<waterType[]>([]);
-  const onClick = () => {};
+  const [waterData, setWaterData] = useState<waterType[]>([]);
+
+  const aggregateWaterData = (data: waterType[]): waterType[] => {
+    const waterMap: {
+      [key: string]: number;
+    } = {};
+
+    data.forEach((water) => {
+      const date = new Date(water.date).toLocaleDateString();
+      const { amount } = water;
+      if (waterMap[date]) {
+        waterMap[date] += amount;
+      } else {
+        waterMap[date] = amount;
+      }
+    });
+
+    return Object.keys(waterMap)
+      .map((date) => ({
+        date,
+        amount: waterMap[date],
+      }))
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  };
+
+  useEffect(() => {
+    const fetch = async () => {
+      const data = await getWater();
+
+      setWaterData(aggregateWaterData(data.slice(-15)));
+    };
+    fetch();
+  }, []);
+
   const onAddWater = async (value: number) => {
     const date = new Date().toLocaleString();
     const data: waterType = {
@@ -130,12 +153,15 @@ const Water = () => {
 
     try {
       const newData = await addWater(data);
-      setWaterData(newData);
+      setWaterData((prev) => {
+        const updatedData = [...prev, newData];
+        return aggregateWaterData(updatedData.slice(-15));
+      });
     } catch (error) {
       console.log(error);
     }
   };
-  
+
   return (
     <>
       <Card className="w-full h-full">
@@ -147,7 +173,7 @@ const Water = () => {
             <ChartContainer config={chartConfig} className="h-40 w-full">
               <LineChart
                 accessibilityLayer
-                data={chartData}
+                data={waterData}
                 margin={{
                   left: 12,
                   right: 12,
@@ -155,7 +181,7 @@ const Water = () => {
               >
                 <CartesianGrid vertical={false} />
                 <XAxis
-                  dataKey="month"
+                  dataKey="date"
                   tickLine={false}
                   axisLine={false}
                   tickMargin={8}
@@ -166,7 +192,7 @@ const Water = () => {
                   content={<ChartTooltipContent hideLabel />}
                 />
                 <Line
-                  dataKey="desktop"
+                  dataKey="amount"
                   type="natural"
                   stroke="var(--color-desktop)"
                   strokeWidth={2}
