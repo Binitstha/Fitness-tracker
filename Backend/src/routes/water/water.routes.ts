@@ -16,7 +16,7 @@ router.post(
 router.get("/", authenticationMiddleware, getWater);
 
 router.post(
-  "/setGoal",
+  "/setGoal:id",
   authenticationMiddleware,
   validateSchema(waterGoalSchema),
   setGoal

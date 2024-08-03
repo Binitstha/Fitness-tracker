@@ -7,6 +7,7 @@ import {
 } from "../../utils/response.handler";
 
 const prisma = new PrismaClient();
+
 export const addWater = async (req: AuthenticatedRequest, res: Response) => {
   const userId = req.userId;
   const data = req.body;
@@ -62,5 +63,20 @@ export const setGoal = async (req: AuthenticatedRequest, res: Response) => {
   } catch (error) {
     console.log(error);
     serverErrorResponse(res, "Failed to set the goal.");
+  }
+};
+
+export const updateGoal = async (req: AuthenticatedRequest, res: Response) => {
+  const { target, achieved } = req.body;
+  const { id } = req.params;
+
+  try {
+    await prisma.waterGoal.update({
+      where: { id: id },
+      data: { target: target, achieved: achieved },
+    });
+  } catch (error) {
+    console.log(error);
+    serverErrorResponse(res, "Failed to update the goal.");
   }
 };
