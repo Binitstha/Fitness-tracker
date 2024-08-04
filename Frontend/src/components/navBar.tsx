@@ -57,7 +57,7 @@ const NavBar = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="flex justify-between items-center border-b border-stone-500 h-16 px-[15rem] sticky top-0">
+      <div className="flex justify-between items-center border-b h-16 px-[15rem] sticky top-0">
         <div className="text-3xl">
           <Link href={"/"}>
             <Image src="/logo.svg" alt="logo" height={100} width={100} />

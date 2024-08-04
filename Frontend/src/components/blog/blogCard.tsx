@@ -86,8 +86,7 @@ const BlogCard = () => {
                       <Image
                         src={`${blog.photo}`}
                         alt="blogImage"
-                        layout="fill"
-                        objectFit="cover"
+                        fill
                         className=" absolute top-0 left-0"
                       />
                     </div>
