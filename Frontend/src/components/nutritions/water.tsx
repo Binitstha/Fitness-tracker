@@ -42,6 +42,7 @@ import {
   setWaterGoal,
 } from "@/api/water/water";
 import { toast } from "../ui/use-toast";
+import { formatDate } from "@/lib/utils";
 
 const notifications = [
   {
@@ -75,6 +76,7 @@ const waterValues = [
 
 const Water = () => {
   const [waterData, setWaterData] = useState<waterType[]>([]);
+  const [waterRecord, setWaterRecord] = useState<waterType[]>([]);
   const [waterGoalData, setWaterGoalData] = useState<waterGoalType>();
   const [newGoal, setNewGoal] = useState<number>(waterGoalData?.target || 1000);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -118,6 +120,7 @@ const Water = () => {
   useEffect(() => {
     const fetch = async () => {
       const data = await getWater();
+      setWaterRecord(data);
       const waterGoal = await setWaterGoal({ target: 1000, achieved: false });
       setWaterGoalData(waterGoal);
       setWaterData(aggregateWaterData(checkAndResetWaterData(data.slice(-15))));
@@ -134,6 +137,7 @@ const Water = () => {
 
     try {
       const newData = await addWater(data);
+      setWaterRecord((prev) => [...prev, newData]);
       setWaterData((prev) => {
         const updatedData = [...prev, newData];
         return aggregateWaterData(updatedData.slice(-15));
@@ -188,7 +192,7 @@ const Water = () => {
             </ChartContainer>
           </div>
           <div className=" mt-4 flex-col flex gap-4">
-            <div className=" flex flex-col justify-center items-center gap-2">
+            <div className=" flex flex-col justify-center items-center gap-2 px-10">
               <p>Today&apos;s Goal</p>
               <Progress
                 value={
@@ -226,27 +230,42 @@ const Water = () => {
               <Card>
                 <CardHeader>
                   <CardTitle className="text-center">
-                    Today&apos;s Water dringking record
+                    Today&apos;s Water Drinking Record
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="grid gap-4">
-                  <div>
-                    {notifications.map((notification, index) => (
-                      <div
-                        key={index}
-                        className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
-                      >
-                        <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
-                        <div className="space-y-1">
-                          <p className="text-sm font-medium leading-none">
-                            {notification.title}
-                          </p>
+                  <div className="mx-6 rounded-md px-4 ">
+                    <div className="mb-3 text-center text-lg font-semibold">
+                      Last 3 Records
+                    </div>
+                    {waterRecord
+                      .sort(
+                        (a, b) =>
+                          new Date(b.date).getTime() -
+                          new Date(a.date).getTime(),
+                      )
+                      .slice(0, 3)
+                      .map((waterData, index) => (
+                        <div
+                          key={index}
+                          className="flex gap-4 justify-between items-center mb-2 p-2 transition-colors duration-200"
+                        >
+                          <div className="flex items-center gap-2">
+                            <Droplets className="text-sky-500" />
+                            <p className="text-sm font-medium leading-none">
+                              {waterData.amount} ml
+                            </p>
+                          </div>
                           <p className="text-sm text-muted-foreground">
-                            {notification.description}
+                            {formatDate(waterData.date)}
                           </p>
                         </div>
+                      ))}
+                    {waterRecord.length === 0 && (
+                      <div className="text-center text-sm text-muted-foreground">
+                        No records available
                       </div>
-                    ))}
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -297,7 +316,7 @@ const Water = () => {
                   </div>
                   <div className="mt-3 h-[120px]">
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={waterData}>
+                      <BarChart data={waterData} height={400}>
                         <Bar
                           dataKey="amount"
                           barSize={10}

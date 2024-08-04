@@ -44,11 +44,15 @@ CREATE TABLE `Workout` (
 -- CreateTable
 CREATE TABLE `Meal` (
     `id` VARCHAR(191) NOT NULL,
-    `date` DATETIME(3) NOT NULL,
-    `type` VARCHAR(191) NOT NULL,
-    `calories` INTEGER NOT NULL,
-    `description` VARCHAR(191) NULL,
     `userId` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `date` VARCHAR(191) NOT NULL,
+    `category` VARCHAR(191) NOT NULL,
+    `totalCalories` INTEGER NOT NULL,
+    `totalProtein` INTEGER NOT NULL,
+    `totalCarbs` INTEGER NOT NULL,
+    `totalFats` INTEGER NOT NULL,
+    `foods` VARCHAR(191) NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -57,7 +61,7 @@ CREATE TABLE `Meal` (
 CREATE TABLE `Goal` (
     `id` VARCHAR(191) NOT NULL,
     `description` VARCHAR(191) NOT NULL,
-    `targetDate` DATETIME(3) NOT NULL,
+    `targetDate` VARCHAR(191) NOT NULL,
     `achieved` BOOLEAN NOT NULL DEFAULT false,
     `targetCalories` INTEGER NOT NULL,
     `currentCalories` INTEGER NOT NULL DEFAULT 0,
@@ -89,6 +93,28 @@ CREATE TABLE `Progress` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `Water` (
+    `id` VARCHAR(191) NOT NULL,
+    `amount` INTEGER NOT NULL,
+    `date` VARCHAR(191) NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `WaterGoal` (
+    `id` VARCHAR(191) NOT NULL,
+    `target` INTEGER NOT NULL,
+    `achieved` BOOLEAN NOT NULL DEFAULT false,
+    `currentWaterAmout` INTEGER NULL DEFAULT 0,
+    `userId` VARCHAR(191) NOT NULL,
+
+    UNIQUE INDEX `WaterGoal_userId_key`(`userId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `RefreshToken` ADD CONSTRAINT `RefreshToken_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -106,3 +132,9 @@ ALTER TABLE `Achievement` ADD CONSTRAINT `Achievement_goalId_fkey` FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE `Progress` ADD CONSTRAINT `Progress_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Water` ADD CONSTRAINT `Water_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `WaterGoal` ADD CONSTRAINT `WaterGoal_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

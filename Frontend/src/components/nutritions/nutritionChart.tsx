@@ -108,10 +108,10 @@ const NutritionChart = ({ mealData }: { mealData: mealDataType[] }) => {
           Daily intake of Protein, Carbs, Fats, and Calories
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="h-[42rem]">
         {mealData.length > 0 ? (
-        <ChartContainer config={chartConfig}>
-          <BarChart data={chartData}>
+        <ChartContainer config={chartConfig} className="h-full w-full">
+          <BarChart data={chartData} height={1000} className="">
             <CartesianGrid vertical={false} strokeDasharray="3 3" />
             <XAxis
               dataKey="date"
