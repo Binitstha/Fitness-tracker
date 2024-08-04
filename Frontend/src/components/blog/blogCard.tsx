@@ -1,5 +1,13 @@
+"use client";
 import Image from "next/image";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../ui/carousel";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "../ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 const blogContent = [
   {
@@ -32,46 +40,75 @@ const blogContent = [
     time: "Time 3",
     photo: "/1722762471470.jpeg",
   },
+  {
+    id: 3,
+    title: "Title 3",
+    content:
+      "Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content ",
+    category: "Category 3",
+    auther: "Binit",
+    time: "Time 3",
+    photo: "/1722762471470.jpeg",
+  },
+  {
+    id: 3,
+    title: "Title 3",
+    content:
+      "Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content ",
+    category: "Category 3",
+    auther: "Binit",
+    time: "Time 3",
+    photo: "/1722762471470.jpeg",
+  },
 ];
 
 const BlogCard = () => {
   return (
-    <div className="border flex flex-wrap gap-5 p-5">
-      <Carousel className="w-full">
-        <CarouselContent className="-ml-1 flex justify-start items-center gap-5">
+    <div className=" flex flex-wrap gap-5 p-5">
+      <Carousel
+        className="w-full"
+        plugins={[
+          Autoplay({
+            delay: 2000,
+          }),
+        ]}
+      >
+        <CarouselContent className="-ml-1">
           {blogContent &&
             blogContent.map((blog, index) => (
-              <CarouselItem key={index}
-              className="md:basis-1/2 lg:basis-1/3 border rounded-md">
-                <div className="">
-                  <div className="relative pb-[56%]">
-                    <Image
-                      src={`${blog.photo}`}
-                      alt="blogImage"
-                      layout="fill"
-                      objectFit="cover"
-                      className=" absolute top-0 left-0"
-                    />
-                  </div>
-                  <div className="border p-3 flex justify-between items-center">
-                    <div className="flex flex-col">
-                      <h3 className="text-base">{blog.title}</h3>
-                      <div className="text-xs flex w-full gap-5">
-                        <div>{blog.auther}</div>
-                        <div>{blog.time}</div>
-                      </div>
+              <CarouselItem
+                key={index}
+                className="pl-2 md:basis-1/2 lg:basis-1/3 rounded-md"
+              >
+                <div className="p-1">
+                  <div className="border rounded-md shadow-md">
+                    <div className="relative pb-[56%]">
+                      <Image
+                        src={`${blog.photo}`}
+                        alt="blogImage"
+                        layout="fill"
+                        objectFit="cover"
+                        className=" absolute top-0 left-0"
+                      />
                     </div>
-                    <div>{blog.category}</div>
-                  </div>
-                  <div className="p-3 text-sm w-full overflow-hidden whitespace-nowrap text-ellipsis h-10">
-                    {blog.content}
+                    <div className="p-3 flex justify-between items-center">
+                      <div className="flex flex-col">
+                        <h3 className="text-base">{blog.title}</h3>
+                        <div className="text-xs flex w-full gap-5">
+                          <div>{blog.auther}</div>
+                          <div>{blog.time}</div>
+                        </div>
+                      </div>
+                      <div>{blog.category}</div>
+                    </div>
+                    <div className="p-3 text-sm w-full overflow-hidden whitespace-nowrap text-ellipsis h-10">
+                      {blog.content}
+                    </div>
                   </div>
                 </div>
               </CarouselItem>
             ))}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
       </Carousel>
     </div>
   );
