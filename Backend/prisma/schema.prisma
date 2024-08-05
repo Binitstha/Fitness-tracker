@@ -27,6 +27,8 @@ model User {
   progress      Progress[]
   Water         Water[]
   WaterGoal     WaterGoal[]
+  posts         Post[]
+  comments      Comment[]
 }
 
 model RefreshToken {
@@ -108,4 +110,44 @@ model WaterGoal {
   currentWaterAmout Int?    @default(0)
   userId            String  @unique
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Post {
+  id          String    @id @default(uuid())
+  title       String
+  content     String
+  authorId    String
+  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments    Comment[]
+  postTags    PostTag[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  authorId  String
+  postId    String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tag {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  postTags  PostTag[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PostTag {
+  postId  String
+  tagId   String
+  post    Post   @relation(fields: [postId], references: [id])
+  tag     Tag    @relation(fields: [tagId], references: [id])
+
+  @@id([postId, tagId])
 }
