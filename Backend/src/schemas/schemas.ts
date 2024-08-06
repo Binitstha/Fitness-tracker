@@ -108,3 +108,13 @@ export const waterGoalSchema = z.object({
   target: z.number().min(0, "Target cannot be null"),
   achieved: z.boolean(),
 });
+
+export const postSchema = z.object({
+  content: z.string().min(0, "Content is required"),
+  title: z.string().min(0, "Title is reqiured"),
+});
+
+export const commentSchema = z.object({
+  comment: z.string().min(0, "Comment is required"),
+  postId: z.string().min(0, "postId cannot be null"),
+});
