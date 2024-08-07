@@ -2,6 +2,7 @@ import { Router } from "express";
 import { authenticationMiddleware } from "../../middleware/authentication";
 import { validateSchema } from "../../middleware/validateSchema";
 import { commentSchema, postSchema } from "../../schemas/schemas";
+import { postComment, postContent } from "./blog.controller";
 
 const router = Router();
 
