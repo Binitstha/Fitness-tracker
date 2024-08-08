@@ -8,6 +8,7 @@ import {
   CarouselPrevious,
 } from "../ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import Link from "next/link";
 
 const blogContent = [
   {
@@ -80,31 +81,33 @@ const BlogCard = () => {
                 key={index}
                 className="pl-2 md:basis-1/2 lg:basis-1/3 rounded-md"
               >
-                <div className="p-1">
-                  <div className="border rounded-md shadow-md">
-                    <div className="relative pb-[56%]">
-                      <Image
-                        src={`${blog.photo}`}
-                        alt="blogImage"
-                        fill
-                        className=" absolute top-0 left-0"
-                      />
-                    </div>
-                    <div className="p-3 flex justify-between items-center">
-                      <div className="flex flex-col">
-                        <h3 className="text-base">{blog.title}</h3>
-                        <div className="text-xs flex w-full gap-5">
-                          <div>{blog.auther}</div>
-                          <div>{blog.time}</div>
-                        </div>
+                <Link href={`blogs/${blog.id}`}>
+                  <div className="p-1">
+                    <div className="border rounded-md shadow-md">
+                      <div className="relative pb-[56%]">
+                        <Image
+                          src={`${blog.photo}`}
+                          alt="blogImage"
+                          fill
+                          className=" absolute top-0 left-0"
+                        />
                       </div>
-                      <div>{blog.category}</div>
-                    </div>
-                    <div className="p-3 text-sm w-full overflow-hidden whitespace-nowrap text-ellipsis h-10">
-                      {blog.content}
+                      <div className="p-3 flex justify-between items-center">
+                        <div className="flex flex-col">
+                          <h3 className="text-base">{blog.title}</h3>
+                          <div className="text-xs flex w-full gap-5">
+                            <div>{blog.auther}</div>
+                            <div>{blog.time}</div>
+                          </div>
+                        </div>
+                        <div>{blog.category}</div>
+                      </div>
+                      <div className="p-3 text-sm w-full overflow-hidden whitespace-nowrap text-ellipsis h-10">
+                        {blog.content}
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               </CarouselItem>
             ))}
         </CarouselContent>
