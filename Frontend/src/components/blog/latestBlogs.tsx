@@ -53,7 +53,8 @@ const blogContent = [
     auther: "Author",
     time: "a min ago",
     photo: "/1722762471470.jpeg",
-  },{
+  },
+  {
     id: 2,
     title: "Title 2",
     content:
@@ -72,7 +73,8 @@ const blogContent = [
     auther: "Author",
     time: "a min ago",
     photo: "/1722762471470.jpeg",
-  },{
+  },
+  {
     id: 2,
     title: "Title 2",
     content:
@@ -91,7 +93,8 @@ const blogContent = [
     auther: "Author",
     time: "a min ago",
     photo: "/1722762471470.jpeg",
-  },{
+  },
+  {
     id: 2,
     title: "Title 2",
     content:
@@ -127,36 +130,11 @@ const LatestBlogs = () => {
       </div>
       <div className="flex gap-5 p-7">
         <div className="w-full lg:w-2/3 h-full">
-          <div className="border rounded-md shadow-md">
-            <div className="relative pb-[56.25%]">
-              <Image
-                src={blogContent[0].photo}
-                alt="blogImage"
-                fill
-                className="object-cover absolute top-0 left-0"
-              />
-            </div>
-            <div className="p-3 flex justify-between items-center">
-              <div className="flex flex-col">
-                <h3 className="text-base">{blogContent[0].title}</h3>
-                <div className="text-xs flex w-full gap-5">
-                  <div>{blogContent[0].auther}</div>
-                  <div>{blogContent[0].time}</div>
-                </div>
-              </div>
-              <div className="text-blue-500">{blogContent[0].category}</div>
-            </div>
-            <div className="p-3 text-sm">
-              {blogContent[0].content}
-            </div>
-          </div>
-        </div>
-        <div className="w-full lg:w-1/3 flex flex-col gap-5 overflow-scroll px-10 p-2 h-[39rem]">
-          {blogContent.slice(1).map((blog, index) => (
-            <div key={index} className="border rounded-md shadow-md">
+          <Link href={`blogs/${blogContent[0].id}`}>
+            <div className="border rounded-md shadow-md">
               <div className="relative pb-[56.25%]">
                 <Image
-                  src={blog.photo}
+                  src={blogContent[0].photo}
                   alt="blogImage"
                   fill
                   className="object-cover absolute top-0 left-0"
@@ -164,17 +142,42 @@ const LatestBlogs = () => {
               </div>
               <div className="p-3 flex justify-between items-center">
                 <div className="flex flex-col">
-                  <h3 className="text-base">{blog.title}</h3>
+                  <h3 className="text-base">{blogContent[0].title}</h3>
                   <div className="text-xs flex w-full gap-5">
-                    <div>{blog.auther}</div>
-                    <div>{blog.time}</div>
+                    <div>{blogContent[0].auther}</div>
+                    <div>{blogContent[0].time}</div>
                   </div>
                 </div>
-                <div className="text-blue-500">{blog.category}</div>
+                <div className="text-blue-500">{blogContent[0].category}</div>
               </div>
-              <div className="p-3 text-sm">
-                {blog.content}
-              </div>
+              <div className="p-3 text-sm">{blogContent[0].content}</div>
+            </div>
+          </Link>
+        </div>
+        <div className="w-full lg:w-1/3 flex flex-col gap-5 overflow-scroll px-10 p-2 h-[39rem]">
+          {blogContent.slice(1).map((blog, index) => (
+            <div key={index} className="border rounded-md shadow-md">
+              <Link href={`blogs/${blog.id}`}>
+                <div className="relative pb-[56.25%]">
+                  <Image
+                    src={blog.photo}
+                    alt="blogImage"
+                    fill
+                    className="object-cover absolute top-0 left-0"
+                  />
+                </div>
+                <div className="p-3 flex justify-between items-center">
+                  <div className="flex flex-col">
+                    <h3 className="text-base">{blog.title}</h3>
+                    <div className="text-xs flex w-full gap-5">
+                      <div>{blog.auther}</div>
+                      <div>{blog.time}</div>
+                    </div>
+                  </div>
+                  <div className="text-blue-500">{blog.category}</div>
+                </div>
+                <div className="p-3 text-sm">{blog.content}</div>
+              </Link>
             </div>
           ))}
         </div>

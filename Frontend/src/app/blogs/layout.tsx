@@ -1,3 +1,4 @@
+import AddBlog from "@/components/blog/addBlog";
 import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 
@@ -12,9 +13,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="m-3 mx-20">
-      <section className=" flex justify-end gap-5">
-        <Button>Add blog</Button>
+    <main className="m-3 mx-20 ">
+      <section className=" my-5 flex justify-end gap-5">
+        <AddBlog/>
         <Button>your blogs</Button>
       </section>
       <section>{children}</section>
