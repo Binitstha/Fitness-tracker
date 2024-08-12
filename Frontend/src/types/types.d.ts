@@ -60,10 +60,10 @@ export type waterGoalType = {
   achieved: boolean;
 };
 
-export type blog = {
+export type blogType = {
   title: string;
   content: string;
   category: string;
   tags: string;
-  image: "C:\\fakepath\\wallpaperflare.com_wallpaper(1).jpg";
+  image: any;
 };
