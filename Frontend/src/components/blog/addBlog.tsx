@@ -62,7 +62,7 @@ const AddBlog = () => {
 
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button>Add Blog Post</Button>
       </DialogTrigger>
       <DialogContent className=" mx-auto">
@@ -91,65 +91,69 @@ const AddBlog = () => {
                 </FormItem>
               )}
             />
+            <div className="flex justify-between">
+              <FormField
+                control={form.control}
+                name="tags"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel htmlFor="tags">Tags</FormLabel>
+                    <FormControl>
+                      <Input
+                        id="tags"
+                        className="w-72"
+                        placeholder="Enter tags (e.g., strength, cardio)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel htmlFor="category">Category</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={(value) =>
+                          field.onChange({ target: { value } })
+                        }
+                        value={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Workout">Workout</SelectItem>
+                          <SelectItem value="Nutrition">Nutrition</SelectItem>
+                          <SelectItem value="Wellness">Wellness</SelectItem>
+                          <SelectItem value="Fitness Tips">
+                            Fitness Tips
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <FormField
               control={form.control}
               name="content"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="">
                   <FormLabel htmlFor="content">Content</FormLabel>
                   <FormControl>
-                    <Input
+                    <textarea
                       id="content"
+                      className="h-40 max-h-56 w-full p-2 text-start resize-y overflow-auto bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
                       placeholder="Describe the workout or tips"
                       {...field}
                     />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="tags"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="tags">Tags</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="tags"
-                      placeholder="Enter tags (e.g., strength, cardio)"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="category"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="category">Category</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={(value) =>
-                        field.onChange({ target: { value } })
-                      }
-                      value={field.value}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Workout">Workout</SelectItem>
-                        <SelectItem value="Nutrition">Nutrition</SelectItem>
-                        <SelectItem value="Wellness">Wellness</SelectItem>
-                        <SelectItem value="Fitness Tips">
-                          Fitness Tips
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
