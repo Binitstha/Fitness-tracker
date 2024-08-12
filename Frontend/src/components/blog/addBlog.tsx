@@ -29,7 +29,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { useState } from "react";
 
 // Define the schema for validation
 const formSchema = z.object({
@@ -41,9 +40,6 @@ const formSchema = z.object({
 });
 
 const AddBlog = () => {
-  const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(
-    null,
-  );
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -54,6 +50,13 @@ const AddBlog = () => {
       image: undefined,
     },
   });
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      form.setValue("image", file);
+    }
+  };
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     // Handle form submission
@@ -166,7 +169,12 @@ const AddBlog = () => {
                 <FormItem>
                   <FormLabel htmlFor="image">Upload Image</FormLabel>
                   <FormControl>
-                    <Input id="image" type="file" accept="image/*" {...field} />
+                    <Input
+                      id="image"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                    />
                   </FormControl>
                   <FormDescription>
                     Upload an image that represents your blog post.

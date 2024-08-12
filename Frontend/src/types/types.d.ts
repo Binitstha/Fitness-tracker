@@ -59,3 +59,11 @@ export type waterGoalType = {
   target: number;
   achieved: boolean;
 };
+
+export type blog = {
+  title: string;
+  content: string;
+  category: string;
+  tags: string;
+  image: "C:\\fakepath\\wallpaperflare.com_wallpaper(1).jpg";
+};
