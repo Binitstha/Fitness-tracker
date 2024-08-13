@@ -7,9 +7,9 @@ import { postComment, postContent } from "./blog.controller";
 const router = Router();
 
 router.post(
-  "/postConten",
-  authenticationMiddleware,
-  validateSchema(postSchema),
+  "/addBlog",
+  // authenticationMiddleware,
+  // validateSchema(postSchema),
   postContent
 );
 

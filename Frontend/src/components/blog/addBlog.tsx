@@ -29,6 +29,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { useState } from "react";
+import { blogType } from "@/types/types";
+import { addBlog } from "@/api/blog/blog";
 
 // Define the schema for validation
 const formSchema = z.object({
@@ -40,6 +43,7 @@ const formSchema = z.object({
 });
 
 const AddBlog = () => {
+  const [BlogData, setBlogs] = useState<blogType[]>([]);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -58,15 +62,31 @@ const AddBlog = () => {
     }
   };
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    // Handle form submission
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     console.log(data);
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("content", data.content);
+    formData.append("category", data.category);
+    if (data.tags) {
+      formData.append("tags", data.tags);
+    }
+    if (data.image) {
+      formData.append("image", data.image);
+    }
+    try {
+      const newBlog = await addBlog(formData);
+      console.log(newBlog)
+      // setBlogs((prev: blogType[]) => [...prev, newBlog]);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Add Blog Post</Button>
+        <Button onClick={() => form.reset()}>Add Blog Post</Button>
       </DialogTrigger>
       <DialogContent className=" mx-auto">
         <DialogHeader>

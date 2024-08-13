@@ -112,6 +112,9 @@ export const waterGoalSchema = z.object({
 export const postSchema = z.object({
   content: z.string().min(0, "Content is required"),
   title: z.string().min(0, "Title is reqiured"),
+  category: z.string().min(0, "Category is required"),
+  tags: z.string().optional(),
+  image: z.any().optional(),
 });
 
 export const commentSchema = z.object({

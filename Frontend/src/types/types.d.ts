@@ -64,6 +64,6 @@ export type blogType = {
   title: string;
   content: string;
   category: string;
-  tags: string;
-  image: any;
+  tags?: string;
+  image?: any;
 };
