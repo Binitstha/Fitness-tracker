@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { AuthenticatedRequest } from "../../middleware/authentication";
-import { Request, Response } from "express";
+import { Response } from "express";
 import {
   serverErrorResponse,
   successResponse,
@@ -8,20 +8,20 @@ import {
 
 const prisma = new PrismaClient();
 
-export const postContent = async (req: Request, res: Response) => {
+export const postContent = async (req: AuthenticatedRequest, res: Response) => {
   const { title, content, category, tags } = await req.body;
-  console.log(title, content, category, tags);
-  console.log("Hello");
-  // const id = req.userId;
-  // const data = req.body;
-  // console.log(data)
-  // try {
-  //   const newPost = await prisma.post.create({ data: data });
-  //   successResponse(res, newPost, "Blog successfully posted.");
-  // } catch (err) {
-  //   console.log(err);
-  //   serverErrorResponse(res, "Error occured while posting.");
-  // }
+  const id = req.userId;
+  const image = req.file;
+
+  try {
+    const newPost = await prisma.post.create({
+      data: { title, content, category, tags: tags?, image: image?.filename },
+    });
+    successResponse(res, newPost, "Blog successfully posted.");
+  } catch (err) {
+    console.log(err);
+    serverErrorResponse(res, "Error occured while posting.");
+  }
 };
 
 export const postComment = async (req: AuthenticatedRequest, res: Response) => {
@@ -35,3 +35,6 @@ export const postComment = async (req: AuthenticatedRequest, res: Response) => {
     serverErrorResponse(res, "Error occured while posting comment.");
   }
 };
+
+
+refine post schema for post tags;
