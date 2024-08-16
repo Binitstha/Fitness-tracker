@@ -20,4 +20,5 @@ export const uploadBlog = multer({
     },
   }),
 });
+
 export default upload;

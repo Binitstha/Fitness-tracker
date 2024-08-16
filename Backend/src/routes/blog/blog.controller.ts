@@ -9,29 +9,46 @@ import {
 const prisma = new PrismaClient();
 
 export const postContent = async (req: AuthenticatedRequest, res: Response) => {
-  const { title, content, category, tags } = await req.body;
+  const { title, content, category, tags } = req.body;
   const id = req.userId;
   const image = req.file;
 
-  try {
-    const newPost = await prisma.post.create({
-      data: { title, content, category, tags: tags?, image: image?.filename },
-    });
-    successResponse(res, newPost, "Blog successfully posted.");
-  } catch (err) {
-    console.log(err);
-    serverErrorResponse(res, "Error occured while posting.");
+  if (id) {
+    try {
+      const newPost = await prisma.post.create({
+        data: {
+          title,
+          content,
+          category,
+          postTags: tags,
+          image: image?.filename,
+          authorId: id,
+        },
+      });
+      successResponse(res, newPost, "Blog successfully posted.");
+    } catch (err) {
+      console.log(err);
+      serverErrorResponse(res, "Error occurred while posting.");
+    }
   }
 };
 
 export const postComment = async (req: AuthenticatedRequest, res: Response) => {
   const id = req.userId;
-  const data = req.body;
-  try {
-    const newPost = await prisma.comment.create({ data: data });
-    successResponse(res, newPost, "Comment successfully posted.");
-  } catch (err) {
-    console.log(err);
-    serverErrorResponse(res, "Error occured while posting comment.");
+  const { content, postId } = req.body;
+  if (id) {
+    try {
+      const newComment = await prisma.comment.create({
+        data: {
+          content,
+          postId,
+          authorId: id,
+        },
+      });
+      successResponse(res, newComment, "Comment successfully posted.");
+    } catch (err) {
+      console.log(err);
+      serverErrorResponse(res, "Error occurred while posting comment.");
+    }
   }
 };

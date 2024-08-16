@@ -173,7 +173,7 @@ const AddBlog = () => {
                   <FormControl>
                     <textarea
                       id="content"
-                      className="h-40 max-h-56 w-full p-2 text-start resize-y overflow-auto bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+                      className="h-40 min-h-40 max-h-56 w-full p-2 text-start resize-y overflow-auto bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
                       placeholder="Describe the workout or tips"
                       {...field}
                     />
