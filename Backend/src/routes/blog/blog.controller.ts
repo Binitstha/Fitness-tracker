@@ -52,3 +52,8 @@ export const postComment = async (req: AuthenticatedRequest, res: Response) => {
     }
   }
 };
+
+export const getFeaturedBlogPost = async (req: AuthenticatedRequest, res: Response) => {
+  const id = req.userId;
+  const blogData = await prisma.post.findMany()
+};

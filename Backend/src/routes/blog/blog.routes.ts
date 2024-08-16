@@ -2,7 +2,11 @@ import { Router } from "express";
 import { authenticationMiddleware } from "../../middleware/authentication";
 import { validateSchema } from "../../middleware/validateSchema";
 import { commentSchema, postSchema } from "../../schemas/schemas";
-import { postComment, postContent } from "./blog.controller";
+import {
+  getFeaturedBlogPost,
+  postComment,
+  postContent,
+} from "./blog.controller";
 import { uploadBlog } from "../../config/multer.config";
 
 const router = Router();
@@ -21,4 +25,11 @@ router.post(
   validateSchema(commentSchema),
   postComment
 );
+
+router.get(
+  "/getFeaturedBlogPost",
+  authenticationMiddleware,
+  getFeaturedBlogPost
+);
+
 export default router;
