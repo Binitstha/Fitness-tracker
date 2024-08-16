@@ -35,6 +35,3 @@ export const postComment = async (req: AuthenticatedRequest, res: Response) => {
     serverErrorResponse(res, "Error occured while posting comment.");
   }
 };
-
-
-refine post schema for post tags;
