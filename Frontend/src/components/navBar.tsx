@@ -71,10 +71,10 @@ const NavBar = () => {
             <DropdownMenuTrigger asChild>
               <Avatar className="w-10 h-10 rounded-full overflow-hidden border flex justify-center items-center cursor-pointer">
                 <AvatarImage
-                  src={`http://localhost:5000/public/image/user/${user?.data.profileImage}`}
+                  src={`http://localhost:5000/public/image/user/${user?.profileImage}`}
                 />
                 <AvatarFallback className="flex justify-center items-center">
-                  {user?.data.firstName?.charAt(0) || "U"}
+                  {user?.firstName?.charAt(0) || "U"}
                 </AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>

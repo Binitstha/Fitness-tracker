@@ -245,8 +245,8 @@ const NutritionDash = ({ mealData, setMealData }: propType) => {
     <>
     <Card >
       <CardContent className="h-full flex justify-evenly w-[66.65rem] p-4 rounded-xl">
-        <main className="">
-          <h1 className="text-xl font-bold mb-4 text-center">
+        <main className="flex flex-col justify-center items-center">
+          <h1 className="text-xl font-bold text-center">
             {dailyRoutineMessage}
           </h1>
           <h2 className=" text-lg text-center">Recommended {foodType}</h2>

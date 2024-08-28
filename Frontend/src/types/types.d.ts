@@ -67,3 +67,16 @@ export type blogType = {
   tags?: string;
   image?: any;
 };
+
+export type User = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  dateOfBirth: string;
+  gender: string;
+  country: string;
+  weight: string;
+  height: string;
+  city: string;
+  profileImage: string;
+};

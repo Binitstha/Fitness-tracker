@@ -18,6 +18,8 @@ import {
 import {
   ChartConfig,
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "../ui/chart";
@@ -56,13 +58,9 @@ const notifications = [
 ];
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  amount: {
+    label: "Water Intake",
     color: "hsl(var(--chart-1))",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig;
 
@@ -155,7 +153,7 @@ const Water = () => {
         </CardHeader>
         <CardContent>
           <div>
-            <ChartContainer config={chartConfig} className="h-40 w-full">
+          <ChartContainer config={chartConfig} className="h-40 w-full">
               <LineChart
                 accessibilityLayer
                 data={waterData}
@@ -179,15 +177,16 @@ const Water = () => {
                 <Line
                   dataKey="amount"
                   type="natural"
-                  stroke="var(--color-desktop)"
+                  stroke="var(--color-amount)"
                   strokeWidth={2}
                   dot={{
-                    fill: "var(--color-desktop)",
+                    fill: "var(--color-amount)",
                   }}
                   activeDot={{
                     r: 6,
                   }}
                 />
+                <ChartLegend content={<ChartLegendContent />} />
               </LineChart>
             </ChartContainer>
           </div>
