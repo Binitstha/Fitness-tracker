@@ -15,20 +15,12 @@ import path from "path";
 const app = express();
 const port = env.port;
 
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://fitness-tracker-liard.vercel.app",
-];
+// const allowedOrigins = "http://localhost:3000";
+const allowedOrigins = "https://fitness-tracker-liard.vercel.app";
 
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, origin);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: allowedOrigins,
     credentials: true,
   })
 );
