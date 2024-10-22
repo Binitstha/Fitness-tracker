@@ -15,7 +15,10 @@ import path from "path";
 const app = express();
 const port = env.port;
 
-const allowedOrigins = ["http://localhost:3000", "https://your-frontend-url.com"]; // Replace with your frontend URL
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://fitness-tracker-liard.vercel.app/",
+];
 
 app.use(
   cors({
