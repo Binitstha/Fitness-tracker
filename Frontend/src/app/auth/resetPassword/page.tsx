@@ -16,11 +16,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
-
 import { toast } from "@/components/ui/use-toast";
-import { useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Loader from "@/components/ui/loader";
+import { dividerClasses } from "@mui/material";
 
 const FormSchema = z
   .object({
@@ -39,12 +39,13 @@ const FormSchema = z
   });
 
 const ResetPassword = () => {
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -100,91 +101,112 @@ const ResetPassword = () => {
     <main
       className={`${roboto.className} flex text-sm justify-center items-center w-full`}
     >
-      <div className="w-[28rem] flex flex-col justify-center items-center my-10 ">
-        <h1 className=" text-3xl m-6">Reset Password</h1>
-        <div className="my-10 mb-20 w-96">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl className="relative">
-                      <div>
-                        <Input
-                          placeholder="Enter password"
-                          type={showPassword ? "text" : "password"}
-                          {...field}
-                        />
-                        <div className="absolute right-3 top-2">
-                          <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                          >
-                            {showPassword ? (
-                              <Eye className="h-5 w-5 text-gray-400" />
-                            ) : (
-                              <EyeOff className="h-5 w-5 text-gray-400" />
-                            )}
-                          </button>
+      {token ? (
+        <div className="w-[28rem] flex flex-col justify-center items-center my-10 ">
+          <h1 className="text-3xl m-6">Reset Password</h1>
+          <div className="my-10 mb-20 w-96">
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-5"
+              >
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl className="relative">
+                        <div>
+                          <Input
+                            placeholder="Enter password"
+                            type={showPassword ? "text" : "password"}
+                            {...field}
+                          />
+                          <div className="absolute right-3 top-2">
+                            <button
+                              type="button"
+                              onClick={() => setShowPassword(!showPassword)}
+                            >
+                              {showPassword ? (
+                                <Eye className="h-5 w-5 text-gray-400" />
+                              ) : (
+                                <EyeOff className="h-5 w-5 text-gray-400" />
+                              )}
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Confirm Password</FormLabel>
-                    <FormControl className="relative">
-                      <div>
-                        <Input
-                          placeholder="Enter password"
-                          type={showConfirmPassword ? "text" : "password"}
-                          {...field}
-                        />
-                        <div className="absolute right-3 top-2">
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setShowConfirmPassword(!showConfirmPassword)
-                            }
-                          >
-                            {showConfirmPassword ? (
-                              <Eye className="h-5 w-5 text-gray-400" />
-                            ) : (
-                              <EyeOff className="h-5 w-5 text-gray-400" />
-                            )}
-                          </button>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Confirm Password</FormLabel>
+                      <FormControl className="relative">
+                        <div>
+                          <Input
+                            placeholder="Enter password"
+                            type={showConfirmPassword ? "text" : "password"}
+                            {...field}
+                          />
+                          <div className="absolute right-3 top-2">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setShowConfirmPassword(!showConfirmPassword)
+                              }
+                            >
+                              {showConfirmPassword ? (
+                                <Eye className="h-5 w-5 text-gray-400" />
+                              ) : (
+                                <EyeOff className="h-5 w-5 text-gray-400" />
+                              )}
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="text-center">
-                <Link href={"/auth/forgotPassword"} className="underline">
-                  Forgot Password?
-                </Link>
-              </div>
-              <div className="flex justify-center items-center">
-                <Button type="submit" disabled={loading}>
-                  {loading ? <Loader /> : "Reset Password"}
-                </Button>
-              </div>
-            </form>
-          </Form>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="text-center">
+                  <Link href={"/auth/forgotPassword"} className="underline">
+                    Forgot Password?
+                  </Link>
+                </div>
+                <div className="flex justify-center items-center">
+                  <Button type="submit" disabled={loading}>
+                    {loading ? <Loader /> : "Reset Password"}
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex justify-center items-center">Token is missing</div>
+      )}
     </main>
   );
 };
 
-export default ResetPassword;
+const Page = () => {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center h-screen">
+          Loading...
+        </div>
+      }
+    >
+      <ResetPassword />
+    </Suspense>
+  );
+};
+
+export default Page;
