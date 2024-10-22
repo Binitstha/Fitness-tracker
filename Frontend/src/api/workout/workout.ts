@@ -2,14 +2,17 @@ import { toast } from "@/components/ui/use-toast";
 
 export const createWorkout = async (data: any) => {
   try {
-    const response = await fetch("http://localhost:5000/workout/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      "https://fitness-tracker-3-o8ue.onrender.com/workout/create",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(data),
       },
-      credentials: "include",
-      body: JSON.stringify(data),
-    });
+    );
     const result = await response.json();
 
     console.log(result);
@@ -38,13 +41,16 @@ export const createWorkout = async (data: any) => {
 
 export const getWorkouts = async () => {
   try {
-    const response = await fetch("http://localhost:5000/workout/", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      "https://fitness-tracker-3-o8ue.onrender.com/workout/",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
       },
-      credentials: "include",
-    });
+    );
     const result = await response.json();
 
     return result.data;
@@ -60,13 +66,16 @@ export const getWorkouts = async () => {
 
 export const deleteWorkout = async (id: string) => {
   try {
-    const response = await fetch(`http://localhost:5000/workout/delete/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `https://fitness-tracker-3-o8ue.onrender.com/workout/delete/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
       },
-      credentials: "include",
-    });
+    );
     const result = await response.json();
     if (response.ok) {
       toast({
@@ -93,14 +102,17 @@ export const deleteWorkout = async (id: string) => {
 
 export const updateWorkout = async (id: string, data: any) => {
   try {
-    const response = await fetch(`http://localhost:5000/workout/update/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `https://fitness-tracker-3-o8ue.onrender.com/workout/update/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(data),
       },
-      credentials: "include",
-      body: JSON.stringify(data),
-    });
+    );
     const result = await response.json();
 
     console.log(result);

@@ -4,14 +4,17 @@ import { resolveTxt } from "dns";
 
 export const addMeal = async (data: CombinedFoodItem) => {
   try {
-    const response = await fetch("http://localhost:5000/meal/addMeal", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      "https://fitness-tracker-3-o8ue.onrender.com/meal/addMeal",
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
       },
-      body: JSON.stringify(data),
-    });
+    );
 
     const result = response.json();
     if (response.ok) {
@@ -36,10 +39,13 @@ export const addMeal = async (data: CombinedFoodItem) => {
 
 export const getMeal = async () => {
   try {
-    const response = await fetch("http://localhost:5000/meal/", {
-      method: "GET",
-      credentials: 'include'
-    });
+    const response = await fetch(
+      "https://fitness-tracker-3-o8ue.onrender.com/meal/",
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
 
     const result = await response.json();
 

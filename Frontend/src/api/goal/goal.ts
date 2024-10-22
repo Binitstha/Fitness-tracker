@@ -1,16 +1,21 @@
 import { toast } from "@/components/ui/use-toast";
 import { goalType } from "@/types/types";
 
-export const addGoal = async (data: Omit<goalType, "id" | "achieved" | "userId">) => {
+export const addGoal = async (
+  data: Omit<goalType, "id" | "achieved" | "userId">,
+) => {
   try {
-    const response = await fetch("http://localhost:5000/goal/addGoal", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      "https://fitness-tracker-3-o8ue.onrender.com/goal/addGoal",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(data),
       },
-      credentials: "include",
-      body: JSON.stringify(data),
-    });
+    );
     const result = await response.json();
 
     if (response.ok) {
@@ -23,7 +28,8 @@ export const addGoal = async (data: Omit<goalType, "id" | "achieved" | "userId">
     } else {
       toast({
         title: "Failed to add goal",
-        description: result.message || "An unexpected error occurred. Please try again.",
+        description:
+          result.message || "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
       return null;
@@ -41,10 +47,13 @@ export const addGoal = async (data: Omit<goalType, "id" | "achieved" | "userId">
 
 export const getGoal = async () => {
   try {
-    const response = await fetch("http://localhost:5000/goal/goal", {
-      method: "GET",
-      credentials: "include",
-    });
+    const response = await fetch(
+      "https://fitness-tracker-3-o8ue.onrender.com/goal/goal",
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
     const result = await response.json();
 
     if (response.ok) {
@@ -60,10 +69,13 @@ export const getGoal = async () => {
 
 export const deleteGoal = async (id: string) => {
   try {
-    const response = await fetch(`http://localhost:5000/goal/${id}`, {
-      method: "DELETE",
-      credentials: "include",
-    });
+    const response = await fetch(
+      `https://fitness-tracker-3-o8ue.onrender.com/goal/${id}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+      },
+    );
     if (response.ok) {
       toast({
         title: "Goal deleted",
@@ -83,16 +95,22 @@ export const deleteGoal = async (id: string) => {
   }
 };
 
-export const updateGoal = async (id: string, data: Omit<goalType, "id" | "achieved" | "userId">) => {
+export const updateGoal = async (
+  id: string,
+  data: Omit<goalType, "id" | "achieved" | "userId">,
+) => {
   try {
-    const response = await fetch(`http://localhost:5000/goal/updateGoal/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `https://fitness-tracker-3-o8ue.onrender.com/goal/updateGoal/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(data),
       },
-      credentials: "include",
-      body: JSON.stringify(data),
-    });
+    );
     const result = await response.json();
 
     if (response.ok) {
@@ -105,7 +123,8 @@ export const updateGoal = async (id: string, data: Omit<goalType, "id" | "achiev
     } else {
       toast({
         title: "Failed to update goal",
-        description: result.message || "An unexpected error occurred. Please try again.",
+        description:
+          result.message || "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
       return null;

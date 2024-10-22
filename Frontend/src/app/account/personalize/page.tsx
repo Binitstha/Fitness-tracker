@@ -56,7 +56,7 @@ const Personalize = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    setLoading(true)
+    setLoading(true);
     const { weight, city, profileImage, heightFT, heightIN } = data;
     const formData = new FormData();
     formData.append("city", city);
@@ -64,10 +64,10 @@ const Personalize = () => {
     formData.append("height", `${heightFT}'${heightIN}"`);
     formData.append("weight", `${weight}kg`);
 
-    console.log(formData)
+    console.log(formData);
     try {
       const response = await fetch(
-        `http://localhost:5000/account/personalize`,
+        `https://fitness-tracker-3-o8ue.onrender.com/account/personalize`,
         {
           method: "POST",
           credentials: "include",
@@ -78,7 +78,7 @@ const Personalize = () => {
       const result = await response.json();
       if (!response.ok) {
         toast({
-          title: "Error not found",     
+          title: "Error not found",
           description: result.message,
           variant: "destructive",
         });

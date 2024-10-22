@@ -3,14 +3,17 @@ import { waterGoalType, waterType } from "@/types/types";
 
 export const addWater = async (data: waterType) => {
   try {
-    const response = await fetch("http://localhost:5000/water/addWater", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      "https://fitness-tracker-3-o8ue.onrender.com/water/addWater",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(data),
       },
-      credentials: "include",
-      body: JSON.stringify(data),
-    });
+    );
     const result = await response.json();
 
     if (response.ok) {
@@ -34,10 +37,13 @@ export const addWater = async (data: waterType) => {
 
 export const getWater = async () => {
   try {
-    const response = await fetch("http://localhost:5000/water/", {
-      method: "GET",
-      credentials: "include",
-    });
+    const response = await fetch(
+      "https://fitness-tracker-3-o8ue.onrender.com/water/",
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
 
     const result = await response.json();
 
@@ -53,14 +59,17 @@ export const getWater = async () => {
 
 export const setWaterGoal = async (data: waterGoalType) => {
   try {
-    const response = await fetch("http://localhost:5000/water/setGoal", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      "https://fitness-tracker-3-o8ue.onrender.com/water/setGoal",
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
       },
-      body: JSON.stringify(data),
-    });
+    );
     const result = await response.json();
     if (response.ok) {
       return result.data;
@@ -72,10 +81,13 @@ export const setWaterGoal = async (data: waterGoalType) => {
 
 export const getWaterGoal = async () => {
   try {
-    const response = await fetch("http://localhost:5000/water/getGoal", {
-      method: "GET",
-      credentials: "include",
-    });
+    const response = await fetch(
+      "https://fitness-tracker-3-o8ue.onrender.com/water/getGoal",
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
 
     const result = await response.json();
 

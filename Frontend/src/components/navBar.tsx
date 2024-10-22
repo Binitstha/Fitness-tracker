@@ -71,7 +71,7 @@ const NavBar = () => {
             <DropdownMenuTrigger asChild>
               <Avatar className="w-10 h-10 rounded-full overflow-hidden border flex justify-center items-center cursor-pointer">
                 <AvatarImage
-                  src={`http://localhost:5000/public/image/user/${user?.profileImage}`}
+                  src={`https://fitness-tracker-3-o8ue.onrender.com/public/image/user/${user?.profileImage}`}
                 />
                 <AvatarFallback className="flex justify-center items-center">
                   {user?.firstName?.charAt(0) || "U"}

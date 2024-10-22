@@ -35,13 +35,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const fetchUserDetails = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:5000/account/userDetail", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "https://fitness-tracker-3-o8ue.onrender.com/account/userDetail",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
         },
-        credentials: "include",
-      });
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch user details");
@@ -61,13 +64,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logOut = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:5000/auth/logOut", {
-        method: 'POST',
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "https://fitness-tracker-3-o8ue.onrender.com/auth/logOut",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
         },
-        credentials: "include",
-      });
+      );
 
       const result = await response.json();
       if (!response.ok) {

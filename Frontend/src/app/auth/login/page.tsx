@@ -47,24 +47,27 @@ const Login = () => {
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include", // Ensures cookies are sent with request
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        "https://fitness-tracker-3-o8ue.onrender.com/auth/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include", // Ensures cookies are sent with request
+          body: JSON.stringify(data),
+        },
+      );
 
       const result = await response.json();
 
       if (!response.ok) {
-        setIsAuthenticated(false)
+        setIsAuthenticated(false);
         toast({
           title: "Login failed",
           description: result.message,
           variant: "destructive",
         });
       } else {
-        setIsAuthenticated(true)
+        setIsAuthenticated(true);
         toast({
           title: "Login successful",
           description: result.message,

@@ -58,13 +58,16 @@ const ResetPassword = () => {
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/auth/resetPassword", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "https://fitness-tracker-3-o8ue.onrender.com/auth/resetPassword",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ...data, token }),
         },
-        body: JSON.stringify({ ...data, token }),
-      });
+      );
 
       const result = await response.json();
       if (response.ok) {

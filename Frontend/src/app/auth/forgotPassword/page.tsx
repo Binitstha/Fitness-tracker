@@ -37,7 +37,7 @@ const ForgotPassword = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        "http://localhost:5000/auth/forgotPassword",
+        "https://fitness-tracker-3-o8ue.onrender.com/auth/forgotPassword",
         {
           method: "POST",
           headers: {
