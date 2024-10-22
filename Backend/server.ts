@@ -13,18 +13,24 @@ import cookieParser from "cookie-parser";
 import path from "path";
 
 const app = express();
-
 const port = env.port;
+
+const allowedOrigins = ["http://localhost:3000", "https://your-frontend-url.com"]; // Replace with your frontend URL
 
 app.use(
   cors({
-    origin: "*",
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, origin);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
 
 app.use("/public", express.static(path.join(__dirname, "public")));
-
 app.use(express.json());
 app.use(cookieParser());
 
