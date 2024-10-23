@@ -55,8 +55,7 @@ const Personalize = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  const Url = process.env.NEXT_PUBLIC_API
-
+  const Url = process.env.NEXT_PUBLIC_API;
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true);
@@ -69,14 +68,11 @@ const Personalize = () => {
 
     console.log(formData);
     try {
-      const response = await fetch(
-        `${Url}account/personalize`,
-        {
-          method: "POST",
-          credentials: "include",
-          body: formData,
-        },
-      );
+      const response = await fetch(`${Url}/account/personalize`, {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      });
 
       const result = await response.json();
       if (!response.ok) {

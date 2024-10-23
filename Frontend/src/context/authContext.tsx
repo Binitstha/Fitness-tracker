@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const fetchUserDetails = useCallback(async () => {
     try {
-      const response = await fetch(`${Url}account/userDetail`, {
+      const response = await fetch(`${Url}/account/userDetail`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logOut = useCallback(async () => {
     try {
-      const response = await fetch(`${Url}auth/logOut`, {
+      const response = await fetch(`${Url}/auth/logOut`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -92,19 +92,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     fetchUserDetails();
   }, [fetchUserDetails]);
-
-  return (
-    <AuthContext.Provider
-      value={{
-        isAuthenticated,
-        user,
-        setIsAuthenticated,
-        fetchUserDetails,
-        logOut,
-        loading,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+  
+  if (user) {
+    return (
+      <AuthContext.Provider
+        value={{
+          isAuthenticated,
+          user,
+          setIsAuthenticated,
+          fetchUserDetails,
+          logOut,
+          loading,
+        }}
+      >
+        {children}
+      </AuthContext.Provider>
+    );
+  }
 };

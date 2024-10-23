@@ -4,7 +4,7 @@ const Url = process.env.NEXT_PUBLIC_API;
 
 export const addBlog = async (formData: FormData) => {
   try {
-    const response = await fetch(`${Url}blog/addBlog`, {
+    const response = await fetch(`${Url}/blog/addBlog`, {
       method: "POST",
       credentials: "include",
       body: formData,

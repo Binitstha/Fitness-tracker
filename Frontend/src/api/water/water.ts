@@ -5,7 +5,7 @@ const Url = process.env.NEXT_PUBLIC_API;
 
 export const addWater = async (data: waterType) => {
   try {
-    const response = await fetch(`${Url}water/addWater`, {
+    const response = await fetch(`${Url}/water/addWater`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -36,7 +36,7 @@ export const addWater = async (data: waterType) => {
 
 export const getWater = async () => {
   try {
-    const response = await fetch(`${Url}water/`, {
+    const response = await fetch(`${Url}/water/`, {
       method: "GET",
       credentials: "include",
     });
@@ -55,7 +55,7 @@ export const getWater = async () => {
 
 export const setWaterGoal = async (data: waterGoalType) => {
   try {
-    const response = await fetch(`${Url}water/setGoal`, {
+    const response = await fetch(`${Url}/water/setGoal`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -74,7 +74,7 @@ export const setWaterGoal = async (data: waterGoalType) => {
 
 export const getWaterGoal = async () => {
   try {
-    const response = await fetch(`${Url}water/getGoal`, {
+    const response = await fetch(`${Url}/water/getGoal`, {
       method: "GET",
       credentials: "include",
     });

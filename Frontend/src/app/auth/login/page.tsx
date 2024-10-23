@@ -36,7 +36,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
 
-  const Url = process.env.NEXT_PUBLIC_API
+  const Url = process.env.NEXT_PUBLIC_API;
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -49,7 +49,7 @@ const Login = () => {
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true);
     try {
-      const response = await fetch(`${Url}auth/login`, {
+      const response = await fetch(`${Url}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include", // Ensures cookies are sent with request

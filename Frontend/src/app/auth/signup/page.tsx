@@ -67,7 +67,7 @@ const Signin = () => {
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true);
     try {
-      const response = await fetch(`${Url}auth/register`, {
+      const response = await fetch(`${Url}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
