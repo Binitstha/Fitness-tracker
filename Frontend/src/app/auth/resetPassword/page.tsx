@@ -46,8 +46,7 @@ const ResetPassword = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const Url = process.env.NEXT_PUBLIC_API
-
+  const Url = process.env.NEXT_PUBLIC_API;
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -60,16 +59,13 @@ const ResetPassword = () => {
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true);
     try {
-      const response = await fetch(
-        `${Url}auth/resetPassword`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ ...data, token }),
+      const response = await fetch(`${Url}/auth/resetPassword`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({ ...data, token }),
+      });
 
       const result = await response.json();
       if (response.ok) {

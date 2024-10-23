@@ -24,7 +24,7 @@ const FormSchema = z.object({
 
 const ForgotPassword = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
-  
+
   const Url = process.env.NEXT_PUBLIC_API;
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -39,7 +39,7 @@ const ForgotPassword = () => {
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true);
     try {
-      const response = await fetch(`${Url}auth/forgotPassword`, {
+      const response = await fetch(`${Url}/auth/forgotPassword`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

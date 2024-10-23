@@ -5,7 +5,7 @@ const Url = process.env.NEXT_PUBLIC_API;
 
 export const addMeal = async (data: CombinedFoodItem) => {
   try {
-    const response = await fetch(`${Url}meal/addMeal`, {
+    const response = await fetch(`${Url}/meal/addMeal`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -37,7 +37,7 @@ export const addMeal = async (data: CombinedFoodItem) => {
 
 export const getMeal = async () => {
   try {
-    const response = await fetch(`${Url}meal/`, {
+    const response = await fetch(`${Url}/meal/`, {
       method: "GET",
       credentials: "include",
     });

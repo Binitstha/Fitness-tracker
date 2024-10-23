@@ -7,7 +7,7 @@ export const addGoal = async (
   data: Omit<goalType, "id" | "achieved" | "userId">,
 ) => {
   try {
-    const response = await fetch(`${Url}goal/addGoal`, {
+    const response = await fetch(`${Url}/goal/addGoal`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -46,7 +46,7 @@ export const addGoal = async (
 
 export const getGoal = async () => {
   try {
-    const response = await fetch(`${Url}goal/goal`, {
+    const response = await fetch(`${Url}/goal/goal`, {
       method: "GET",
       credentials: "include",
     });
@@ -65,7 +65,7 @@ export const getGoal = async () => {
 
 export const deleteGoal = async (id: string) => {
   try {
-    const response = await fetch(`${Url}goal/${id}`, {
+    const response = await fetch(`${Url}/goal/${id}`, {
       method: "DELETE",
       credentials: "include",
     });
@@ -93,7 +93,7 @@ export const updateGoal = async (
   data: Omit<goalType, "id" | "achieved" | "userId">,
 ) => {
   try {
-    const response = await fetch(`${Url}updateGoal/${id}`, {
+    const response = await fetch(`${Url}/updateGoal/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

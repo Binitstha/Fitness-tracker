@@ -1,11 +1,10 @@
 import { toast } from "@/components/ui/use-toast";
 
-const Url = process.env.NEXT_PUBLIC_API
-
+const Url = process.env.NEXT_PUBLIC_API;
 
 export const createWorkout = async (data: any) => {
   try {
-    const response = await fetch(`${Url}workout/create`, {
+    const response = await fetch(`${Url}/workout/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -41,7 +40,7 @@ export const createWorkout = async (data: any) => {
 
 export const getWorkouts = async () => {
   try {
-    const response = await fetch(`${Url}workout/`, {
+    const response = await fetch(`${Url}/workout/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -63,7 +62,7 @@ export const getWorkouts = async () => {
 
 export const deleteWorkout = async (id: string) => {
   try {
-    const response = await fetch(`${Url}workout/delete/${id}`, {
+    const response = await fetch(`${Url}/workout/delete/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -96,7 +95,7 @@ export const deleteWorkout = async (id: string) => {
 
 export const updateWorkout = async (id: string, data: any) => {
   try {
-    const response = await fetch(`${Url}workout/update/${id}`, {
+    const response = await fetch(`${Url}/workout/update/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
