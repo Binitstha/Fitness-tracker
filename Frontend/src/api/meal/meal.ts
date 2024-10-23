@@ -1,7 +1,7 @@
 import { toast } from "@/components/ui/use-toast";
 import { CombinedFoodItem } from "@/types/types";
 
-const Url: string = "http://localhost:5000/";
+const Url = process.env.NEXT_PUBLIC_API;
 
 export const addMeal = async (data: CombinedFoodItem) => {
   try {

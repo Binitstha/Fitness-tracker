@@ -24,6 +24,9 @@ const FormSchema = z.object({
 
 const ForgotPassword = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
+  
+  const Url = process.env.NEXT_PUBLIC_API;
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -36,16 +39,13 @@ const ForgotPassword = () => {
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true);
     try {
-      const response = await fetch(
-        "https://fitness-tracker-3-o8ue.onrender.com/auth/forgotPassword",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
+      const response = await fetch(`${Url}auth/forgotPassword`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(data),
+      });
 
       const result = await response.json();
       if (!response.ok) {

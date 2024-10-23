@@ -1,6 +1,6 @@
 import { toast } from "@/components/ui/use-toast";
 
-const Url: string = "http://localhost:5000/";
+const Url = process.env.NEXT_PUBLIC_API;
 
 export const addBlog = async (formData: FormData) => {
   try {

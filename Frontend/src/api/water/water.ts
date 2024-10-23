@@ -1,7 +1,7 @@
 import { toast } from "@/components/ui/use-toast";
 import { waterGoalType, waterType } from "@/types/types";
 
-const Url: string = "http://localhost:5000/";
+const Url = process.env.NEXT_PUBLIC_API;
 
 export const addWater = async (data: waterType) => {
   try {
@@ -55,17 +55,14 @@ export const getWater = async () => {
 
 export const setWaterGoal = async (data: waterGoalType) => {
   try {
-    const response = await fetch(
-      "https://fitness-tracker-3-o8ue.onrender.com/water/setGoal",
-      {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+    const response = await fetch(`${Url}water/setGoal`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify(data),
+    });
     const result = await response.json();
     if (response.ok) {
       return result.data;
@@ -77,13 +74,10 @@ export const setWaterGoal = async (data: waterGoalType) => {
 
 export const getWaterGoal = async () => {
   try {
-    const response = await fetch(
-      "https://fitness-tracker-3-o8ue.onrender.com/water/getGoal",
-      {
-        method: "GET",
-        credentials: "include",
-      },
-    );
+    const response = await fetch(`${Url}water/getGoal`, {
+      method: "GET",
+      credentials: "include",
+    });
 
     const result = await response.json();
 

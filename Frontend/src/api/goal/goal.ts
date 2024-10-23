@@ -1,7 +1,7 @@
 import { toast } from "@/components/ui/use-toast";
 import { goalType } from "@/types/types";
 
-const Url: string = "http://localhost:5000/";
+const Url = process.env.NEXT_PUBLIC_API;
 
 export const addGoal = async (
   data: Omit<goalType, "id" | "achieved" | "userId">,

@@ -46,6 +46,8 @@ const ResetPassword = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const Url = process.env.NEXT_PUBLIC_API
+
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -59,7 +61,7 @@ const ResetPassword = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        "https://fitness-tracker-3-o8ue.onrender.com/auth/resetPassword",
+        `${Url}auth/resetPassword`,
         {
           method: "POST",
           headers: {

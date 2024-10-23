@@ -32,19 +32,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const Url = process.env.NEXT_PUBLIC_API;
 
   const fetchUserDetails = useCallback(async () => {
     try {
-      const response = await fetch(
-        "https://fitness-tracker-3-o8ue.onrender.com/account/userDetail",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
+      const response = await fetch(`${Url}account/userDetail`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        credentials: "include",
+      });
 
       if (!response.ok) {
         throw new Error("Failed to fetch user details");
@@ -64,16 +62,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logOut = useCallback(async () => {
     try {
-      const response = await fetch(
-        "https://fitness-tracker-3-o8ue.onrender.com/auth/logOut",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
+      const response = await fetch(`${Url}auth/logOut`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        credentials: "include",
+      });
 
       const result = await response.json();
       if (!response.ok) {

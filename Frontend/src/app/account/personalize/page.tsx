@@ -55,6 +55,9 @@ const Personalize = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
+  const Url = process.env.NEXT_PUBLIC_API
+
+
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true);
     const { weight, city, profileImage, heightFT, heightIN } = data;
@@ -67,7 +70,7 @@ const Personalize = () => {
     console.log(formData);
     try {
       const response = await fetch(
-        `https://fitness-tracker-3-o8ue.onrender.com/account/personalize`,
+        `${Url}account/personalize`,
         {
           method: "POST",
           credentials: "include",
