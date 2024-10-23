@@ -9,7 +9,6 @@ import {
   validationErrorResponse,
 } from "../../utils/response.handler";
 import jwt from "jsonwebtoken";
-import { url } from "inspector";
 import env from "../../config/env";
 import { emailSender } from "../../utils/lib";
 import { AuthenticatedRequest } from "../../middleware/authentication";

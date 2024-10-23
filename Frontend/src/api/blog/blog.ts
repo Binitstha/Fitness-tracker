@@ -1,15 +1,14 @@
 import { toast } from "@/components/ui/use-toast";
 
+const Url: string = "http://localhost:5000/";
+
 export const addBlog = async (formData: FormData) => {
   try {
-    const response = await fetch(
-      "https://fitness-tracker-3-o8ue.onrender.com/blog/addBlog",
-      {
-        method: "POST",
-        credentials: "include",
-        body: formData, // Use FormData instead of raw JSON
-      },
-    );
+    const response = await fetch(`${Url}blog/addBlog`, {
+      method: "POST",
+      credentials: "include",
+      body: formData,
+    });
 
     const result = await response.json();
 

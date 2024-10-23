@@ -1,21 +1,20 @@
 import { toast } from "@/components/ui/use-toast";
 import { goalType } from "@/types/types";
 
+const Url: string = "http://localhost:5000/";
+
 export const addGoal = async (
   data: Omit<goalType, "id" | "achieved" | "userId">,
 ) => {
   try {
-    const response = await fetch(
-      "https://fitness-tracker-3-o8ue.onrender.com/goal/addGoal",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(data),
+    const response = await fetch(`${Url}goal/addGoal`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      credentials: "include",
+      body: JSON.stringify(data),
+    });
     const result = await response.json();
 
     if (response.ok) {
@@ -47,13 +46,10 @@ export const addGoal = async (
 
 export const getGoal = async () => {
   try {
-    const response = await fetch(
-      "https://fitness-tracker-3-o8ue.onrender.com/goal/goal",
-      {
-        method: "GET",
-        credentials: "include",
-      },
-    );
+    const response = await fetch(`${Url}goal/goal`, {
+      method: "GET",
+      credentials: "include",
+    });
     const result = await response.json();
 
     if (response.ok) {
@@ -69,13 +65,10 @@ export const getGoal = async () => {
 
 export const deleteGoal = async (id: string) => {
   try {
-    const response = await fetch(
-      `https://fitness-tracker-3-o8ue.onrender.com/goal/${id}`,
-      {
-        method: "DELETE",
-        credentials: "include",
-      },
-    );
+    const response = await fetch(`${Url}/goal/${id}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
     if (response.ok) {
       toast({
         title: "Goal deleted",
@@ -101,7 +94,7 @@ export const updateGoal = async (
 ) => {
   try {
     const response = await fetch(
-      `https://fitness-tracker-3-o8ue.onrender.com/goal/updateGoal/${id}`,
+      `${Url}/updateGoal/${id}`,
       {
         method: "PUT",
         headers: {

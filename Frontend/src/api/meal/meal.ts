@@ -1,20 +1,18 @@
 import { toast } from "@/components/ui/use-toast";
 import { CombinedFoodItem } from "@/types/types";
-import { resolveTxt } from "dns";
+
+const Url: string = "http://localhost:5000/";
 
 export const addMeal = async (data: CombinedFoodItem) => {
   try {
-    const response = await fetch(
-      "https://fitness-tracker-3-o8ue.onrender.com/meal/addMeal",
-      {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+    const response = await fetch(`${Url}meal/addMeal`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify(data),
+    });
 
     const result = response.json();
     if (response.ok) {
@@ -39,13 +37,10 @@ export const addMeal = async (data: CombinedFoodItem) => {
 
 export const getMeal = async () => {
   try {
-    const response = await fetch(
-      "https://fitness-tracker-3-o8ue.onrender.com/meal/",
-      {
-        method: "GET",
-        credentials: "include",
-      },
-    );
+    const response = await fetch(`${Url}/meal/`, {
+      method: "GET",
+      credentials: "include",
+    });
 
     const result = await response.json();
 
