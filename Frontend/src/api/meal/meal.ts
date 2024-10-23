@@ -37,7 +37,7 @@ export const addMeal = async (data: CombinedFoodItem) => {
 
 export const getMeal = async () => {
   try {
-    const response = await fetch(`${Url}/meal/`, {
+    const response = await fetch(`${Url}meal/`, {
       method: "GET",
       credentials: "include",
     });

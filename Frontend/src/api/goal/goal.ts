@@ -65,7 +65,7 @@ export const getGoal = async () => {
 
 export const deleteGoal = async (id: string) => {
   try {
-    const response = await fetch(`${Url}/goal/${id}`, {
+    const response = await fetch(`${Url}goal/${id}`, {
       method: "DELETE",
       credentials: "include",
     });
@@ -93,17 +93,14 @@ export const updateGoal = async (
   data: Omit<goalType, "id" | "achieved" | "userId">,
 ) => {
   try {
-    const response = await fetch(
-      `${Url}/updateGoal/${id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(data),
+    const response = await fetch(`${Url}updateGoal/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      credentials: "include",
+      body: JSON.stringify(data),
+    });
     const result = await response.json();
 
     if (response.ok) {

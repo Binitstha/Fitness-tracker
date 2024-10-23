@@ -30,9 +30,7 @@ const NavBar = () => {
     setIsAuthenticated(false);
   };
 
-  useEffect(() => {
-    // Force re-render when authentication state changes
-  }, [isAuthenticated, user]);
+  useEffect(() => {}, [isAuthenticated, user]);
 
   return (
     <section className={`${roboto_mono.className}`}>

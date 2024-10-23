@@ -79,7 +79,7 @@ const Page = () => {
   return (
     <main className="m-5 mx-auto flex gap-5 items-start justify-center">
       <section className=" flex flex-col gap-5">
-        <Dashboard user={user} mealData={mealData} />
+        {mealData && <Dashboard user={user} mealData={mealData} />}
         <div className="">
           <NutritionChart mealData={mealData} />
         </div>
