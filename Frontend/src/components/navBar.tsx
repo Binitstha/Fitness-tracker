@@ -22,7 +22,6 @@ const NavBar = () => {
   const { setTheme } = useTheme();
   const { isAuthenticated, user, setIsAuthenticated, logOut } = useSession();
   const router = useRouter();
-  const Url = process.env.NEXT_PUBLIC_API;
 
   const handleLogout = async () => {
     await logOut();
@@ -70,7 +69,7 @@ const NavBar = () => {
             <DropdownMenuTrigger asChild>
               <Avatar className="w-10 h-10 rounded-full overflow-hidden border flex justify-center items-center cursor-pointer">
                 <AvatarImage
-                  src={`${Url}/public/image/user/${user?.profileImage}`}
+                  src={`${process.env.NEXT_PUBLIC_IMAGE_LOCATION}user/${user?.profileImage}`}
                 />
                 <AvatarFallback className="flex justify-center items-center">
                   {user?.firstName?.charAt(0) || "U"}

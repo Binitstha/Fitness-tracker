@@ -15,8 +15,8 @@ import path from "path";
 const app = express();
 const port = env.port;
 
-// const allowedOrigins = "http://localhost:3000";
-const allowedOrigins = "https://fitness-tracker-omega-liard.vercel.app";
+const allowedOrigins = "http://localhost:3000";
+// const allowedOrigins = "https://fitness-tracker-omega-liard.vercel.app";
 
 app.use(
   cors({

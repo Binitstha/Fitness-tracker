@@ -61,11 +61,17 @@ export type waterGoalType = {
 };
 
 export type blogType = {
-  title: string;
-  content: string;
-  category: string;
-  tags?: string;
-  image?: any;
+  id: String;
+  title: String;
+  content: String;
+  authorId: String;
+  author: User;
+  comments: Comment[];
+  postTags: String;
+  image: String;
+  category: String;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type User = {

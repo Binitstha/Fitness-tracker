@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [Url]);
 
   const logOut = useCallback(async () => {
     try {
@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       console.error("Failed to log out:", error);
     }
-  }, []);
+  }, [Url]);
 
   useEffect(() => {
     fetchUserDetails();

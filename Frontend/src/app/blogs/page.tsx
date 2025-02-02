@@ -1,12 +1,28 @@
+"use client";
+
+import { getGetLatestBlogs } from "@/api/blog/blog";
 import FeaturedBlogs from "@/components/blog/featuredBlog";
 import LatestBlogs from "@/components/blog/latestBlogs";
+import { blogType } from "@/types/types";
+import { useEffect, useState } from "react";
 
 const Page = () => {
+  const [latestBlogs, setLatestBlogs] = useState<blogType[]>();
+
+  useEffect(() => {
+    getGetLatestBlogs().then((data) => {
+      setLatestBlogs(data);
+    });
+  }, []);
+
   return (
     <>
-      <main className="m-10 my-5 flex flex-col justify-center items-center">
+      <main className=" my-5 flex flex-col justify-center items-center">
         <FeaturedBlogs />
-        <LatestBlogs />
+
+        {latestBlogs && latestBlogs.length > 0 && (
+          <LatestBlogs data={latestBlogs} />
+        )}
       </main>
     </>
   );

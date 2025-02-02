@@ -4,8 +4,10 @@ import { z } from "zod";
 import { Button } from "../ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -43,7 +45,7 @@ const formSchema = z.object({
 });
 
 const AddBlog = () => {
-  const [BlogData, setBlogs] = useState<blogType[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -76,7 +78,8 @@ const AddBlog = () => {
     }
     try {
       const newBlog = await addBlog(formData);
-      console.log(newBlog)
+      console.log(newBlog);
+      setIsOpen(false); // Close the dialog on successful submission
       // setBlogs((prev: blogType[]) => [...prev, newBlog]);
     } catch (error) {
       console.log(error);
@@ -84,9 +87,9 @@ const AddBlog = () => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button onClick={() => form.reset()}>Add Blog Post</Button>
+        <Button onClick={() => { form.reset(); setIsOpen(true); }}>Add Blog Post</Button>
       </DialogTrigger>
       <DialogContent className=" mx-auto">
         <DialogHeader>
@@ -137,7 +140,7 @@ const AddBlog = () => {
                 control={form.control}
                 name="category"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-40">
                     <FormLabel htmlFor="category">Category</FormLabel>
                     <FormControl>
                       <Select
@@ -203,7 +206,9 @@ const AddBlog = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <DialogFooter className="flex justify-end">
+              <Button type="submit">Add Blog</Button>
+            </DialogFooter>
           </form>
         </Form>
       </DialogContent>

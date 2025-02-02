@@ -67,6 +67,10 @@ const BlogCard = () => {
   return (
     <div className=" flex flex-wrap gap-5 p-5">
       <Carousel
+        opts={{
+          align: "center",
+          loop: true,
+        }}
         className="w-full"
         plugins={[
           Autoplay({
@@ -89,6 +93,7 @@ const BlogCard = () => {
                           src={`${blog.photo}`}
                           alt="blogImage"
                           fill
+                          objectFit="cover"
                           className=" absolute top-0 left-0"
                         />
                       </div>

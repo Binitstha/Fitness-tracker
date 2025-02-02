@@ -1,4 +1,5 @@
 import { toast } from "@/components/ui/use-toast";
+import { blogType } from "@/types/types";
 
 const Url = process.env.NEXT_PUBLIC_API;
 
@@ -38,5 +39,26 @@ export const addBlog = async (formData: FormData) => {
       variant: "destructive",
     });
     return null;
+  }
+};
+
+export const getGetLatestBlogs = async (): Promise<blogType[]> => {
+  try {
+    const response = await fetch(`${Url}/blog/getGetLatestBlogs`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    const data = await response.json();
+    console.log(data)
+    return data.data;
+  } catch (e) {
+    toast({
+      description: "Failed to fetch latest blogs",
+      variant: "destructive",
+    });
+    
+    console.log(e);
+    return [];
   }
 };

@@ -13,10 +13,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="m-3 mx-20 ">
+    <main className="m-3 mx-40 ">
       <section className=" my-5 flex justify-end gap-5">
         <AddBlog/>
-        <Button>your blogs</Button>
+        {/* <Button>your blogs</Button> */}
       </section>
       <section>{children}</section>
     </main>

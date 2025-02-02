@@ -115,7 +115,7 @@ model WaterGoal {
 model Post {
   id        String    @id @default(uuid())
   title     String
-  content   String
+  content   String    @db.Text
   authorId  String
   author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   comments  Comment[]

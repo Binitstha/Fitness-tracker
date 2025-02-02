@@ -3,7 +3,9 @@ import { authenticationMiddleware } from "../../middleware/authentication";
 import { validateSchema } from "../../middleware/validateSchema";
 import { commentSchema, postSchema } from "../../schemas/schemas";
 import {
+  getBlogs,
   getFeaturedBlogPost,
+  getGetLatestBlogPost,
   postComment,
   postContent,
 } from "./blog.controller";
@@ -32,4 +34,9 @@ router.get(
   getFeaturedBlogPost
 );
 
+router.get(
+  "/getGetLatestBlogs",
+  authenticationMiddleware,
+  getGetLatestBlogPost
+);
 export default router;
