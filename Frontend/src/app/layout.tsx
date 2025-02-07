@@ -5,8 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import NavBar from "@/components/navBar";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "@/context/authContext";
-
-const inter = Inter({ subsets: ["latin"] });
+import { usePathname } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "MyFitPal",
@@ -28,9 +27,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            <section className="sticky top-0 z-10 backdrop-blur-lg">
-              <NavBar />
-            </section>
+            <NavBar />
             {children}
             <Toaster />
           </AuthProvider>

@@ -1,9 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import NavLinks from "./ui/navLinks";
 import Image from "next/image";
-import { Button } from "./ui/button";
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 import {
@@ -15,13 +13,19 @@ import {
 import { inter, roboto_mono } from "@/app/fonts";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { useSession } from "@/context/authContext";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { Button } from "./ui/button";
+import NavLinks from "./ui/navLinks";
 
 const NavBar = () => {
   const { setTheme } = useTheme();
   const { isAuthenticated, user, setIsAuthenticated, logOut } = useSession();
   const router = useRouter();
+
+  const pathname = usePathname();
+  const isLandingPage = pathname.startsWith("/auth") || pathname.length < 2;
+  console.log(pathname);
 
   const handleLogout = async () => {
     await logOut();
@@ -32,8 +36,8 @@ const NavBar = () => {
   useEffect(() => {}, [isAuthenticated, user]);
 
   return (
-    <section className={`${roboto_mono.className}`}>
-      <div className="fixed right-10 top-4 z-20">
+    <section className={`${roboto_mono.className} sticky top-0 bg-white dark:bg-black z-10`}>
+      <div className="fixed right-10 top-5 z-20">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon">
@@ -55,15 +59,23 @@ const NavBar = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="flex justify-between items-center border-b h-16 px-[15rem] sticky top-0">
+      <div className="flex justify-between items-center shadow-2xl h-20 px-72 sticky top-0">
         <div className="text-3xl">
           <Link href={"/"}>
-            <Image src="/logo.svg" alt="logo" height={100} width={100} />
+            <Image
+              src="/logo.svg"
+              alt="logo"
+              height={150}
+              width={150}
+              className="dark:invert p-3"
+            />
           </Link>
         </div>
-        <div className="flex gap-5 justify-center items-center">
-          <NavLinks />
-        </div>
+        {!isLandingPage && (
+          <div className="flex gap-5 justify-center items-center">
+            <NavLinks />
+          </div>
+        )}
         {isAuthenticated ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

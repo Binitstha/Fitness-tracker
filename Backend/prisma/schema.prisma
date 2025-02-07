@@ -29,6 +29,7 @@ model User {
   WaterGoal     WaterGoal[]
   posts         Post[]
   comments      Comment[]
+  likes         Like[]
 }
 
 model RefreshToken {
@@ -65,24 +66,14 @@ model Meal {
 }
 
 model Goal {
-  id              String        @id @default(uuid())
+  id              String  @id @default(uuid())
   description     String
   targetDate      String
-  achieved        Boolean       @default(false)
+  achieved        Boolean @default(false)
   targetCalories  Int
-  currentCalories Int           @default(0)
+  currentCalories Int     @default(0)
   userId          String
-  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  achievements    Achievement[]
-}
-
-model Achievement {
-  id          String   @id @default(uuid())
-  title       String
-  description String
-  date        DateTime
-  goalId      String
-  goal        Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  user            User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Progress {
@@ -124,6 +115,7 @@ model Post {
   category  String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  likes     Like[]
 }
 
 model Comment {
@@ -135,4 +127,15 @@ model Comment {
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  userId    String
+  postId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
 }

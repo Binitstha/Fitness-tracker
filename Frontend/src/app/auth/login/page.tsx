@@ -87,7 +87,7 @@ const Login = () => {
 
   return (
     <main
-      className={`${roboto.className} flex text-sm justify-center items-center w-full`}
+      className={`${roboto.className} flex text-sm justify-center items-center w-full h-screen`}
     >
       <div className="w-[28rem] flex flex-col justify-center items-center my-10">
         <h1 className="text-3xl m-6">Log In</h1>
