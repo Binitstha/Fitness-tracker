@@ -1,6 +1,6 @@
 "use client";
 
-import { getGetLatestBlogs } from "@/api/blog/blog";
+import { getLatestBlogPost } from "@/api/blog/blog";
 import FeaturedBlogs from "@/components/blog/featuredBlog";
 import LatestBlogs from "@/components/blog/latestBlogs";
 import { blogType } from "@/types/types";
@@ -10,7 +10,7 @@ const Page = () => {
   const [latestBlogs, setLatestBlogs] = useState<blogType[]>();
 
   useEffect(() => {
-    getGetLatestBlogs().then((data) => {
+    getLatestBlogPost().then((data) => {
       setLatestBlogs(data);
     });
   }, []);

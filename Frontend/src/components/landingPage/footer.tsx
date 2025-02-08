@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer className="w-full px-4 sm:px-6 lg:px-8 py-8">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
-        <div className="mb-4 md:mb-0">
+        <div className="mb-4 md:mb-0 flex flex-col items-center">
           <Link href="/" className="text-2xl font-bold">
             <Image
               src="/logo.svg"

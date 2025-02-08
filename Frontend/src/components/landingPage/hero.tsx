@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Button } from "../ui/button";
 import Video from "../ui/video";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -8,8 +9,6 @@ import CountUp from "react-countup";
 const Hero = () => {
   const { scrollY } = useScroll();
 
-  // Smooth scrolling animations
-  // const y = useTransform(scrollY, [0, 400], [0, -100]);
   const opacity = useTransform(scrollY, [0, 400], [1, 0.4]);
   const blur = useTransform(scrollY, [0, 400], ["0px", "15px"]);
   const scale = useTransform(scrollY, [0, 400], [1, 1.2]);
@@ -18,7 +17,6 @@ const Hero = () => {
 
   return (
     <main className="relative w-full h-screen overflow-hidden">
-      {/* 🚀 Animated Video Background */}
       <motion.div
         style={{ opacity, filter: blur, scale }}
         className="absolute inset-0 w-full h-full -z-10"
@@ -28,26 +26,22 @@ const Hero = () => {
           height={720}
           width={1280}
           source="/hero.mp4"
-          classname="object-cover h-full w-full -scale-x-[1] opacity-80"
+          classname="object-cover h-full w-full -scale-x-[1] dark:opacity-80"
         />
       </motion.div>
 
-      {/* 🌟 Hero Content */}
       <motion.div
         style={{ opacity: textOpacity, y: textY }}
         className="size-full flex flex-col gap-6 font-semibold items-start justify-center px-72 text-white"
       >
-        {/* Main Headline */}
         <h1 className="text-6xl">
           Your Personal Fitness <br /> Journey Starts Here
         </h1>
 
-        {/* Subheading for Motivation */}
         <h3 className="text-gray-200 text-xl">
           Track your progress, set goals, and achieve results with MyFitPal.
         </h3>
 
-        {/* 🔥 Key Metrics Section with Animated Numbers */}
         <div className="flex gap-10 mt-3">
           <div className="flex flex-col items-center">
             <span className="text-4xl font-bold">
@@ -69,13 +63,12 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* 🎯 Call-to-Action Buttons */}
         <div className="flex gap-4 mt-4">
-          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-            <Button className="w-fit text-black bg-white shadow-lg shadow-gray-500/40">
+          <Link href="/auth/signup">
+            <Button className="w-fit text-black bg-white shadow-lg shadow-gray-500/40 hover:bg-gray-200">
               Get Started
             </Button>
-          </motion.div>
+          </Link>
         </div>
       </motion.div>
     </main>

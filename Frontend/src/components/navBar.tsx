@@ -25,7 +25,6 @@ const NavBar = () => {
 
   const pathname = usePathname();
   const isLandingPage = pathname.startsWith("/auth") || pathname.length < 2;
-  console.log(pathname);
 
   const handleLogout = async () => {
     await logOut();
@@ -36,7 +35,9 @@ const NavBar = () => {
   useEffect(() => {}, [isAuthenticated, user]);
 
   return (
-    <section className={`${roboto_mono.className} sticky top-0 bg-white dark:bg-black z-10`}>
+    <section
+      className={`${roboto_mono.className} sticky top-0  bg-inherit z-10`}
+    >
       <div className="fixed right-10 top-5 z-20">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -102,9 +103,11 @@ const NavBar = () => {
             <Link href="/auth/login">
               <Button>Log In</Button>
             </Link>
-            <Link href="/auth/signup">
-              <Button>Sign up</Button>
-            </Link>
+            {!isLandingPage && (
+              <Link href="/auth/signup">
+                <Button>Sign up</Button>
+              </Link>
+            )}
           </div>
         )}
       </div>

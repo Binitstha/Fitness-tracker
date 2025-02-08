@@ -3,9 +3,11 @@ import { authenticationMiddleware } from "../../middleware/authentication";
 import { validateSchema } from "../../middleware/validateSchema";
 import { commentSchema, postSchema } from "../../schemas/schemas";
 import {
-  getBlogs,
+  deleteBlog,
   getFeaturedBlogPost,
-  getGetLatestBlogPost,
+  getLatestBlogPost,
+  getSingleBlog,
+  getuserBlogs,
   postComment,
   postContent,
 } from "./blog.controller";
@@ -34,9 +36,12 @@ router.get(
   getFeaturedBlogPost
 );
 
-router.get(
-  "/getGetLatestBlogs",
-  authenticationMiddleware,
-  getGetLatestBlogPost
-);
+router.get("/getLatestBlogPost", authenticationMiddleware, getLatestBlogPost);
+
+router.get("/getSingleBlog/:id", authenticationMiddleware, getSingleBlog);
+
+router.delete("/deleteBlog/:id", authenticationMiddleware, deleteBlog);
+
+router.get("/getUsersBlogs", authenticationMiddleware, getuserBlogs);
+
 export default router;

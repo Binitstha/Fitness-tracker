@@ -17,22 +17,14 @@ const inter = Inter({ subsets: ["latin"] });
 const Page = () => {
   const { push } = useRouter();
   const { isAuthenticated } = useSession();
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (isAuthenticated) {
         push("/dashboard");
-      } else {
-        push("/");
-        setLoading(false);
       }
     }
   }, [isAuthenticated, push]);
-
-  if (loading) {
-    return <main>Loading...</main>;
-  }
 
   return (
     <main className={inter.className}>

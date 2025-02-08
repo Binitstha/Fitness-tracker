@@ -89,7 +89,14 @@ const AddBlog = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button onClick={() => { form.reset(); setIsOpen(true); }}>Add Blog Post</Button>
+        <Button
+          onClick={() => {
+            form.reset();
+            setIsOpen(true);
+          }}
+        >
+          Add Blog Post
+        </Button>
       </DialogTrigger>
       <DialogContent className=" mx-auto">
         <DialogHeader>

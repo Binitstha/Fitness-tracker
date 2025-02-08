@@ -17,8 +17,8 @@ const Video = ({ source, controls, width, height, classname }: Props) => {
       width={width}
       height={height}
       className={`${classname} object-cover will-change-auto`}
-      preload="auto"
-      style={{ backfaceVisibility: "hidden", transform: "translateZ(0)" }}
+      preload="none"
+      style={{ backfaceVisibility: "hidden" }}
     >
       <source src={source.replace(".mp4", ".webm")} type="video/webm" />
       <source src={source} type="video/mp4" />

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const CTA = () => {
   return (
@@ -19,9 +20,11 @@ const CTA = () => {
             Join MyFitPal today and transform your life with our powerful
             fitness tracking tools.
           </p>
-          <Button size="lg" variant="secondary">
-            Get Started
-          </Button>
+          <Link href="/auth/signup">
+            <Button size="lg" variant="secondary">
+              Get Started
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </section>
