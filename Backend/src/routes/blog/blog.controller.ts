@@ -133,6 +133,14 @@ export const getFeaturedBlogPost = async (
       const blogData = await prisma.post.findMany({
         where: { category },
         take: 2,
+        include: {
+          author: {
+            select: {
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
       });
 
       featuresBlogs.push(...blogData);

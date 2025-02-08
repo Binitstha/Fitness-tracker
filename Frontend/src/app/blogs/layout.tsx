@@ -1,6 +1,8 @@
 import AddBlog from "@/components/blog/addBlog";
+import Footer from "@/components/landingPage/footer";
 import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "MyFitPal",
@@ -13,12 +15,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="m-3 mx-40 ">
-      <section className=" my-5 flex justify-end gap-5">
-        <AddBlog/>
-        {/* <Button>your blogs</Button> */}
-      </section>
-      <section>{children}</section>
-    </main>
+    <>
+      <main className="m-10 mx-72">
+        <section className=" my-5 flex justify-end gap-5">
+          <AddBlog />
+          <Link href={"/blogs/myblogs"}>
+            <Button>Your blogs</Button>
+          </Link>
+        </section>
+        <section>{children}</section>
+      </main>
+      <Footer />
+    </>
   );
 }

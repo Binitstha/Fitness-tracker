@@ -78,9 +78,7 @@ const AddBlog = () => {
     }
     try {
       const newBlog = await addBlog(formData);
-      console.log(newBlog);
       setIsOpen(false); // Close the dialog on successful submission
-      // setBlogs((prev: blogType[]) => [...prev, newBlog]);
     } catch (error) {
       console.log(error);
     }

@@ -12,7 +12,7 @@ async function BlogContent({ id }: { id: string }) {
   return (
     <>
       {blog && (
-        <main className="mx-5 md:mx-10 lg:mx-72 m-5">
+        <main className=" mt-10 lg:mx-20 m-5">
           <div>
             <div>
               <h1 className="text-4xl mb-3">{blog.title}</h1>
@@ -27,22 +27,20 @@ async function BlogContent({ id }: { id: string }) {
               </div>
             </div>
             <div>
-              <div className="relative my-10 rounded-md shadow-lg w-full h-0 pb-[40%] overflow-hidden mx-auto max-w-[800px]">
+              <div className="relative my-10 rounded-md shadow-lg w-full h-0 pb-[40%] overflow-hidden mx-auto max-w-screen-xl">
                 <Image
                   src={`${process.env.NEXT_PUBLIC_IMAGE_LOCATION}blog/${blog.image}`}
                   alt="BlogImage"
                   fill
-                  style={{ objectFit: "cover" }} // Maintain aspect ratio
+                  style={{ objectFit: "cover" }}
                   className="absolute top-0 left-0 transition-transform duration-300 ease-in-out transform hover:scale-105"
                 />
               </div>
               <p className="mt-2 text-center text-gray-500">{blog.title}</p>
             </div>
             <div>
-              <div className="prose lg:prose-xl leading-loose">
-                <ReactMarkdown>
-                  {blog.content.toString()}
-                </ReactMarkdown>
+              <div className="prose lg:prose-xl leading-8">
+                <ReactMarkdown>{blog.content.toString()}</ReactMarkdown>
               </div>
             </div>
           </div>

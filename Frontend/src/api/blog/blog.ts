@@ -43,15 +43,14 @@ export const addBlog = async (formData: FormData) => {
   }
 };
 
-export const getLatestBlogPost = async (): Promise<blogType[]> => {
+export const getLatestBlogPost = async () => {
   try {
-    const response = await fetch(`${Url}/blog/getLatestBlogPost`, {
+    const response = await fetch(`${Url}/blog/getLatestBlogPost/`, {
       method: "GET",
       credentials: "include",
     });
 
     const data = await response.json();
-    console.log(data);
     return data.data;
   } catch (e) {
     toast({
@@ -80,7 +79,7 @@ export const getSingleBlog = async ({ id }: { id: string }) => {
 
 export const getFeaturedBlogs = async () => {
   try {
-    const response = await fetch(`${Url}/blogs/getFeaturedBlogPost/`, {
+    const response = await fetch(`${Url}/blog/getFeaturedBlogPost/`, {
       method: "GET",
       credentials: "include",
     });
@@ -106,7 +105,7 @@ export const postComment = async ({
       comment: comment,
     };
 
-    const response = await fetch(`${Url}/blogs/postComment`, {
+    const response = await fetch(`${Url}/blog/postComment`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(commentData),
@@ -122,19 +121,28 @@ export const postComment = async ({
 
 export const deleteBlog = async ({ id }: { id: string }) => {
   try {
-    await fetch(`${Url}/blogs/deleteBlog/${id}`);
+    await fetch(`${Url}/blog/deleteBlog/${id}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
 
+    toast({
+      title: "Blog Deleted",
+      description: "Your blog has been successfully deleted.",
+      variant: "destructive",
+    });
     return id;
   } catch (e) {
     console.log(e);
   }
 };
 
-export const getuserBlogs = async () => {
+export const getUserBlogs = async () => {
   try {
-    const response = await fetch(`${Url}/blogs/getUsersBlogs`, {
+    const response = await fetch(`${Url}/blog/getUserBlogs`, {
       method: "GET",
       credentials: "include",
+      headers: { "Content-Type": "application/json" },
     });
 
     const data = await response.json();

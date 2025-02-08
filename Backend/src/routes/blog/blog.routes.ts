@@ -42,6 +42,6 @@ router.get("/getSingleBlog/:id", authenticationMiddleware, getSingleBlog);
 
 router.delete("/deleteBlog/:id", authenticationMiddleware, deleteBlog);
 
-router.get("/getUsersBlogs", authenticationMiddleware, getuserBlogs);
+router.get("/getUserBlogs", authenticationMiddleware, getuserBlogs);
 
 export default router;
