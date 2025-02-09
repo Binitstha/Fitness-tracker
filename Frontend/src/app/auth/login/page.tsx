@@ -32,7 +32,7 @@ const FormSchema = z.object({
 
 const Login = () => {
   const router = useRouter();
-  const { isAuthenticated, setIsAuthenticated } = useSession();
+  const { isAuthenticated, setIsAuthenticated, fetchUserDetails } = useSession();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
 
@@ -81,6 +81,7 @@ const Login = () => {
         variant: "destructive",
       });
     } finally {
+      fetchUserDetails()
       setLoading(false);
     }
   };
