@@ -9,39 +9,39 @@ import Autoplay from "embla-carousel-autoplay";
 const testimonials = [
   {
     name: "Sarah J.",
-    avatar: "/placeholder.svg?height=40&width=40",
+    avatar: "",
     content:
       "MyFitPal has completely transformed my fitness routine. The progress tracking is incredible!",
   },
   {
     name: "Mike T.",
-    avatar: "/placeholder.svg?height=40&width=40",
+    avatar: "",
     content:
       "I love the community aspect of MyFitPal. It keeps me motivated and accountable.",
   },
   {
     name: "Emily R.",
-    avatar: "/placeholder.svg?height=40&width=40",
+    avatar: "",
     content:
       "The workout planner is a game-changer. I've never been so consistent with my fitness goals.",
   },
   {
-    name: "Emily R.",
-    avatar: "/placeholder.svg?height=40&width=40",
+    name: "Arjun K.",
+    avatar: "",
     content:
-      "The workout planner is a game-changer. I've never been so consistent with my fitness goals.",
+      "This app has helped me stay focused on my health and fitness goals.",
   },
   {
-    name: "Emily R.",
-    avatar: "/placeholder.svg?height=40&width=40",
+    name: "Rita S.",
+    avatar: "",
     content:
-      "The workout planner is a game-changer. I've never been so consistent with my fitness goals.",
+      "Using MyFitPal has brought a significant improvement to my lifestyle.",
   },
   {
-    name: "Emily R.",
-    avatar: "/placeholder.svg?height=40&width=40",
+    name: "Sunita D.",
+    avatar: "",
     content:
-      "The workout planner is a game-changer. I've never been so consistent with my fitness goals.",
+      "This app has helped me track my daily exercise and diet.",
   },
 ];
 

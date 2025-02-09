@@ -23,9 +23,6 @@ const NavBar = () => {
   const { isAuthenticated, user, setIsAuthenticated, logOut } = useSession();
   const router = useRouter();
 
-  const pathname = usePathname();
-  const isLandingPage = pathname.startsWith("/auth") || pathname.length < 2;
-
   const handleLogout = async () => {
     await logOut();
     router.push("/auth/login");
@@ -72,7 +69,7 @@ const NavBar = () => {
             />
           </Link>
         </div>
-        {!isLandingPage && (
+        {isAuthenticated && (
           <div className="flex gap-5 justify-center items-center">
             <NavLinks />
           </div>
@@ -103,11 +100,6 @@ const NavBar = () => {
             <Link href="/auth/login">
               <Button>Log In</Button>
             </Link>
-            {!isLandingPage && (
-              <Link href="/auth/signup">
-                <Button>Sign up</Button>
-              </Link>
-            )}
           </div>
         )}
       </div>

@@ -20,6 +20,7 @@ const Video = ({ source, controls, width, height, classname }: Props) => {
       preload="none"
       style={{ backfaceVisibility: "hidden" }}
     >
+      {/* <source src={source.replace(".mp4", ".webm")} type="video/webm" /> */}
       <source src={source} type="video/mp4" />
       Video Not supported
     </video>

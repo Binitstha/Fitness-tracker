@@ -34,6 +34,10 @@ import {
 import { useState } from "react";
 import { blogType } from "@/types/types";
 import { addBlog } from "@/api/blog/blog";
+import Link from "next/link";
+import { useSession } from "@/context/authContext";
+import { toast } from "../ui/use-toast";
+import { useRouter } from "next/navigation";
 
 // Define the schema for validation
 const formSchema = z.object({
@@ -46,6 +50,7 @@ const formSchema = z.object({
 
 const AddBlog = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated } = useSession();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -84,56 +89,113 @@ const AddBlog = () => {
     }
   };
 
+  const router = useRouter();
+
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button
-          onClick={() => {
-            form.reset();
-            setIsOpen(true);
-          }}
-        >
-          Add Blog Post
-        </Button>
-      </DialogTrigger>
-      <DialogContent className=" mx-auto">
-        <DialogHeader>
-          <DialogTitle>Add a New Fitness Blog Post</DialogTitle>
-          <DialogDescription>
-            Share your latest fitness workout or tips with your readers.
-          </DialogDescription>
-        </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="title">Title</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="title"
-                      placeholder="Enter blog title"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="flex justify-between">
+    <section className=" my-5 flex justify-end gap-5">
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogTrigger asChild>
+          <Button
+            onClick={() => {
+              form.reset();
+              if (isAuthenticated) {
+                setIsOpen(true);
+              } else {
+                setIsOpen(false);
+                router.push("/auth/login");
+              }
+            }}
+          >
+            Add Blog Post
+          </Button>
+        </DialogTrigger>
+        <DialogContent className=" mx-auto">
+          <DialogHeader>
+            <DialogTitle>Add a New Fitness Blog Post</DialogTitle>
+            <DialogDescription>
+              Share your latest fitness workout or tips with your readers.
+            </DialogDescription>
+          </DialogHeader>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
               <FormField
                 control={form.control}
-                name="tags"
+                name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel htmlFor="tags">Tags</FormLabel>
+                    <FormLabel htmlFor="title">Title</FormLabel>
                     <FormControl>
                       <Input
-                        id="tags"
-                        className="w-72"
-                        placeholder="Enter tags (e.g., strength, cardio)"
+                        id="title"
+                        placeholder="Enter blog title"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="flex justify-between">
+                <FormField
+                  control={form.control}
+                  name="tags"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel htmlFor="tags">Tags</FormLabel>
+                      <FormControl>
+                        <Input
+                          id="tags"
+                          className="w-72"
+                          placeholder="Enter tags (e.g., strength, cardio)"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="category"
+                  render={({ field }) => (
+                    <FormItem className="w-40">
+                      <FormLabel htmlFor="category">Category</FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={(value) =>
+                            field.onChange({ target: { value } })
+                          }
+                          value={field.value}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a category" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Workout">Workout</SelectItem>
+                            <SelectItem value="Nutrition">Nutrition</SelectItem>
+                            <SelectItem value="Wellness">Wellness</SelectItem>
+                            <SelectItem value="Fitness Tips">
+                              Fitness Tips
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <FormField
+                control={form.control}
+                name="content"
+                render={({ field }) => (
+                  <FormItem className="">
+                    <FormLabel htmlFor="content">Content</FormLabel>
+                    <FormControl>
+                      <textarea
+                        id="content"
+                        className="h-40 min-h-40 max-h-56 w-full p-2 text-start resize-y overflow-auto bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+                        placeholder="Describe the workout or tips"
                         {...field}
                       />
                     </FormControl>
@@ -143,81 +205,36 @@ const AddBlog = () => {
               />
               <FormField
                 control={form.control}
-                name="category"
+                name="image"
                 render={({ field }) => (
-                  <FormItem className="w-40">
-                    <FormLabel htmlFor="category">Category</FormLabel>
+                  <FormItem>
+                    <FormLabel htmlFor="image">Upload Image</FormLabel>
                     <FormControl>
-                      <Select
-                        onValueChange={(value) =>
-                          field.onChange({ target: { value } })
-                        }
-                        value={field.value}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Workout">Workout</SelectItem>
-                          <SelectItem value="Nutrition">Nutrition</SelectItem>
-                          <SelectItem value="Wellness">Wellness</SelectItem>
-                          <SelectItem value="Fitness Tips">
-                            Fitness Tips
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Input
+                        id="image"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                      />
                     </FormControl>
+                    <FormDescription>
+                      Upload an image that represents your blog post.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-            </div>
-            <FormField
-              control={form.control}
-              name="content"
-              render={({ field }) => (
-                <FormItem className="">
-                  <FormLabel htmlFor="content">Content</FormLabel>
-                  <FormControl>
-                    <textarea
-                      id="content"
-                      className="h-40 min-h-40 max-h-56 w-full p-2 text-start resize-y overflow-auto bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
-                      placeholder="Describe the workout or tips"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="image">Upload Image</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="image"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Upload an image that represents your blog post.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <DialogFooter className="flex justify-end">
-              <Button type="submit">Add Blog</Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+              <DialogFooter className="flex justify-end">
+                <Button type="submit">Add Blog</Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+      <Link href={"/blogs/myblogs"}>
+        <Button>Your blogs</Button>
+      </Link>
+    </section>
   );
 };
 
