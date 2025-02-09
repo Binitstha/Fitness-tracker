@@ -27,7 +27,8 @@ const LatestBlogs = async () => {
                     <Image
                       src={`${process.env.NEXT_PUBLIC_IMAGE_LOCATION}blog/${latestBlogs[0].image}`}
                       alt="blogImage"
-                      fill
+                      height={1000}
+                      width={1000}
                       className="object-cover absolute top-0 left-0"
                     />
                   </div>

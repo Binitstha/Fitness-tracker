@@ -41,14 +41,15 @@ const BlogCard = ({ featuredBlogs }: { featuredBlogs: blogType[] }) => {
                           <Image
                             src={`${process.env.NEXT_PUBLIC_IMAGE_LOCATION}blog/${blog.image}`}
                             alt="blogImage"
-                            fill
+                            height={500}
+                            width={500}
                             objectFit="cover"
                             className=" absolute top-0 left-0"
                           />
                         </div>
-                        <div className="p-3 flex justify-between items-center">
-                          <div className="flex flex-col">
-                            <h3 className="text-base">{blog.title}</h3>
+                        <div className="p-3 flex justify-between items-center gap-1">
+                          <div className="flex flex-col gap-1">
+                            <h3 className="text-base line-clamp-2">{blog.title}</h3>
                             <div className="text-xs flex w-full gap-5">
                               <div>{blog.author.firstName}</div>
                               <div>{blog.createdAt}</div>

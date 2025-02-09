@@ -22,6 +22,7 @@ import Loader from "@/components/ui/loader";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import clsx from "clsx";
+import { useSession } from "@/context/authContext";
 
 const FormSchema = z.object({
   weight: z
@@ -41,6 +42,7 @@ const FormSchema = z.object({
 });
 
 const Personalize = () => {
+  const { isAuthenticated } = useSession();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -237,7 +239,7 @@ const Personalize = () => {
                 )}
               />
               <div className="flex gap-3 justify-center items-center">
-                <Link href={"/dashboard"}>
+                <Link href={isAuthenticated ? "/dashboard" : "/auth/login"}>
                   <Button className="w-28">Skip for now</Button>
                 </Link>
                 <Button className="w-28" type="submit" disabled={loading}>
