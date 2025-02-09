@@ -10,7 +10,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "https://fitness-tracker-3-o8ue.onrender.com",
+        hostname: "fitness-tracker-3-o8ue.onrender.com",
       },
     ],
   },
