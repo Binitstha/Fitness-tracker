@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSession } from "@/context/authContext";
 import { useRouter } from "next/navigation";
 import { Inter } from "next/font/google";

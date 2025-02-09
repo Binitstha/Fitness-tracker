@@ -17,7 +17,7 @@ const BlogsSkeleton = () => {
           <div>
             <div className="grid grid-cols-3 gap-5 p-7">
               {[1, 2, 3].map((_, index) => (
-                <Card className="h-[25.6rem] rounded-md">
+                <Card className="h-[25.6rem] rounded-md" key={index}>
                   <div className="h-[73%] bg-gray-200 dark:bg-neutral-600 animate-pulse"></div>
                   <div className="flex flex-col gap-3 m-3">
                     <div className=" h-5 bg-gray-200 dark:bg-neutral-600 animate-pulse rounded-sm w-3/4"></div>

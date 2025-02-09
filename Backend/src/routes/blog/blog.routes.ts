@@ -36,9 +36,9 @@ router.get(
   getFeaturedBlogPost
 );
 
-router.get("/getLatestBlogPost", authenticationMiddleware, getLatestBlogPost);
+router.get("/getLatestBlogPost", getLatestBlogPost);
 
-router.get("/getSingleBlog/:id", authenticationMiddleware, getSingleBlog);
+router.get("/getSingleBlog/:id", getSingleBlog);
 
 router.delete("/deleteBlog/:id", authenticationMiddleware, deleteBlog);
 

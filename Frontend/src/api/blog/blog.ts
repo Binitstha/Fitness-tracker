@@ -47,7 +47,6 @@ export const getLatestBlogPost = async () => {
   try {
     const response = await fetch(`${Url}/blog/getLatestBlogPost/`, {
       method: "GET",
-      credentials: "include",
     });
 
     const data = await response.json();
